@@ -2,7 +2,7 @@
 
 \begin{document}
 
-\lstset{language={sh},showspaces=false,rulecolor=\color[cmyk]{0, 0.29,0.84,0}}
+\lstset{language=c++,basicstyle=\ttfamily\tiny,showspaces=false,rulecolor=\color[cmyk]{0, 0.29,0.84,0}}
 
 \begin{frame}
   \titlepage
@@ -354,6 +354,7 @@
       %\setlength{\itemsep}{1em}
     \item GitHubで公開
     \item \url{https://github.com/t-sakashita/rokko}
+    \item 参考: バージョン管理web講習会 {\tiny \url{http://www.cms-initiative.jp/ja/research-support/develop-support/how-to-publish/develop-apps/manage-version}}
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -403,6 +404,11 @@
     %\setlength{\itemsep}{1em}
   \item MPIプロセスの2次元割付けを指定
   \item Row-majorとcolumn-majorの二種類
+  \item 4プロセスの例 (左 row-major, 右 column-major)
+  \begin{center}
+    \includegraphics[height=0.25\textheight]{figure/grid-row-major.pdf} \ \ \ \
+    \includegraphics[height=0.25\textheight]{figure/grid-column-major.pdf}
+  \end{center}
   \item ほとんどの並列固有値ソルバは両方の種類をサポート \\
     (Elementalはcolumn-majorのみサポート)
   \end{itemize}
@@ -413,65 +419,203 @@
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item ほとんどの並列固有値ソルバにおいて, 密行列は「2次元ブロック・サイクリック形式」でデータ分割される
-  \item 4プロセスでの例
+  \item 4プロセスでの例 (左 ローカルビュー, 右 グローバルビュー)
+  \begin{center}
+    \includegraphics[height=0.45\textheight]{figure/local-view.pdf} \ \ \ \ \ \ \ \
+    \includegraphics[height=0.35\textheight]{figure/global-view.pdf}
+  \end{center}
   \item ScaLAPACKとELPAは任意のブロックサイズをサポート
-  \item EigenExaとElementalは$1 \times 1$ブロックサイズのみをサポート
+  \item EigenExaとElementalは$1 \times 1$のみをサポート
   \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[c,fragile]
   \frametitle{rokko::grid クラス}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item MPIプロセスの2次元割付けを指定
-  \item Row-majorとcolumn-majorの二種類
-  \item ほとんどの並列固有値ソルバは両方の種類をサポート \\
-    (Elementalはcolumn-majorのみサポート)
+  \item \href{https://github.com/t-sakashita/rokko/blob/develop/rokko/grid.hpp}{rokko/grid.hpp}
+\begin{lstlisting}
+namespace rokko {
+extern struct grid_row_major_t {} grid_row_major;
+extern struct grid_col_major_t {} grid_col_major;
+class grid {
+public:
+  explicit grid(MPI_Comm comm_in = MPI_COMM_WORLD);
+  template <typename GRID_MAJOR>
+  grid(MPI_Comm comm_in, GRID_MAJOR const& grid_major);
+  MPI_Comm get_comm() const { return comm; }
+  int get_nprocs() const;
+  int get_nprow() const;
+  int get_npcol() const;
+  int get_myrank() const;
+  int get_myrow() const;
+  int get_mycol() const;
+  bool is_row_major() const;
+  bool is_col_major() const;
+  int calculate_grid_row(int proc_rank) const;
+  int calculate_grid_col(int proc_rank) const;
+};
+}
+\end{lstlisting}
   \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[c,fragile]
   \frametitle{rokko::localized\_matrix クラステンプレート}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item ほとんどの並列固有値ソルバにおいて, 密行列は「2次元ブロック・サイクリック形式」でデータ分割される
-  \item 4プロセスでの例
-  \item ScaLAPACKとELPAは任意のブロックサイズをサポート
-  \item EigenExaとElementalは$1 \times 1$ブロックサイズのみをサポート
+  \item \href{https://github.com/t-sakashita/rokko/blob/develop/rokko/localized_matrix.hpp}{rokko/localized\_matrix.hpp}
+\begin{lstlisting}
+namespace rokko {
+template<typename MATRIX_MAJOR = rokko::matrix_row_major>
+class localized_matrix {
+public:
+  typedef MATRIX_MAJOR major_type;
+  localized_matrix();
+  localized_matrix(int rows, int cols);
+  template <typename T>
+  localized_matrix(T const& other);
+  template <typename T>
+  matrix_type& operator=(T const& other);
+  double operator[](int i, int j) const;
+  double& operator[](int i, int j);
+  int get_m_global() const;
+  int get_n_global() const;
+  int get_m_local() const;
+  int get_n_local() const;
+  bool is_gindex_myrow(const int& global_i) const;
+};
+}
+\end{lstlisting}
   \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[c,fragile]
+  \frametitle{rokko::localized\_vector と rokko::localized\_matrix の利用例}
+  \begin{itemize}
+  \item \href{https://github.com/t-sakashita/rokko/blob/develop/test/localized_matrix.cpp}{test/localized\_matrix.cpp}
+\begin{lstlisting}
+int dim = 3;
+rokko::localized_matrix<> M(dim,dim);
+M << 1,2,3,4,5,6,7,8,9;
+double a = 5.0;
+rokko::localized_vector u(dim);
+u << 1,2,3;
+rokko::localized_vector v(dim);
+v << 4,5,6;
+rokko::localized_vector w = a*u+M*v;
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
   \frametitle{rokko::distributed\_matrix クラステンプレート}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item 
+  \item \href{https://github.com/t-sakashita/rokko/blob/develop/rokko/distributed_matrix.hpp}{rokko/distributed\_matrix.hpp}
+\begin{lstlisting}
+namespace rokko {
+template<typename MATRIX_MAJOR = rokko::matrix_row_major>
+class distributed_matrix {
+public:
+  template<typename SOLVER>
+  distributed_matrix(int m_global_in, int n_global_in, const grid& g_in, SOLVER const& solver_in);
+  template<typename SOLVER>
+  void initialize(int m_global_in, int n_global_in, const grid& g_in, SOLVER const& solver_in);
+  int get_mb() const;
+  int get_nb() const;
+  int get_nprow() const;
+  ...
+  bool is_gindex_myrow(const int& global_i) const;
+  bool is_gindex_mycol(const int& global_j) const;
+  bool is_gindex(const int& global_i, const int& global_j) const;
+  void set_local(int local_i, int local_j, double value);
+  double get_local(int local_i, int local_j) const;
+  void update_local(int local_i, int local_j, double value);
+  void set_global(int global_i, int global_j, double value);
+  double get_global(int global_i, int global_j) const;
+};
+}
+\end{lstlisting}
   \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[c,fragile]
   \frametitle{分散行列の操作}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item 行列の掛け算, 転置, scatter/gather
+  \item 行列の掛け算 $C = \alpha A B + \beta C$
+\begin{lstlisting}
+  ...
+  rokko::distributed_matrix<rokko::matrix_col_major> matA(dim, dim, g, solver);
+  rokko::distributed_matrix<rokko::matrix_col_major> matB(dim, dim, g, solver);
+  rokko::distributed_matrix<rokko::matrix_col_major> matC(dim, dim, g, solver);
+  ...
+  rokko::product(alpha, matA, transA, matB, transB, beta, matC);
+\end{lstlisting}
+  \item 分散行列の scatter と gather
+\begin{lstlisting}
+  rokko::localized_matrix<LOC_MAT_MAJOR> lmat(dim, dim);
+  rokko::distributed_matrix<DIST_MAT_MAJOR> mat(dim, dim, g, solver);
+  rokko::scatter(lmat, mat, root);
+  rokko::gather(mat, lmat, root);
+\end{lstlisting}
   \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[c,fragile]
   \frametitle{分散行列の生成}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item 要素毎に代入 (globalな添字)
+\begin{lstlisting}
+for(int global_i=0; global_i < mat.m_global; ++global_i) {
+  for(int global_j=0; global_j < mat.n_global; ++global_j) {
+    mat.set_global(global_i, global_j, f(global_i, global_j));
+  }
+}
+\end{lstlisting}
   \item 要素毎に代入 (localな添字)
+\begin{lstlisting}
+for(int local_i = 0; local_i < mat.get_m_local(); ++local_i) {
+  for(int local_j = 0; local_j < mat.get_n_local(); ++local_j) {
+    int global_i = mat.translate_l2g_row(local_i);
+    int global_j = mat.translate_l2g_col(local_j);
+    mat.set_local(local_i, local_j, f(global_i, global_j));
+  }
+}
+\end{lstlisting}
   \item 関数の値で行列を埋める
-  \item 分散行列の scatter と gather
+\begin{lstlisting}
+mat.generate(f);
+\end{lstlisting}
   \end{itemize}
 \end{frame}
 
-\section{サンプルの実行}
-\section{アプリケーションからのRokkoの利用}
+\begin{frame}[c,fragile]
+  \frametitle{rokko::solverクラス(密行列ソルバ)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 初期化
+\begin{lstlisting}
+rokko::solver solver(name);
+solver.initialize(boost::unit_test::framework::master_test_suite().argc,
+  boost::unit_test::framework::master_test_suite().argv);
+solver.finalize();
+\end{lstlisting}
+  \item 対角化 (行列は破壊される)
+\begin{lstlisting}
+rokko::distributed_matrix<rokko::matrix_col_major> mat(dim, dim, g, solver);
+...
+rokko::localized_vector evals(dim);
+rokko::distributed_matrix<rokko::matrix_col_major> evecs(dim, dim, g, solver);
+solver.diagonalize(mat, evals, evecs);
+\end{lstlisting}
+  \item 登録されているソルバの一覧
+\begin{lstlisting}
+std::vector<std::string> names = rokko::solver_factory::solverls_names();
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
 
-\section{Rokkoのインストール}
+\section{Rokkoのコンパイル}
 
 \begin{frame}
   \frametitle{インストール作業に必須のツールとライブラリ}
@@ -495,16 +639,65 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[c,fragile]
   \frametitle{Rokkoのインストール}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
+  \item 下準備 (psi.issp.u-tokyo.ac.jpの場合)
+\begin{lstlisting}
+source /opt/nano/alps/env.sh
+mkdir $HOME/opt
+ln -s /opt/nano/alps/rokko $HOME/opt
+\end{lstlisting}
   \item ソースコードのダウンロード・展開
+\begin{lstlisting}
+cd $HOME
+wget --no-check-certificate https://github.com/t-sakashita/rokko/archive/develop.zip
+unzip develop
+\end{lstlisting}
   \item CMake
-  \item Make
-  \item テスト
+\begin{lstlisting}
+mkdir rokko-build
+cd rokko-build
+cmake -DCMAKE_C_COMPILER=icc -DCMAKE_CXX_COMPILER=icpc -DCMAKE_Fortran_COMPILER=ifort $HOME/rokko-develop
+\end{lstlisting}
+  \item Make, テスト
+\begin{lstlisting}
+make
+ctest
+\end{lstlisting}
   \end{itemize}
 \end{frame}
+
+\section{サンプルの実行}
+
+\begin{frame}[c,fragile]
+  \frametitle{}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 初期化
+\begin{lstlisting}
+rokko::solver solver(name);
+solver.initialize(boost::unit_test::framework::master_test_suite().argc,
+  boost::unit_test::framework::master_test_suite().argv);
+solver.finalize();
+\end{lstlisting}
+  \item 対角化 (行列は破壊される)
+\begin{lstlisting}
+rokko::distributed_matrix<rokko::matrix_col_major> mat(dim, dim, g, solver);
+...
+rokko::localized_vector evals(dim);
+rokko::distributed_matrix<rokko::matrix_col_major> evecs(dim, dim, g, solver);
+solver.diagonalize(mat, evals, evecs);
+\end{lstlisting}
+  \item 登録されているソルバの一覧
+\begin{lstlisting}
+std::vector<std::string> names = rokko::solver_factory::solverls_names();
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\section{アプリケーションからのRokkoの利用}
 
 
 \section{ALPS/Baristaパッケージ}
