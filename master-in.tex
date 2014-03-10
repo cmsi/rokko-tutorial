@@ -21,6 +21,7 @@
   \item 講師
     \setlength{\itemsep}{1em}
     \begin{itemize}
+      \setlength{\itemsep}{1em}
     \item 藤堂眞治 (東大院理) \ \href{mailto:wistaria@phys.s.u-tokyo.ac.jp}{wistaria@phys.s.u-tokyo.ac.jp}
     \item 五十嵐 亮 (東大物性研) \ \href{mailto:rigarash@issp.u-tokyo.ac.jp}{rigarash@issp.u-tokyo.ac.jp}
     \item 本山裕一 (東大院工 $\Rightarrow $ 物性研) \ \href{mailto:yomichi@looper.u-tokyo.ac.jp}{yomichi@looper.t.u-tokyo.ac.jp}
@@ -51,14 +52,16 @@
   \begin{itemize}
     \setlength{\itemsep}{1em}
   \item LAN接続 (無線 or 有線)
-  \item 実習用ワークステーション(psi)のアカウント登録
+  \item 講習会資料ダウンロード
+  \item 実習用ワークステーションのアカウント登録
+  \item 実習用ワークステーションへのログイン確認
   \end{itemize}
 \end{frame}
 
 \section{固有値問題の解法・固有値ソルバ/線形計算ライブラリ}
 
 \begin{frame}
-  \frametitle{アウトライン}
+  \frametitle{固有値問題の解法・固有値ソルバ/線形計算ライブラリ}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item 行列の対角化
@@ -172,6 +175,15 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}
+  \frametitle{固有値解法とソルバ}
+  \begin{itemize}
+    \item GitHub Wikiに、固有値問題の解法、固有値ソルバ、固有値ソルバ/線形計算ライブラリ、厳密対角化パッケージに関する辞書を作成中 \\
+      固有値解法とソルバ: \url{https://github.com/t-sakashita/rokko/wiki/EigenvalueAlgorithms}
+    \item ボランティア募集中!
+  \end{itemize}
+\end{frame}
+        
 \section{Rokkoの概要と内部構造}
 
 \begin{frame}
@@ -268,6 +280,66 @@
 
 \begin{frame}
   \frametitle{プロセスグリッド}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item MPIプロセスの2次元割付けを指定
+  \item Row-majorとcolumn-majorの二種類
+  \item ほとんどの並列固有値ソルバは両方の種類をサポート \\
+    (Elementalはcolumn-majorのみサポート)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{分散行列(Distributed Matrix)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item ほとんどの並列固有値ソルバにおいて、密行列は「2次元ブロック・サイクリック形式」でデータ分割される
+  \item 4プロセスでの例
+  \item ScaLAPACKとELPAは任意のブロックサイズをサポート
+  \item EigenExaとElementalは$1 \times 1$ブロックサイズのみをサポート
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{rokko::grid クラス}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item MPIプロセスの2次元割付けを指定
+  \item Row-majorとcolumn-majorの二種類
+  \item ほとんどの並列固有値ソルバは両方の種類をサポート \\
+    (Elementalはcolumn-majorのみサポート)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{rokko::localized\_matrix クラステンプレート}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item ほとんどの並列固有値ソルバにおいて、密行列は「2次元ブロック・サイクリック形式」でデータ分割される
+  \item 4プロセスでの例
+  \item ScaLAPACKとELPAは任意のブロックサイズをサポート
+  \item EigenExaとElementalは$1 \times 1$ブロックサイズのみをサポート
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{rokko::distributed\_matrix クラステンプレート}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{分散行列の操作}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 行列の掛け算、転置、scatter/gather
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{分散行列の生成}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item 
