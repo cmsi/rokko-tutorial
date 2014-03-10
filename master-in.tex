@@ -41,9 +41,9 @@
   \item 座学: Rokkoの概要と内部構造
   \item 実習: サンプルの実行
   \item 実習: アプリケーションからのRokkoの利用
-  \item 座学: Rokkoのインストール
-  \item 付録: ALPS/Baristaパッケージ
-  \item 付録: MateriAppsとMateriApps LIVE!
+  \item 座学/実習: Rokkoのインストール
+  \item (付録: ALPS/Baristaパッケージ)
+  \item (付録: MateriAppsとMateriApps LIVE!)
   \end{itemize}
 \end{frame}
 
@@ -63,7 +63,7 @@
 \begin{frame}
   \frametitle{固有値問題の解法・固有値ソルバ/線形計算ライブラリ}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
+    \setlength{\itemsep}{1em}
   \item 行列の対角化
   \item 固有値問題の解法
   \item 既存の固有値ソルバ/線形計算ライブラリ
@@ -73,12 +73,24 @@
 \begin{frame}
   \frametitle{行列の対角化}
   \begin{itemize}
-    \setlength{\itemsep}{1em}
-  \item 行列の種類: 実対称行列、実非対称行列、エルミート行列、非エルミート行列
-  \item 行列の表示: 密行列、CRS形式、MatFree形式 \\
-    (それぞれ、TITPACKの「小規模」、「中規模」、「大規模」に対応)
-  \item 必要な固有値: 全て、絶対値の大きな(小さな)順にいくつか、ある範囲内
-  \item 固有ベクトル: 要/不要
+    %\setlength{\itemsep}{1em}
+  \item 行列の種類
+    \begin{itemize}
+    \item 実対称行列、実非対称行列、エルミート行列、非エルミート行列
+    \end{itemize}
+  \item 行列の表示
+    \begin{itemize}
+      \item 密行列、CRS形式、MatFree形式 (それぞれTITPACK2の「小規模」、
+        「中規模」、「大規模」に対応)
+    \end{itemize}
+  \item 必要な固有値
+    \begin{itemize}
+      \item 全て、絶対値の大きな(小さな)順にいくつか、ある範囲内
+    \end{itemize}
+  \item 固有ベクトル
+    \begin{itemize}
+      \item 要/不要
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
@@ -86,59 +98,122 @@
   \frametitle{用語の定義}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item 固有値問題の解法(Eigenvalue algorithm) \\
-    固有値問題を解くためのアルゴリズム
-  \item 固有値ソルバ(Eigensolver, Eigenvalue problem solver) \\
-    固有値解法の実装
-  \item 固有値ソルバライブラリ(Eigensolver LIbrary) \\
-    固有値ソルバのみを含むライブラリ
-  \item 線形計算ライブラリ(Linear Algebra Library) \\
-    固有値ソルバや他の線形計算ソルバの集合体
-  \item 厳密対角化パッケージ(Exact diaognalization package) \\
-    量子格子模型のハミルトニアンの固有値問題を扱うソフトウェア
+  \item 固有値問題の解法(Eigenvalue algorithm)
+    \begin{itemize}
+      \item 固有値問題を解くためのアルゴリズム
+    \end{itemize}
+  \item 固有値ソルバ(Eigensolver, Eigenvalue problem solver)
+    \begin{itemize}
+      \item 固有値解法の実装
+    \end{itemize}
+  \item 固有値ソルバライブラリ(Eigensolver LIbrary)
+    \begin{itemize}
+      \item 固有値ソルバのみを含むライブラリ
+    \end{itemize}
+  \item 線形計算ライブラリ(Linear Algebra Library)
+    \begin{itemize}
+      \item 固有値ソルバや他の線形計算ソルバの集合体
+    \end{itemize}
+  \item 厳密対角化パッケージ(Exact diaognalization package)
+    \begin{itemize}
+      \item 量子格子模型のハミルトニアンの固有値問題を扱うソフトウェア
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{固有値問題の解法}
-  \begin{itemize}
-    \setlength{\itemsep}{1em}
-  \item 三重対角行列に対する固有値問題の解法: 二分法, QR法, MR3, 分割統治法+QR法
-  \item 密行列の直接対角化: Jacobi法
-  \item 密行列の三重対角化: Householder法
-  \item 疎行列の直接対角化: べき乗法, 逆べき乗法, レイリー商反復法, Jacobi-Davidson法, LOBPCG, Krylov-Schur法
-  \item 疎行列の三重対角化: Lanczos法, Arnoldi法, リスタート付きLanczos法(RestartLanczos), Thick-restart Lanczos
-  \item その他の方法: Sakurai-Sugiura法
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{既存の固有値ソルバライブラリ}
+  \frametitle{固有値問題の解法(一部)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item Anasazi: 反復法ソルバ中心。Krylov-Schur、Jacobi-Davidson、XXX-Davidson、LOBPCG、Implicit Riemann Trust Region Method
-  \item EigenExa
-  \item ELPA: Householder+分割統治法+QR
-  \item IETL: ALPSに含まれる反復法ソルバ。Lanczos、他
+  \item 三重対角行列に対する固有値問題の解法
+    \begin{itemize}
+      \item 二分法, QR法, MR3, 分割統治法+QR法
+    \end{itemize}
+  \item 密行列の直接対角化
+    \begin{itemize}
+      \item Jacobi法
+    \end{itemize}
+  \item 密行列の三重対角化
+    \begin{itemize}
+      \item Householder法
+    \end{itemize}
+  \item 疎行列の直接対角化
+    \begin{itemize}
+      \item べき乗法, 逆べき乗法, レイリー商反復法, Jacobi-Davidson法, LOBPCG, Krylov-Schur法
+    \end{itemize}
+  \item 疎行列の三重対角化
+    \begin{itemize}
+      \item Lanczos法, Arnoldi法, リスタート付きLanczos法(Restart Lanczos), Thick-restart Lanczos
+    \end{itemize}
+  \item その他の方法
+    \begin{itemize}
+      \item Sakurai-Sugiura法
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{既存の線形計算ライブラリ}
+  \frametitle{既存の固有値ソルバライブラリ(一部)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item Anasazi: 反復法ソルバ中心
+    \begin{itemize}
+      \item Krylov-Schur、Jacobi-Davidson、XXX-Davidson、LOBPCG、Implicit Riemann Trust Region Method
+    \end{itemize}
+  \item EigenExa: 密行列ソルバ
+    \begin{itemize}
+      \item Householder (3重対角化、5重対角化)+分割統治法+QR
+    \end{itemize}
+  \item ELPA
+    \begin{itemize}
+      \item Householder+分割統治法+QR
+    \end{itemize}
+  \item IETL: ALPSに含まれる反復法ソルバ
+    \begin{itemize}
+      \item Lanczos、他
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{既存の線形計算ライブラリ(一部)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Apple VecLib: LAPACK
-  \item ARPACK: Implicit Restarted Lanczos
+  \item ARPACK
+    \begin{itemize}
+      \item Implicit Restarted Lanczos
+    \end{itemize}
   \item BLOPEX
-  \item Eigen3: Householder+QR \\
-    並列(ただし、プロセス数が平方数の場合しか使えない)
-  \item Elemental: Householder+MR3
-  \item Fujitsu SSLII: LAPACK, ScaLAPACK(の一部)、他(富士通独自)
+  \item Eigen3: MPI並列(プロセス数が平方数の場合のみ)
+    \begin{itemize}
+      \item Householder+QR
+    \end{itemize}
+  \item Elemental
+    \begin{itemize}
+      \item Householder+MR3
+    \end{itemize}
+  \item Fujitsu SSLII: LAPACK, ScaLAPACK(の一部)、他
   \item Intel MKL: LAPACK, ScaLAPACK
-  \item Netlib LAPACK: LAPACKのリファレンス実装、Householder+QR、Householder+分割統治法+QR、Householder+二分法、Householder+MR3
-  \item Netlib ScaLAPACK: Householder+QR、Householder+分割統治法+QR、Householder+二分法、Householder+MR3
-  \item SLEPc: 反復法ソルバ中心。Krylov-Schur、Generalized Davidson、Jacobi-Davidson、Rayleigh Quotient Conjugate Gradient、Contour integral Sakurai-Sugiura、Power method、Subspace Itertation、Arnoldi (explicit restart)、Lanczos (explicit restart) \\
-    ビルド時に逐次かMPI並列かを選ぶ必要あり
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{既存の線形計算ライブラリ(一部)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item Netlib LAPACK: LAPACKのリファレンス実装
+    \begin{itemize}
+      \item Householder+QR、Householder+分割統治法+QR、Householder+二分法、Householder+MR3
+    \end{itemize}
+  \item Netlib ScaLAPACK: ScaLAPACKのリファレンス実装
+    \begin{itemize}
+      \item Householder+QR、Householder+分割統治法+QR、Householder+二分法、Householder+MR3
+    \end{itemize}
+  \item SLEPc: 反復法ソルバ中心、ビルド時に逐次かMPI並列かを選ぶ必要あり
+    \begin{itemize}
+      \item Krylov-Schur、Generalized Davidson、Jacobi-Davidson、Rayleigh Quotient Conjugate Gradient、Contour integral Sakurai-Sugiura、Power method、Subspace Itertation、Arnoldi (explicit restart)、Lanczos (explicit restart) \\
+    \end{itemize}
   \item Xabclib (ppOpen AT)
   \end{itemize}
 \end{frame}
@@ -168,10 +243,11 @@
   \frametitle{厳密対角化パッケージ}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item ALPS
-  \item KOBEPACK
-  \item SPINPACK
-  \item TITPACK
+  \item ALPS: LAPACK, IETLを利用
+  \item KOBEPACK: 独自の固有値ソルバを実装
+  \item SPINPACK: LAPACKを利用
+  \item TITPACK2: 独自の固有値ソルバを実装
+  \item 逐次 or スレッド並列のみ (MPI並列なし)
   \end{itemize}
 \end{frame}
 
@@ -342,13 +418,51 @@
   \frametitle{分散行列の生成}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item 
+  \item 要素毎に代入 (globalな添字)
+  \item 要素毎に代入 (localな添字)
+  \item 関数の値で行列を埋める
+  \item 分散行列の scatter と gather
   \end{itemize}
 \end{frame}
 
 \section{サンプルの実行}
 \section{アプリケーションからのRokkoの利用}
+
 \section{Rokkoのインストール}
+
+\begin{frame}
+  \frametitle{インストール作業に必須のツールとライブラリ}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item CMake: \url{http:www.cmake.org}
+  \item Boost C++ Libraries: \url{http://www.boost.org}
+  \item インストールスクリプト
+  \item 主要なスパコンにインストール済み
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{サードパーティーの固有値ソルバ/線形計算ライブラリのインストール}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item Eigen3, LAPACK-e (LAPACKのCバインディング)は、Rokkoに同梱されている
+  \item インストールスクリプト: EigenExa, ELPA, Elemental, SLEPc
+  \item 主要なスパコンにインストール済み
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rokkoのインストール}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item ソースコードのダウンロード・展開
+  \item CMake
+  \item Make
+  \item テスト
+  \end{itemize}
+\end{frame}
+
+
 \section{ALPS/Baristaパッケージ}
 \section{MateriAppsとMateriApps LIVE!}
 
