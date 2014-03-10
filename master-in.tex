@@ -9,19 +9,21 @@
   \noindent {\footnotesize 本資料のソースは\url{https://github.com/cmsi/rokko-tutorial}にて公開中}
 \end{frame}
 
-\section*{Outline}
-\begin{frame}
-  \tableofcontents
-\end{frame}
+%% \section*{Outline}
+%% \begin{frame}
+%%   \tableofcontents
+%% \end{frame}
 
 \section{チュートリアルの概要}
 
 \begin{frame}{Rokkoチュートリアル スタッフ}
   \begin{itemize}
   \item 講師
+    \setlength{\itemsep}{1em}
     \begin{itemize}
     \item 藤堂眞治 (東大院理) \ \href{mailto:wistaria@phys.s.u-tokyo.ac.jp}{wistaria@phys.s.u-tokyo.ac.jp}
     \item 五十嵐 亮 (東大物性研) \ \href{mailto:rigarash@issp.u-tokyo.ac.jp}{rigarash@issp.u-tokyo.ac.jp}
+    \item 本山裕一 (東大院工 $\Rightarrow $ 物性研) \ \href{mailto:yomichi@looper.u-tokyo.ac.jp}{yomichi@looper.t.u-tokyo.ac.jp}
     \end{itemize}
   \item 主催
     \begin{itemize}
@@ -47,9 +49,9 @@
 \begin{frame}
   \frametitle{ネットワーク設定}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
+    \setlength{\itemsep}{1em}
   \item LAN接続 (無線 or 有線)
-  \item 実習用ワークステーションのアカウント登録
+  \item 実習用ワークステーション(psi)のアカウント登録
   \end{itemize}
 \end{frame}
 
@@ -65,6 +67,111 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}
+  \frametitle{行列の対角化}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item 行列の種類: 実対称行列、実非対称行列、エルミート行列、非エルミート行列
+  \item 行列の表示: 密行列、CRS形式、MatFree形式 \\
+    (それぞれ、TITPACKの「小規模」、「中規模」、「大規模」に対応)
+  \item 必要な固有値: 全て、絶対値の大きな(小さな)順にいくつか、ある範囲内
+  \item 固有ベクトル: 要/不要
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{用語の定義}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 固有値問題の解法(Eigenvalue algorithm) \\
+    固有値問題を解くためのアルゴリズム
+  \item 固有値ソルバ(Eigensolver, Eigenvalue problem solver) \\
+    固有値解法の実装
+  \item 固有値ソルバライブラリ(Eigensolver LIbrary) \\
+    固有値ソルバのみを含むライブラリ
+  \item 線形計算ライブラリ(Linear Algebra Library) \\
+    固有値ソルバや他の線形計算ソルバの集合体
+  \item 厳密対角化パッケージ(Exact diaognalization package) \\
+    量子格子模型のハミルトニアンの固有値問題を扱うソフトウェア
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{固有値問題の解法}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item 三重対角行列に対する固有値問題の解法: 二分法, QR法, MR3, 分割統治法+QR法
+  \item 密行列の直接対角化: Jacobi法
+  \item 密行列の三重対角化: Householder法
+  \item 疎行列の直接対角化: べき乗法, 逆べき乗法, レイリー商反復法, Jacobi-Davidson法, LOBPCG, Krylov-Schur法
+  \item 疎行列の三重対角化: Lanczos法, Arnoldi法, リスタート付きLanczos法(RestartLanczos), Thick-restart Lanczos
+  \item その他の方法: Sakurai-Sugiura法
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{既存の固有値ソルバライブラリ}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item Anasazi: 反復法ソルバ中心。Krylov-Schur、Jacobi-Davidson、XXX-Davidson、LOBPCG、Implicit Riemann Trust Region Method
+  \item EigenExa
+  \item ELPA: Householder+分割統治法+QR
+  \item IETL: ALPSに含まれる反復法ソルバ。Lanczos、他
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{既存の線形計算ライブラリ}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item Apple VecLib: LAPACK
+  \item ARPACK: Implicit Restarted Lanczos
+  \item BLOPEX
+  \item Eigen3: Householder+QR \\
+    並列(ただし、プロセス数が平方数の場合しか使えない)
+  \item Elemental: Householder+MR3
+  \item Fujitsu SSLII: LAPACK, ScaLAPACK(の一部)、他(富士通独自)
+  \item Intel MKL: LAPACK, ScaLAPACK
+  \item Netlib LAPACK: LAPACKのリファレンス実装、Householder+QR、Householder+分割統治法+QR、Householder+二分法、Householder+MR3
+  \item Netlib ScaLAPACK: Householder+QR、Householder+分割統治法+QR、Householder+二分法、Householder+MR3
+  \item SLEPc: 反復法ソルバ中心。Krylov-Schur、Generalized Davidson、Jacobi-Davidson、Rayleigh Quotient Conjugate Gradient、Contour integral Sakurai-Sugiura、Power method、Subspace Itertation、Arnoldi (explicit restart)、Lanczos (explicit restart) \\
+    ビルド時に逐次かMPI並列かを選ぶ必要あり
+  \item Xabclib (ppOpen AT)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{おすすめ順}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 密行列・逐次 \\
+    LAPACK (のベンダー実装) $>$ Eigen3
+  \item 密行列・MPI並列 \\
+    EigenExa $>$ ELPA $>$ ScaLAPACK (のベンダー実装) $>$ Elemental
+  \item 疎行列・逐次 \\
+    Anasazi
+  \item 疎行列・MPI並列 \\
+    Anasazi $>$ SLEPc
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{EigenExa}
+  \begin{center}
+    \includegraphics[height=0.8\textheight]{figure/eigenexa.pdf}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{厳密対角化パッケージ}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item ALPS
+  \item KOBEPACK
+  \item SPINPACK
+  \item TITPACK
+  \end{itemize}
+\end{frame}
+
 \section{Rokkoの概要と内部構造}
 
 \begin{frame}
@@ -76,10 +183,109 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}
+  \frametitle{既存のライブラリの問題点}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item ソルバ毎に異なるデザイン
+  \item インストール方法もライブラリ毎に異なる
+  \item ドキュメントが不十分な場合も多い
+  \item コンピュータのアーキテクチャ毎に異なるコンパイル・リンクオプションが必要
+  \item C++/C/Fortran相互リンクの問題
+  \item ライブラリ間の依存関係が複雑
+  \item 実際に試す前に大まかな性能比較が欲しい
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{ライブラリ間の依存関係(一部)}
+  \begin{center}
+    \includegraphics[height=0.8\textheight]{figure/library-dependence.pdf}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rokkoの開発者}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item 坂下達哉 (東大物性研) \ \href{mailto:t-sakashita@issp.u-tokyo.ac.jp}{t-sakashita@issp.u-tokyo.ac.jp}
+  \item 本山裕一 (東大院工 $\Rightarrow $ 物性研) \ \href{mailto:yomichi@looper.u-tokyo.ac.jp}{yomichi@looper.t.u-tokyo.ac.jp}
+  \item 五十嵐 亮 (東大物性研) \ \href{mailto:rigarash@issp.u-tokyo.ac.jp}{rigarash@issp.u-tokyo.ac.jp}
+  \item 大久保 毅 (東大物性研) \ \href{mailto:t-okubo@issp.u-tokyo.ac.jp}{t-okubo@issp.u-tokyo.ac.jp}
+  \item 藤堂眞治 (東大院理/東大物性研) \ \href{mailto:wistaria@phys.s.u-tokyo.ac.jp}{wistaria@phys.s.u-tokyo.ac.jp}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rokkoの概要}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 使用言語
+    \begin{itemize}
+      %\setlength{\itemsep}{1em}
+    \item コア部分: C++
+    \item 言語バインディング: C, Fortran90
+    \item ベンチマークスクリプト: Python
+    \end{itemize}
+  \item ライセンス
+    \begin{itemize}
+      %\setlength{\itemsep}{1em}
+    \item Boostライセンス (ほぼ自由に使える)
+    \end{itemize}
+  \item ソースコード
+    \begin{itemize}
+      %\setlength{\itemsep}{1em}
+    \item GitHubで公開
+    \item \url{https://github.com/t-sakashita/rokko}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rokkoの設計思想}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 共通の行列クラス
+  \item 実行時にソルバを選択可能
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rokkoの全体像}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 固有値ソルバ/線形演算ライブラリのインストールスクリプト
+  \item 共通基本クラス(分散行列、プロセスグリッド他)
+  \item 固有値ソルバラッパー(C++)
+  \item 固有値ソルバ・ファクトリ(C++)
+  \item C/Fortranラッパー
+  \item テスト・サンプルプログラム
+  \item ベンチマークスクリプト
+  \end{itemize}
+\end{frame}
+
+\section{並列ソルバの基本概念}
+
+\begin{frame}
+  \frametitle{プロセスグリッド}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 
+  \end{itemize}
+\end{frame}
+
 \section{サンプルの実行}
 \section{アプリケーションからのRokkoの利用}
 \section{Rokkoのインストール}
 \section{ALPS/Baristaパッケージ}
 \section{MateriAppsとMateriApps LIVE!}
+
+\begin{frame}
+  \frametitle{テスト}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item テスト
+  \end{itemize}
+\end{frame}
 
 \end{document}

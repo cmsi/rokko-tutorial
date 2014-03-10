@@ -21,7 +21,7 @@ ${BASENAME}.pdf: ${BASENAME}.dvi
 
 clean:
 	rm -f ${BASENAME}*.aux ${BASENAME}*.dvi ${BASENAME}*.log ${BASENAME}*.nav ${BASENAME}*.out ${BASENAME}*.snm ${BASENAME}*.toc ${BASENAME}*.vrb
-	rm -rf auto *.xbb ./style/*.xbb
+	rm -rf auto *.xbb ./figure/*.xbb ./style/*.xbb
 
 distclean: clean
 	rm -f ${BASENAME}-wide.pdf ${BASENAME}.pdf
