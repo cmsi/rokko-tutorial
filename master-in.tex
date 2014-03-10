@@ -76,16 +76,16 @@
     %\setlength{\itemsep}{1em}
   \item 行列の種類
     \begin{itemize}
-    \item 実対称行列、実非対称行列、エルミート行列、非エルミート行列
+    \item 実対称行列, 実非対称行列, エルミート行列, 非エルミート行列
     \end{itemize}
   \item 行列の表示
     \begin{itemize}
-      \item 密行列、CRS形式、MatFree形式 (それぞれTITPACK2の「小規模」、
-        「中規模」、「大規模」に対応)
+      \item 密行列, CRS形式, MatFree形式 (それぞれTITPACK2の「小規模」, 
+        「中規模」, 「大規模」に対応)
     \end{itemize}
   \item 必要な固有値
     \begin{itemize}
-      \item 全て、絶対値の大きな(小さな)順にいくつか、ある範囲内
+      \item 全て, 絶対値の大きな(小さな)順にいくつか, ある範囲内
     \end{itemize}
   \item 固有ベクトル
     \begin{itemize}
@@ -153,16 +153,25 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{固有値問題の解法}
+  \begin{center}
+    \includegraphics[height=0.6\textheight]{figure/AlgebraicEigenvalue.jpg} \ \
+    \includegraphics[height=0.6\textheight]{figure/MatrixAlgorithms.jpg} \ \
+    \includegraphics[height=0.6\textheight]{figure/book.jpg}
+  \end{center}
+\end{frame}
+
+\begin{frame}
   \frametitle{既存の固有値ソルバライブラリ(一部)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Anasazi: 反復法ソルバ中心
     \begin{itemize}
-      \item Krylov-Schur、Jacobi-Davidson、XXX-Davidson、LOBPCG、Implicit Riemann Trust Region Method
+      \item Krylov-Schur, Jacobi-Davidson, XXX-Davidson, LOBPCG, Implicit Riemann Trust Region Method
     \end{itemize}
   \item EigenExa: 密行列ソルバ
     \begin{itemize}
-      \item Householder (3重対角化、5重対角化)+分割統治法+QR
+      \item Householder (3重対角化, 5重対角化)+分割統治法+QR
     \end{itemize}
   \item ELPA
     \begin{itemize}
@@ -170,7 +179,7 @@
     \end{itemize}
   \item IETL: ALPSに含まれる反復法ソルバ
     \begin{itemize}
-      \item Lanczos、他
+      \item Lanczos, 他
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -193,7 +202,7 @@
     \begin{itemize}
       \item Householder+MR3
     \end{itemize}
-  \item Fujitsu SSLII: LAPACK, ScaLAPACK(の一部)、他
+  \item Fujitsu SSLII: LAPACK, ScaLAPACK(の一部), 他
   \item Intel MKL: LAPACK, ScaLAPACK
   \end{itemize}
 \end{frame}
@@ -204,15 +213,15 @@
     %\setlength{\itemsep}{1em}
   \item Netlib LAPACK: LAPACKのリファレンス実装
     \begin{itemize}
-      \item Householder+QR、Householder+分割統治法+QR、Householder+二分法、Householder+MR3
+      \item Householder+QR, Householder+分割統治法+QR, Householder+二分法, Householder+MR3
     \end{itemize}
   \item Netlib ScaLAPACK: ScaLAPACKのリファレンス実装
     \begin{itemize}
-      \item Householder+QR、Householder+分割統治法+QR、Householder+二分法、Householder+MR3
+      \item Householder+QR, Householder+分割統治法+QR, Householder+二分法, Householder+MR3
     \end{itemize}
-  \item SLEPc: 反復法ソルバ中心、ビルド時に逐次かMPI並列かを選ぶ必要あり
+  \item SLEPc: 反復法ソルバ中心, ビルド時に逐次かMPI並列かを選ぶ必要あり
     \begin{itemize}
-      \item Krylov-Schur、Generalized Davidson、Jacobi-Davidson、Rayleigh Quotient Conjugate Gradient、Contour integral Sakurai-Sugiura、Power method、Subspace Itertation、Arnoldi (explicit restart)、Lanczos (explicit restart) \\
+      \item Krylov-Schur, Generalized Davidson, Jacobi-Davidson, Rayleigh Quotient Conjugate Gradient, Contour integral Sakurai-Sugiura, Power method, Subspace Itertation, Arnoldi (explicit restart), Lanczos (explicit restart) \\
     \end{itemize}
   \item Xabclib (ppOpen AT)
   \end{itemize}
@@ -223,39 +232,57 @@
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item 密行列・逐次 \\
-    LAPACK (のベンダー実装) $>$ Eigen3
+    LAPACK (のベンダ実装) $>$ Eigen3
   \item 密行列・MPI並列 \\
-    EigenExa $>$ ELPA $>$ ScaLAPACK (のベンダー実装) $>$ Elemental
+    EigenExa $>$ ELPA $>$ ScaLAPACK (のベンダ実装) $>$ Elemental
   \item 疎行列・逐次 \\
     Anasazi
   \item 疎行列・MPI並列 \\
-    Anasazi $>$ SLEPc
+    Anasazi $>$ SLEPc \\
+  \item ハイブリッド並列対応のソルバも増えてきた
+  \item 並列版をユーザが実装・最適化するのはもはや不可能
+  \item オープンソースの最新並列固有値ソルバを積極的に活用すべき
   \end{itemize}
 \end{frame}
 
-\begin{frame}{EigenExa}
+\begin{frame}{EigenExaによる超巨大密行列の対角化}
   \begin{center}
     \includegraphics[height=0.8\textheight]{figure/eigenexa.pdf}
   \end{center}
 \end{frame}
 
 \begin{frame}
-  \frametitle{厳密対角化パッケージ}
+  \frametitle{最新の固有値ソルバ}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
+    \setlength{\itemsep}{1em}
+  \item ハイブリッド並列(MPI+OpenMP)対応のソルバも増えてきた
+  \item 超並列環境に対応した並列ソルバを一般ユーザが実装・最適化するの
+    はもはや不可能
+  \item オープンソースの最新並列固有値ソルバを積極的に活用すべき
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{厳密対角化パッケージの状況}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
   \item ALPS: LAPACK, IETLを利用
   \item KOBEPACK: 独自の固有値ソルバを実装
   \item SPINPACK: LAPACKを利用
-  \item TITPACK2: 独自の固有値ソルバを実装
-  \item 逐次 or スレッド並列のみ (MPI並列なし)
+  \item TITPACK2: 独自の固有値ソルバを実装 \\
+  \item 逐次 or スレッド並列のみ、MPI並列なし
+  \item 最新の超並列スパコン環境を活かしきれていない
   \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{固有値解法とソルバ}
   \begin{itemize}
-    \item GitHub Wikiに、固有値問題の解法、固有値ソルバ、固有値ソルバ/線形計算ライブラリ、厳密対角化パッケージに関する辞書を作成中 \\
-      固有値解法とソルバ: \url{https://github.com/t-sakashita/rokko/wiki/EigenvalueAlgorithms}
+    \setlength{\itemsep}{1em}
+    \item GitHub Wikiに, 固有値問題の解法, 固有値ソルバ, 固有値ソルバ/線形計算ライブラリ, 厳密対角化パッケージに関する辞書を作成中
+      \begin{itemize}
+        \item 固有値解法とソルバ: \url{https://github.com/t-sakashita/rokko/wiki/EigenvalueAlgorithms}
+      \end{itemize}
     \item ボランティア募集中!
   \end{itemize}
 \end{frame}
@@ -263,11 +290,13 @@
 \section{Rokkoの概要と内部構造}
 
 \begin{frame}
-  \frametitle{アウトライン}
+  \frametitle{Rokkoの概要と内部構造}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
+    \setlength{\itemsep}{1em}
   \item 既存のライブラリの問題点
   \item Rokkoの概要
+  \item 並列ソルバの基本概念
+  \item Rokkoの内部構造
   \end{itemize}
 \end{frame}
 
@@ -330,11 +359,18 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Rokkoの設計思想}
+  \frametitle{Rokkoの設計方針}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item 共通の行列クラス
+  \item 共通のベクトルや行列クラス
+  \item ソルバの違いをラッパーで吸収
+    \begin{itemize}
+      %\setlength{\itemsep}{1em}
+    \item 個々のソルバに仕様変更があってもRokkoが吸収
+    \end{itemize}
   \item 実行時にソルバを選択可能
+  \item 仮想関数とテンプレートを組み合わせることで, オーバーヘッドの少ないラッパーを実装
+  \item C++, C, Fortran90から使用可能に
   \end{itemize}
 \end{frame}
 
@@ -343,13 +379,20 @@
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item 固有値ソルバ/線形演算ライブラリのインストールスクリプト
-  \item 共通基本クラス(分散行列、プロセスグリッド他)
+  \item 共通基本クラス(分散行列, プロセスグリッド他)
   \item 固有値ソルバラッパー(C++)
   \item 固有値ソルバ・ファクトリ(C++)
   \item C/Fortranラッパー
   \item テスト・サンプルプログラム
   \item ベンチマークスクリプト
   \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rokko Software Stack}
+  \begin{center}
+    \includegraphics[height=0.8\textheight]{figure/rokko-software-stack.jpg}
+  \end{center}
 \end{frame}
 
 \section{並列ソルバの基本概念}
@@ -369,7 +412,7 @@
   \frametitle{分散行列(Distributed Matrix)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item ほとんどの並列固有値ソルバにおいて、密行列は「2次元ブロック・サイクリック形式」でデータ分割される
+  \item ほとんどの並列固有値ソルバにおいて, 密行列は「2次元ブロック・サイクリック形式」でデータ分割される
   \item 4プロセスでの例
   \item ScaLAPACKとELPAは任意のブロックサイズをサポート
   \item EigenExaとElementalは$1 \times 1$ブロックサイズのみをサポート
@@ -391,7 +434,7 @@
   \frametitle{rokko::localized\_matrix クラステンプレート}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item ほとんどの並列固有値ソルバにおいて、密行列は「2次元ブロック・サイクリック形式」でデータ分割される
+  \item ほとんどの並列固有値ソルバにおいて, 密行列は「2次元ブロック・サイクリック形式」でデータ分割される
   \item 4プロセスでの例
   \item ScaLAPACKとELPAは任意のブロックサイズをサポート
   \item EigenExaとElementalは$1 \times 1$ブロックサイズのみをサポート
@@ -410,7 +453,7 @@
   \frametitle{分散行列の操作}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item 行列の掛け算、転置、scatter/gather
+  \item 行列の掛け算, 転置, scatter/gather
   \end{itemize}
 \end{frame}
 
@@ -433,7 +476,7 @@
 \begin{frame}
   \frametitle{インストール作業に必須のツールとライブラリ}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
+    \setlength{\itemsep}{1em}
   \item CMake: \url{http:www.cmake.org}
   \item Boost C++ Libraries: \url{http://www.boost.org}
   \item インストールスクリプト
@@ -444,9 +487,10 @@
 \begin{frame}
   \frametitle{サードパーティーの固有値ソルバ/線形計算ライブラリのインストール}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item Eigen3, LAPACK-e (LAPACKのCバインディング)は、Rokkoに同梱されている
+    \setlength{\itemsep}{1em}
+  \item Eigen3, LAPACK-e (LAPACKのCバインディング)は, Rokkoに同梱されている
   \item インストールスクリプト: EigenExa, ELPA, Elemental, SLEPc
+  \item 対応アーキテクチャ: 京/FX10, x86スパコン・クラスタ(Intelコンパイラ/GCC), Mac OS X (GCC)
   \item 主要なスパコンにインストール済み
   \end{itemize}
 \end{frame}
