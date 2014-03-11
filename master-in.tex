@@ -1,0 +1,795 @@
+\title{Rokkoチュートリアル}
+
+\begin{document}
+
+\lstset{language=c++,basicstyle=\ttfamily\tiny,showspaces=false,rulecolor=\color[cmyk]{0, 0.29,0.84,0}}
+
+\begin{frame}
+  \titlepage
+  \noindent {\footnotesize PDFファイル: \url{http://sf.net/projects/rokko-tutorial/}} \\
+  \noindent {\footnotesize LaTeXソース: \url{http://github.com/cmsi/rokko-tutorial/}}
+\end{frame}
+
+%% \section*{Outline}
+%% \begin{frame}
+%%   \tableofcontents
+%% \end{frame}
+
+\section{チュートリアルの概要}
+
+\begin{frame}{Rokkoチュートリアル スタッフ}
+  \begin{itemize}
+  \item 講師
+    \setlength{\itemsep}{1em}
+    \begin{itemize}
+      \setlength{\itemsep}{1em}
+    \item 藤堂眞治 (東大院理/物性研) \ \href{mailto:wistaria@phys.s.u-tokyo.ac.jp}{wistaria@phys.s.u-tokyo.ac.jp}
+    \item 五十嵐 亮 (東大物性研) \ \href{mailto:rigarash@issp.u-tokyo.ac.jp}{rigarash@issp.u-tokyo.ac.jp}
+    \item 本山裕一 (東大院工 $\Rightarrow $ 物性研) \ \href{mailto:yomichi@looper.u-tokyo.ac.jp}{yomichi@looper.t.u-tokyo.ac.jp}
+    \end{itemize}
+  \item 主催
+    \begin{itemize}
+    \item CMSI: 計算物質科学イニシアティブ \url{http://cms-initiative.jp/}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{チュートリアルの流れ}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 座学: 既存の固有値問題の解法・固有値ソルバ/線形計算ライブラリ
+  \item 座学: Rokkoの概要と内部構造
+  \item 実習: Rokkoのインストール
+  \item 座学: 並列ソルバの基本概念
+  \item 実習: サンプルの実行
+  \item 実習: アプリケーションからのRokkoの利用
+  \item (付録: ALPS/Baristaパッケージ)
+  \item (付録: MateriAppsとMateriApps LIVE!)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{ネットワーク設定}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item LAN接続 (無線 or 有線)
+  \item 講習会資料ダウンロード
+  \item 実習用ワークステーションのアカウント登録
+  \item 実習用ワークステーションへのログイン確認
+  \end{itemize}
+\end{frame}
+
+\section{固有値問題の解法・固有値ソルバ/線形計算ライブラリ}
+
+\begin{frame}
+  \frametitle{固有値問題の解法・固有値ソルバ/線形計算ライブラリ}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item 行列の対角化
+  \item 固有値問題の解法
+  \item 既存の固有値ソルバ/線形計算ライブラリ
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{行列の対角化}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 行列の種類
+    \begin{itemize}
+    \item 実対称行列, 実非対称行列, エルミート行列, 非エルミート行列
+    \end{itemize}
+  \item 行列の表示
+    \begin{itemize}
+      \item 密行列, CRS形式, MatFree形式 (それぞれTITPACK2の「小規模」, 
+        「中規模」, 「大規模」に対応)
+    \end{itemize}
+  \item 必要な固有値
+    \begin{itemize}
+      \item 全て, 絶対値の大きな(小さな)順にいくつか, ある範囲内
+    \end{itemize}
+  \item 固有ベクトル
+    \begin{itemize}
+      \item 要/不要
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{用語の定義}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 固有値問題の解法(Eigenvalue algorithm)
+    \begin{itemize}
+      \item 固有値問題を解くためのアルゴリズム
+    \end{itemize}
+  \item 固有値ソルバ(Eigensolver, Eigenvalue problem solver)
+    \begin{itemize}
+      \item 固有値解法の実装
+    \end{itemize}
+  \item 固有値ソルバライブラリ(Eigensolver LIbrary)
+    \begin{itemize}
+      \item 固有値ソルバのみを含むライブラリ
+    \end{itemize}
+  \item 線形計算ライブラリ(Linear Algebra Library)
+    \begin{itemize}
+      \item 固有値ソルバや他の線形計算ソルバの集合体
+    \end{itemize}
+  \item 厳密対角化パッケージ(Exact diaognalization package)
+    \begin{itemize}
+      \item 量子格子模型のハミルトニアンの固有値問題を扱うソフトウェア
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{固有値問題の解法(一部)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 三重対角行列に対する固有値問題の解法
+    \begin{itemize}
+      \item 二分法, QR法, MR3, 分割統治法+QR法
+    \end{itemize}
+  \item 密行列の直接対角化
+    \begin{itemize}
+      \item Jacobi法
+    \end{itemize}
+  \item 密行列の三重対角化
+    \begin{itemize}
+      \item Householder法
+    \end{itemize}
+  \item 疎行列の直接対角化
+    \begin{itemize}
+      \item べき乗法, 逆べき乗法, レイリー商反復法, Jacobi-Davidson法, LOBPCG, Krylov-Schur法
+    \end{itemize}
+  \item 疎行列の三重対角化
+    \begin{itemize}
+      \item Lanczos法, Arnoldi法, リスタート付きLanczos法(Restart Lanczos), Thick-restart Lanczos
+    \end{itemize}
+  \item その他の方法
+    \begin{itemize}
+      \item Sakurai-Sugiura法
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{固有値問題の解法}
+  \begin{center}
+    \includegraphics[height=0.6\textheight]{figure/AlgebraicEigenvalue.jpg} \ \
+    \includegraphics[height=0.6\textheight]{figure/MatrixAlgorithms.jpg} \ \
+    \includegraphics[height=0.6\textheight]{figure/book.jpg}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{既存の固有値ソルバライブラリ(一部)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item Anasazi: 反復法ソルバ中心
+    \begin{itemize}
+      \item Krylov-Schur, Jacobi-Davidson, XXX-Davidson, LOBPCG, Implicit Riemann Trust Region Method
+    \end{itemize}
+  \item EigenExa: 密行列ソルバ
+    \begin{itemize}
+      \item Householder (3重対角化, 5重対角化)+分割統治法+QR
+    \end{itemize}
+  \item ELPA
+    \begin{itemize}
+      \item Householder+分割統治法+QR
+    \end{itemize}
+  \item IETL: ALPSに含まれる反復法ソルバ
+    \begin{itemize}
+      \item Lanczos, 他
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{既存の線形計算ライブラリ(一部)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item Apple VecLib: LAPACK
+  \item ARPACK
+    \begin{itemize}
+      \item Implicit Restarted Lanczos
+    \end{itemize}
+  \item BLOPEX
+  \item Eigen3: MPI並列(プロセス数が平方数の場合のみ)
+    \begin{itemize}
+      \item Householder+QR
+    \end{itemize}
+  \item Elemental
+    \begin{itemize}
+      \item Householder+MR3
+    \end{itemize}
+  \item Fujitsu SSLII: LAPACK, ScaLAPACK(の一部), 他
+  \item Intel MKL: LAPACK, ScaLAPACK
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{既存の線形計算ライブラリ(一部)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item Netlib LAPACK: LAPACKのリファレンス実装
+    \begin{itemize}
+      \item Householder+QR, Householder+分割統治法+QR, Householder+二分法, Householder+MR3
+    \end{itemize}
+  \item Netlib ScaLAPACK: ScaLAPACKのリファレンス実装
+    \begin{itemize}
+      \item Householder+QR, Householder+分割統治法+QR, Householder+二分法, Householder+MR3
+    \end{itemize}
+  \item SLEPc: 反復法ソルバ中心, ビルド時に逐次かMPI並列かを選ぶ必要あり
+    \begin{itemize}
+      \item Krylov-Schur, Generalized Davidson, Jacobi-Davidson, Rayleigh Quotient Conjugate Gradient, Contour integral Sakurai-Sugiura, Power method, Subspace Itertation, Arnoldi (explicit restart), Lanczos (explicit restart) \\
+    \end{itemize}
+  \item Xabclib (ppOpen AT)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{おすすめ順}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 密行列・逐次
+    \begin{itemize}
+      \item LAPACK (のベンダ実装) $>$ Eigen3
+    \end{itemize}
+  \item 密行列・MPI並列
+    \begin{itemize}
+      \item EigenExa $>$ ELPA $>$ ScaLAPACK (のベンダ実装) $>$ Elemental
+    \end{itemize}
+  \item 疎行列・逐次
+    \begin{itemize}
+      \item Anasazi
+    \end{itemize}
+  \item 疎行列・MPI並列
+    \begin{itemize}
+      \item Anasazi $>$ SLEPc
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{EigenExaによる超巨大密行列の対角化}
+  \begin{center}
+    \includegraphics[height=0.8\textheight]{figure/eigenexa.pdf}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{最新の固有値ソルバ}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item ハイブリッド並列(MPI+OpenMP)対応のソルバも増えてきた
+  \item 超並列環境に対応した並列ソルバをユーザ自身が実装・最適化するの
+    はもはや不可能
+  \item 最新の並列固有値ソルバを積極的に活用すべき
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{厳密対角化パッケージの状況}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item ALPS: LAPACK, IETLを利用
+  \item KOBEPACK: 独自の固有値ソルバを実装
+  \item SPINPACK: LAPACKを利用
+  \item TITPACK2: 独自の固有値ソルバを実装 \\
+  \item 逐次 or スレッド並列のみ, MPI並列なし
+  \item 最新の超並列スパコン環境を活かしきれていない
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{固有値解法とソルバ}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+    \item GitHub Wikiに, 固有値問題の解法, 固有値ソルバ, 固有値ソルバ/線形計算ライブラリ, 厳密対角化パッケージに関するリファレンス・マニュアルを作成中
+      \begin{itemize}
+        \item 固有値解法とソルバ: \url{https://github.com/t-sakashita/rokko/wiki/EigenvalueAlgorithms}
+      \end{itemize}
+    \item ボランティア募集中!
+  \end{itemize}
+\end{frame}
+        
+\section{Rokkoの概要と内部構造}
+
+\begin{frame}
+  \frametitle{Rokkoの概要と内部構造}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item 既存のライブラリの問題点
+  \item Rokkoの概要
+  \item 並列ソルバの基本概念
+  \item Rokkoの内部構造
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{既存のライブラリの問題点}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item ソルバ毎に異なるデザイン
+  \item インストール方法もライブラリ毎に異なる
+  \item ドキュメントが不十分な場合も多い
+  \item コンピュータのアーキテクチャ毎に異なるコンパイル・リンクオプションが必要
+  \item C++/C/Fortran相互リンクの問題
+  \item ライブラリ間の依存関係が複雑
+  \item 実際に試す前に大まかな性能比較が欲しい
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{ライブラリ間の依存関係(一部)}
+  \begin{center}
+    \includegraphics[height=0.8\textheight]{figure/library-dependence.pdf}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rokkoの開発者}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item 坂下達哉 (東大物性研) \ \href{mailto:t-sakashita@issp.u-tokyo.ac.jp}{t-sakashita@issp.u-tokyo.ac.jp}
+  \item 本山裕一 (東大院工 $\Rightarrow $ 物性研) \ \href{mailto:yomichi@looper.u-tokyo.ac.jp}{yomichi@looper.t.u-tokyo.ac.jp}
+  \item 五十嵐 亮 (東大物性研) \ \href{mailto:rigarash@issp.u-tokyo.ac.jp}{rigarash@issp.u-tokyo.ac.jp}
+  \item 大久保 毅 (東大物性研) \ \href{mailto:t-okubo@issp.u-tokyo.ac.jp}{t-okubo@issp.u-tokyo.ac.jp}
+  \item 藤堂眞治 (東大院理/物性研) \ \href{mailto:wistaria@phys.s.u-tokyo.ac.jp}{wistaria@phys.s.u-tokyo.ac.jp}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rokkoの概要}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 使用言語
+    \begin{itemize}
+      %\setlength{\itemsep}{1em}
+    \item コア部分: C++
+    \item 言語バインディング: C, Fortran90
+    \item ベンチマークスクリプト: Python
+    \end{itemize}
+  \item ライセンス
+    \begin{itemize}
+      %\setlength{\itemsep}{1em}
+    \item Boostライセンス (ほぼ自由に使える)
+    \end{itemize}
+  \item ソースコード
+    \begin{itemize}
+      %\setlength{\itemsep}{1em}
+    \item GitHubで公開
+    \item \url{https://github.com/t-sakashita/rokko/}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{VCS (Version Control System)によるソース管理}
+  \begin{itemize}
+  \item 開発者が複数になると, ディレクトリ名やログファイルによるバージョン管理はすぐに破綻する
+  \item ソースコードをサーバー上で一括管理
+    \begin{itemize}
+    \item ネットワーク経由でソースを check out/check in
+    \end{itemize}
+  \item 全ての修正履歴を保存
+  \item 複数人が同時に更新した場合に衝突を回避するしくみ
+  \item ブランチ・マージ・タグ付けなどが可能
+  \item 開発者が一人, 公開の予定がない場合でも積極的に使うべき
+  \item 参考資料: バージョン管理web講習会 {\tiny \url{http://www.cms-initiative.jp/ja/research-support/develop-support/how-to-publish/develop-apps/manage-version}}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rokkoの設計方針}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item 共通のベクトルや行列クラス
+  \item ソルバの違いはラッパーで吸収
+    \begin{itemize}
+      %\setlength{\itemsep}{1em}
+    \item 個々のソルバに仕様変更があってもRokkoが吸収
+    \end{itemize}
+  \item 再コンパイルなしに, 実行時にソルバを選択可能
+  \item 仮想関数とテンプレートを組み合わせることで, オーバーヘッドの少ないラッパーを実装
+  \item C++, C, Fortran90から使用可能に
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rokkoの全体像}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 固有値ソルバ/線形演算ライブラリのインストールスクリプト
+  \item 共通基本クラス(分散行列, プロセスグリッド他)
+  \item 固有値ソルバラッパー(C++)
+  \item 固有値ソルバ・ファクトリ(C++)
+  \item C/Fortranラッパー
+  \item テスト・サンプルプログラム
+  \item ベンチマークスクリプト
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rokko Software Stack}
+  \begin{center}
+    \includegraphics[height=0.8\textheight]{figure/rokko-software-stack.jpg}
+  \end{center}
+\end{frame}
+
+\section{Rokkoのインストール}
+
+\begin{frame}
+  \frametitle{インストール作業に必須のツールとライブラリ}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item CMake: \url{http://www.cmake.org}
+  \item Boost C++ Libraries: \url{http://www.boost.org}
+  \item インストールスクリプト: \url{https://github.com/wistaria/installer}
+  \item 主要なスパコンへのインストール状況 \\
+    \url{https://github.com/wistaria/installer/wiki}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{ビルドシステム: CMake}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item Makefileを生成するためのユーティリティー (configureスクリプトに対応)
+    \begin{itemize}
+    \item Windows の Visual C++ 用ソリューションファイル, Mac OS X の Xcode 用プロジェクトファイルの生成も可能
+    \end{itemize}
+  \item 設定は CMakeLists.txt に記述する
+  \item テスト(CTest)やバイナリ配布(CPack)の機能もある
+  \item ファイルの依存関係の自動検出
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{サードパーティーの固有値ソルバ/線形計算ライブラリのインストール}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item Eigen3 (ベクトル, 行列クラスを内部で利用), LAPACKE (LAPACKのCインターフェース)は, Rokkoに同梱されている
+  \item インストールスクリプト: \href{https://github.com/t-sakashita/rokko/tree/master/3rd-party/install}{3rd-party/install}
+    \begin{itemize}
+      \item ライブラリ: Anasazi, EigenExa, Elemental, ELPA, PETSc, ScaLAPACK, SLEPc
+      \item 対応アーキテクチャ: 京/FX10, x86スパコン・クラスタ(Intelコンパイラ/GCC), Mac OS X (GCC), 他
+    \end{itemize}
+  \item 主要なスパコンにインストール済み: \url{https://github.com/t-sakashita/rokko/wiki/PreInstall}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{Rokkoのインストール}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 下準備 (psi.issp.u-tokyo.ac.jpの場合)
+\begin{lstlisting}
+ln -s /opt/nano/alps $HOME/opt
+source $HOME/opt/env.sh
+\end{lstlisting}
+  \item ソースコードのダウンロード・展開
+\begin{lstlisting}
+cd $HOME
+wget --no-check-certificate https://github.com/t-sakashita/rokko/archive/0.1.tar.gz -O rokko-0.1.tar.gz
+tar zxvf rokko-0.1.tar.gz
+\end{lstlisting}
+  \item CMake
+\begin{lstlisting}
+mkdir rokko-build
+cd rokko-build
+cmake -DCMAKE_C_COMPILER=icc -DCMAKE_CXX_COMPILER=icpc -DCMAKE_Fortran_COMPILER=ifort $HOME/rokko-0.1
+\end{lstlisting}
+  \item Make, テスト
+\begin{lstlisting}
+make
+make test
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\section{並列ソルバの基本概念}
+
+\begin{frame}
+  \frametitle{プロセスグリッド}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item MPIプロセスの2次元割付けを指定
+  \item Row-majorとcolumn-majorの二種類
+  \item 4プロセスの例 (左 row-major, 右 column-major)
+  \begin{center}
+    \includegraphics[height=0.25\textheight]{figure/grid-row-major.pdf} \ \ \ \
+    \includegraphics[height=0.25\textheight]{figure/grid-column-major.pdf}
+  \end{center}
+  \item ほとんどの並列固有値ソルバは両方の種類をサポート \\
+    (Elementalはcolumn-majorのみサポート)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{分散行列(Distributed Matrix)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item ほとんどの並列固有値ソルバにおいて, 密行列は「2次元ブロック・サイクリック形式」でデータ分割される
+  \item 4プロセスでの例 (左 ローカルビュー, 右 グローバルビュー)
+  \begin{center}
+    \includegraphics[height=0.45\textheight]{figure/local-view.pdf} \ \ \ \ \ \ \ \
+    \includegraphics[height=0.35\textheight]{figure/global-view.pdf}
+  \end{center}
+  \item ScaLAPACKとELPAは任意のブロックサイズをサポート
+  \item EigenExaとElementalは$1 \times 1$のみをサポート
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::grid クラス}
+  \begin{itemize}
+  \item \href{https://github.com/t-sakashita/rokko/blob/master/rokko/grid.hpp}{rokko/grid.hpp}
+\begin{lstlisting}
+namespace rokko {
+extern struct grid_row_major_t {} grid_row_major;
+extern struct grid_col_major_t {} grid_col_major;
+class grid {
+public:
+  explicit grid(MPI_Comm comm_in = MPI_COMM_WORLD);
+  template <typename GRID_MAJOR>
+  grid(MPI_Comm comm_in, GRID_MAJOR const& grid_major);
+  MPI_Comm get_comm() const { return comm; }
+  int get_nprocs() const;
+  int get_nprow() const;
+  int get_npcol() const;
+  int get_myrank() const;
+  int get_myrow() const;
+  int get_mycol() const;
+  bool is_row_major() const;
+  bool is_col_major() const;
+  int calculate_grid_row(int proc_rank) const;
+  int calculate_grid_col(int proc_rank) const;
+};
+}
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::localized\_matrix クラステンプレート}
+  \begin{itemize}
+  \item \href{https://github.com/t-sakashita/rokko/blob/master/rokko/localized_matrix.hpp}{rokko/localized\_matrix.hpp}
+\begin{lstlisting}
+namespace rokko {
+template<typename MATRIX_MAJOR = rokko::matrix_row_major>
+class localized_matrix {
+public:
+  typedef MATRIX_MAJOR major_type;
+  localized_matrix();
+  localized_matrix(int rows, int cols);
+  template <typename T>
+  localized_matrix(T const& other);
+  template <typename T>
+  matrix_type& operator=(T const& other);
+  double operator[](int i, int j) const;
+  double& operator[](int i, int j);
+  int get_m_global() const;
+  int get_n_global() const;
+  int get_m_local() const;
+  int get_n_local() const;
+  bool is_gindex_myrow(const int& global_i) const;
+};
+}
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::localized\_vector と rokko::localized\_matrix の利用例}
+  \begin{itemize}
+  \item \href{https://github.com/t-sakashita/rokko/blob/master/test/localized_matrix.cpp}{test/localized\_matrix.cpp}
+\begin{lstlisting}
+int dim = 3;
+rokko::localized_matrix<> M(dim,dim);
+M << 1,2,3,4,5,6,7,8,9;
+double a = 5.0;
+rokko::localized_vector u(dim);
+u << 1,2,3;
+rokko::localized_vector v(dim);
+v << 4,5,6;
+rokko::localized_vector w = a*u+M*v;
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::distributed\_matrix クラステンプレート}
+  \begin{itemize}
+  \item \href{https://github.com/t-sakashita/rokko/blob/master/rokko/distributed_matrix.hpp}{rokko/distributed\_matrix.hpp}
+\begin{lstlisting}
+namespace rokko {
+template<typename MATRIX_MAJOR = rokko::matrix_row_major>
+class distributed_matrix {
+public:
+  template<typename SOLVER>
+  distributed_matrix(int m_global_in, int n_global_in, const grid& g_in, SOLVER const& solver_in);
+  template<typename SOLVER>
+  void initialize(int m_global_in, int n_global_in, const grid& g_in, SOLVER const& solver_in);
+  int get_mb() const;
+  int get_nb() const;
+  int get_nprow() const;
+  ...
+  bool is_gindex_myrow(const int& global_i) const;
+  bool is_gindex_mycol(const int& global_j) const;
+  bool is_gindex(const int& global_i, const int& global_j) const;
+  void set_local(int local_i, int local_j, double value);
+  double get_local(int local_i, int local_j) const;
+  void update_local(int local_i, int local_j, double value);
+  void set_global(int global_i, int global_j, double value);
+  double get_global(int global_i, int global_j) const;
+};
+}
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{分散行列の操作}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 行列の掛け算 $C = \alpha A B + \beta C$
+\begin{lstlisting}
+  ...
+  rokko::distributed_matrix<rokko::matrix_col_major> matA(dim, dim, g, solver);
+  rokko::distributed_matrix<rokko::matrix_col_major> matB(dim, dim, g, solver);
+  rokko::distributed_matrix<rokko::matrix_col_major> matC(dim, dim, g, solver);
+  ...
+  rokko::product(alpha, matA, transA, matB, transB, beta, matC);
+\end{lstlisting}
+  \item 分散行列の scatter と gather
+\begin{lstlisting}
+  rokko::localized_matrix<LOC_MAT_MAJOR> lmat(dim, dim);
+  rokko::distributed_matrix<DIST_MAT_MAJOR> mat(dim, dim, g, solver);
+  rokko::scatter(lmat, mat, root);
+  rokko::gather(mat, lmat, root);
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{分散行列の生成}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 要素毎に代入 (globalな添字)
+\begin{lstlisting}
+for(int global_i=0; global_i < mat.m_global; ++global_i) {
+  for(int global_j=0; global_j < mat.n_global; ++global_j) {
+    mat.set_global(global_i, global_j, f(global_i, global_j));
+  }
+}
+\end{lstlisting}
+  \item 要素毎に代入 (localな添字)
+\begin{lstlisting}
+for(int local_i = 0; local_i < mat.get_m_local(); ++local_i) {
+  for(int local_j = 0; local_j < mat.get_n_local(); ++local_j) {
+    int global_i = mat.translate_l2g_row(local_i);
+    int global_j = mat.translate_l2g_col(local_j);
+    mat.set_local(local_i, local_j, f(global_i, global_j));
+  }
+}
+\end{lstlisting}
+  \item 関数の値で行列を埋める
+\begin{lstlisting}
+mat.generate(f);
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::solverクラス(密行列ソルバ)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 初期化
+\begin{lstlisting}
+rokko::solver solver(name);
+solver.initialize(boost::unit_test::framework::master_test_suite().argc,
+  boost::unit_test::framework::master_test_suite().argv);
+solver.finalize();
+\end{lstlisting}
+  \item 対角化 (行列は破壊される)
+\begin{lstlisting}
+rokko::distributed_matrix<matrix_col_major> mat(dim, dim, g, solver);
+...
+rokko::localized_vector evals(dim);
+rokko::distributed_matrix<matrix_col_major> evecs(dim, dim, g, solver);
+solver.diagonalize(mat, evals, evecs);
+\end{lstlisting}
+  \item 登録されているソルバの一覧
+\begin{lstlisting}
+std::vector<std::string> names = rokko::solver_factory::solver_names();
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\section{サンプルの実行}
+
+\begin{frame}[c,fragile]
+  \frametitle{密行列の対角化}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 逐次密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/serial_solver_factory.cpp}{test/serial\_solver\_factory.cpp}
+\begin{lstlisting}
+./test/serial_sovlver_factory
+\end{lstlisting}
+  \item MPI並列密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/solver_factory.cpp}{test/solver\_factory.cpp}
+\begin{lstlisting}
+./test/sovlver_factory
+\end{lstlisting}
+  \item LAPACK dsyev を直接使う \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/dsyev.c}{sample\_dense/dsyev.cpp}
+\begin{lstlisting}
+./sample_dense/dsyev
+\end{lstlisting}
+  \item 逐次密行列solverを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/frank_dense.cpp}{sample\_dense/frank\_dense.cpp}
+\begin{lstlisting}
+./sample_dense/frank_dense lapack 5
+\end{lstlisting}
+  \item 並列密行列ソルバを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/frank_dense_mpi.cpp}{sample\_dense/frank\_dense\_mpi.cpp}
+\begin{lstlisting}
+mpirun -np 4 ./sample_dense/frank_dense_mpi elpa 5
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{量子スピン系の対角化(密行列)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item Heisenberg模型(MPI) \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/heisenberg_dense_mpi.cpp}{sample\_dense/heisenberg\_dense\_mpi.cpp}
+\begin{lstlisting}
+mpirun -np 4 ./sample_dense/heisenberg_dense_mpi elpa
+\end{lstlisting}
+  \item XYZ模型(逐次) \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/xyz_dense.cpp}{sample\_dense/xyz\_dense.cpp}
+\begin{lstlisting}
+./sample_dense/xyz_dense lapack $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
+\end{lstlisting}
+  \item XYZ模型(MPI) \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/xyz_dense_mpi.cpp}{sample\_dense/xyz\_dense\_mpi.cpp}
+\begin{lstlisting}
+mpirun -np 4 ./sample_dense/xyz_dense_mpi elpa $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{量子スピン系の対角化(疎行列, Anasazi)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item Heisenberg模型(CRS) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/heisenberg_crs_mpi.cpp}{sample\_anasazi/heisenberg\_crs\_mpi.cpp}
+\begin{lstlisting}
+mpirun -np 4 ./sample_anasazi/heisenberg_crs_mpi
+\end{lstlisting}
+  \item Heisenberg模型(MatFree) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/heisenberg_matfree_mpi.cpp}{sample\_anasazi/heisenberg\_matfree\_mpi.cpp}
+\begin{lstlisting}
+mpirun -np 4 ./sample_anasazi/heisenberg_matfree_mpi
+\end{lstlisting}
+  \item XYZ模型(CRS) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/xyz_crs_mpi.cpp}{sample\_anasazi/xyz\_crs\_mpi.cpp}
+\begin{lstlisting}
+mpirun -np 4 ./sample_anasazi/xyz_crs_mpi
+\end{lstlisting}
+  \item XYZ模型(MatFree) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/xyz_matfree_mpi.cpp}{sample\_anasazi/xyz\_matfree\_mpi.cpp}
+\begin{lstlisting}
+mpirun -np 4 ./sample_anasazi/xyz_matfree_mpi
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\end{document}
+
+\section{アプリケーションからのRokkoの利用}
+\section{ALPS/Baristaパッケージ}
+\section{MateriAppsとMateriApps LIVE!}
+
+\begin{frame}
+  \frametitle{テスト}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item テスト
+  \end{itemize}
+\end{frame}
+
