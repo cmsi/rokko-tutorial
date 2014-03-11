@@ -8,20 +8,20 @@ Rokko講習会のための日本語資料
 Table of Contents / 内容
 ============================
 
-* Overview of Rokko / Rokkoの概要
 * Eigenvalue Algorithms / 固有値問題の解法
 * Eigensolver/Linear Algebra Libries / 固有値ソルバ/線形計算ライブラリ
 * Exact Diagonalization Packages / 厳密対角化パッケージ
+* Overview of Rokko / Rokkoの概要
+* Installation of Rokko / Rokkoのインストール
 * Inside Rokko / Rokkoの内部
 * Running Examples / サンプルの実行
 * Using Rokko / Rokkoの利用
 * ALPS/Barista Package / ALPS/Baristaパッケージ
-* Installation of Rokko / Rokkoのインストール
 
 How to generte PDF files / PDF生成方法
 ==============================================
 
-* sh make_dist.sh
+* make
 
 生成済のPDFファイル / Pre-generated PDF files
 ======================================================
@@ -31,7 +31,7 @@ How to generte PDF files / PDF生成方法
 Authors / 著者
 =================
 
-* Synge Todo (Department of Physics, Univ. of Tokyo) / 藤堂眞治 (東大院理)
+* Synge Todo (Department of Physics/ISSP, Univ. of Tokyo) / 藤堂眞治 (東大院理/物性研)
 
 License / ライセンス
 ==========================

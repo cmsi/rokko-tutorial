@@ -451,7 +451,7 @@
   \begin{itemize}
     \setlength{\itemsep}{1em}
   \item Eigen3 (ベクトル, 行列クラスを内部で利用), LAPACKE (LAPACKのCインターフェース)は, Rokkoに同梱されている
-  \item インストールスクリプト: \href{https://github.com/t-sakashita/rokko/tree/develop/3rd-party/install}{3rd-party/install}
+  \item インストールスクリプト: \href{https://github.com/t-sakashita/rokko/tree/master/3rd-party/install}{3rd-party/install}
     \begin{itemize}
       \item ライブラリ: Anasazi, EigenExa, Elemental, ELPA, PETSc, ScaLAPACK, SLEPc
       \item 対応アーキテクチャ: 京/FX10, x86スパコン・クラスタ(Intelコンパイラ/GCC), Mac OS X (GCC), 他
@@ -472,14 +472,14 @@ source $HOME/opt/env.sh
   \item ソースコードのダウンロード・展開
 \begin{lstlisting}
 cd $HOME
-wget --no-check-certificate https://github.com/t-sakashita/rokko/archive/develop.zip
-unzip develop
+wget --no-check-certificate https://github.com/t-sakashita/rokko/archive/0.1.tar.gz -O rokko-0.1.tar.gz
+tar zxvf rokko-0.1.tar.gz
 \end{lstlisting}
   \item CMake
 \begin{lstlisting}
 mkdir rokko-build
 cd rokko-build
-cmake -DCMAKE_C_COMPILER=icc -DCMAKE_CXX_COMPILER=icpc -DCMAKE_Fortran_COMPILER=ifort $HOME/rokko-develop
+cmake -DCMAKE_C_COMPILER=icc -DCMAKE_CXX_COMPILER=icpc -DCMAKE_Fortran_COMPILER=ifort $HOME/rokko-0.1
 \end{lstlisting}
   \item Make, テスト
 \begin{lstlisting}
@@ -525,7 +525,7 @@ make test
 \begin{frame}[c,fragile]
   \frametitle{rokko::grid クラス}
   \begin{itemize}
-  \item \href{https://github.com/t-sakashita/rokko/blob/develop/rokko/grid.hpp}{rokko/grid.hpp}
+  \item \href{https://github.com/t-sakashita/rokko/blob/master/rokko/grid.hpp}{rokko/grid.hpp}
 \begin{lstlisting}
 namespace rokko {
 extern struct grid_row_major_t {} grid_row_major;
@@ -555,7 +555,7 @@ public:
 \begin{frame}[c,fragile]
   \frametitle{rokko::localized\_matrix クラステンプレート}
   \begin{itemize}
-  \item \href{https://github.com/t-sakashita/rokko/blob/develop/rokko/localized_matrix.hpp}{rokko/localized\_matrix.hpp}
+  \item \href{https://github.com/t-sakashita/rokko/blob/master/rokko/localized_matrix.hpp}{rokko/localized\_matrix.hpp}
 \begin{lstlisting}
 namespace rokko {
 template<typename MATRIX_MAJOR = rokko::matrix_row_major>
@@ -584,7 +584,7 @@ public:
 \begin{frame}[c,fragile]
   \frametitle{rokko::localized\_vector と rokko::localized\_matrix の利用例}
   \begin{itemize}
-  \item \href{https://github.com/t-sakashita/rokko/blob/develop/test/localized_matrix.cpp}{test/localized\_matrix.cpp}
+  \item \href{https://github.com/t-sakashita/rokko/blob/master/test/localized_matrix.cpp}{test/localized\_matrix.cpp}
 \begin{lstlisting}
 int dim = 3;
 rokko::localized_matrix<> M(dim,dim);
@@ -602,7 +602,7 @@ rokko::localized_vector w = a*u+M*v;
 \begin{frame}[c,fragile]
   \frametitle{rokko::distributed\_matrix クラステンプレート}
   \begin{itemize}
-  \item \href{https://github.com/t-sakashita/rokko/blob/develop/rokko/distributed_matrix.hpp}{rokko/distributed\_matrix.hpp}
+  \item \href{https://github.com/t-sakashita/rokko/blob/master/rokko/distributed_matrix.hpp}{rokko/distributed\_matrix.hpp}
 \begin{lstlisting}
 namespace rokko {
 template<typename MATRIX_MAJOR = rokko::matrix_row_major>
@@ -695,15 +695,15 @@ solver.finalize();
 \end{lstlisting}
   \item 対角化 (行列は破壊される)
 \begin{lstlisting}
-rokko::distributed_matrix<rokko::matrix_col_major> mat(dim, dim, g, solver);
+rokko::distributed_matrix<matrix_col_major> mat(dim, dim, g, solver);
 ...
 rokko::localized_vector evals(dim);
-rokko::distributed_matrix<rokko::matrix_col_major> evecs(dim, dim, g, solver);
+rokko::distributed_matrix<matrix_col_major> evecs(dim, dim, g, solver);
 solver.diagonalize(mat, evals, evecs);
 \end{lstlisting}
   \item 登録されているソルバの一覧
 \begin{lstlisting}
-std::vector<std::string> names = rokko::solver_factory::solverls_names();
+std::vector<std::string> names = rokko::solver_factory::solver_names();
 \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -711,24 +711,77 @@ std::vector<std::string> names = rokko::solver_factory::solverls_names();
 \section{サンプルの実行}
 
 \begin{frame}[c,fragile]
-  \frametitle{}
+  \frametitle{密行列の対角化}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item 逐次密行列ソルバーの一覧
+  \item 逐次密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/serial_solver_factory.cpp}{test/serial\_solver\_factory.cpp}
 \begin{lstlisting}
 ./test/serial_sovlver_factory
 \end{lstlisting}
-  \item MPI並列密行列ソルバーの一覧
+  \item MPI並列密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/solver_factory.cpp}{test/solver\_factory.cpp}
 \begin{lstlisting}
 ./test/sovlver_factory
+\end{lstlisting}
+  \item LAPACK dsyev を直接使う \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/dsyev.c}{sample\_dense/dsyev.cpp}
+\begin{lstlisting}
+./sample_dense/dsyev
+\end{lstlisting}
+  \item 逐次密行列solverを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/frank_dense.cpp}{sample\_dense/frank\_dense.cpp}
+\begin{lstlisting}
+./sample_dense/frank_dense lapack 5
+\end{lstlisting}
+  \item 並列密行列ソルバを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/frank_dense_mpi.cpp}{sample\_dense/frank\_dense\_mpi.cpp}
+\begin{lstlisting}
+mpirun -np 4 ./sample_dense/frank_dense_mpi elpa 5
 \end{lstlisting}
   \end{itemize}
 \end{frame}
 
-\section{アプリケーションからのRokkoの利用}
+\begin{frame}[c,fragile]
+  \frametitle{量子スピン系の対角化(密行列)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item Heisenberg模型(MPI) \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/heisenberg_dense_mpi.cpp}{sample\_dense/heisenberg\_dense\_mpi.cpp}
+\begin{lstlisting}
+mpirun -np 4 ./sample_dense/heisenberg_dense_mpi elpa
+\end{lstlisting}
+  \item XYZ模型(逐次) \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/xyz_dense.cpp}{sample\_dense/xyz\_dense.cpp}
+\begin{lstlisting}
+./sample_dense/xyz_dense lapack $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
+\end{lstlisting}
+  \item XYZ模型(MPI) \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/xyz_dense_mpi.cpp}{sample\_dense/xyz\_dense\_mpi.cpp}
+\begin{lstlisting}
+mpirun -np 4 ./sample_dense/xyz_dense_mpi elpa $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{量子スピン系の対角化(疎行列, Anasazi)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item Heisenberg模型(CRS) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/heisenberg_crs_mpi.cpp}{sample\_anasazi/heisenberg\_crs\_mpi.cpp}
+\begin{lstlisting}
+mpirun -np 4 ./sample_anasazi/heisenberg_crs_mpi
+\end{lstlisting}
+  \item Heisenberg模型(MatFree) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/heisenberg_matfree_mpi.cpp}{sample\_anasazi/heisenberg\_matfree\_mpi.cpp}
+\begin{lstlisting}
+mpirun -np 4 ./sample_anasazi/heisenberg_matfree_mpi
+\end{lstlisting}
+  \item XYZ模型(CRS) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/xyz_crs_mpi.cpp}{sample\_anasazi/xyz\_crs\_mpi.cpp}
+\begin{lstlisting}
+mpirun -np 4 ./sample_anasazi/xyz_crs_mpi
+\end{lstlisting}
+  \item XYZ模型(MatFree) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/xyz_matfree_mpi.cpp}{sample\_anasazi/xyz\_matfree\_mpi.cpp}
+\begin{lstlisting}
+mpirun -np 4 ./sample_anasazi/xyz_matfree_mpi
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
 
 \end{document}
 
+\section{アプリケーションからのRokkoの利用}
 \section{ALPS/Baristaパッケージ}
 \section{MateriAppsとMateriApps LIVE!}
 
