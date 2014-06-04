@@ -169,7 +169,7 @@
     %\setlength{\itemsep}{1em}
   \item Anasazi: 反復法ソルバ中心
     \begin{itemize}
-      \item Krylov-Schur, Jacobi-Davidson, XXX-Davidson, LOBPCG, Implicit Riemann Trust Region Method
+      \item Krylov-Schur, Jacobi-Davidson, XXX-Davidson, LOBPCG, Implicit Riemanian Trust Region Method
     \end{itemize}
   \item EigenExa: 密行列ソルバ
     \begin{itemize}
@@ -196,11 +196,11 @@
       \item Implicit Restarted Lanczos
     \end{itemize}
   \item BLOPEX
-  \item Eigen3: MPI並列(プロセス数が平方数の場合のみ)
+  \item Eigen3（逐次版、行列・行列咳のみスレッド並列化）
     \begin{itemize}
       \item Householder+QR
     \end{itemize}
-  \item Elemental
+  \item Elemental：含まれる固有値ソルバMRRRは、プロセス数が平方数の場合のみ確実に動く
     \begin{itemize}
       \item Householder+MR3
     \end{itemize}
