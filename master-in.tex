@@ -290,10 +290,13 @@
   \frametitle{厳密対角化パッケージの状況}
   \begin{itemize}
     \setlength{\itemsep}{1em}
-  \item ALPS: LAPACK, IETLを利用
-  \item KOBEPACK: 独自の固有値ソルバを実装
-  \item SPINPACK: LAPACKを利用
-  \item TITPACK2: 独自の固有値ソルバを実装 \\
+  \item 代表的なパッケージ
+    \begin{itemize}
+    \item ALPS(fulldiag/sparsediag): LAPACK, IETLを利用
+    \item KOBEPACK: 独自の固有値ソルバを実装
+    \item SPINPACK: LAPACKを利用
+    \item TITPACK2: 独自の固有値ソルバを実装
+    \end{itemize}
   \item 逐次 or スレッド並列のみ, MPI並列なし
   \item 最新の超並列スパコン環境を活かしきれていない
   \end{itemize}
