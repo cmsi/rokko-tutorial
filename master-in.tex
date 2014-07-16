@@ -2,7 +2,15 @@
 
 \begin{document}
 
-\lstset{language=c++,basicstyle=\ttfamily\tiny,showspaces=false,rulecolor=\color[cmyk]{0, 0.29,0.84,0}}
+\lstset{language=c++,basicstyle=\ttfamily\tiny,showspaces=false,keepspaces=true,rulecolor=\color[cmyk]{0, 0.29,0.84,0}}
+
+\lstdefinestyle{shstyle}{
+    language=bash,
+    basicstyle=\ttfamily\tiny,
+    frame=single,
+    keepspaces=true,
+    rulecolor=\color[cmyk]{0, 0.29,0.84,0}
+}
 
 \begin{frame}
   \titlepage
@@ -145,7 +153,7 @@
     \end{itemize}
   \item 疎行列の三重対角化
     \begin{itemize}
-      \item Lanczos法, Arnoldi法, リスタート付きLanczos法(Restart Lanczos), Thick-restart Lanczos
+      \item Lanczos法, Arnoldi法, リスタート付きLanczos法(Restart Lanczos), Thick-restart Lanczos法
     \end{itemize}
   \item その他の方法
     \begin{itemize}
@@ -196,7 +204,7 @@
       \item Implicit Restarted Lanczos
     \end{itemize}
   \item BLOPEX
-  \item Eigen3（逐次版、行列・行列咳のみスレッド並列化）
+  \item Eigen3（逐次版、行列・行列積のみスレッド並列化）
     \begin{itemize}
       \item Householder+QR
     \end{itemize}
@@ -465,18 +473,18 @@
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item 下準備 (psi.issp.u-tokyo.ac.jpの場合)
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 ln -s /opt/nano/alps $HOME/opt
 source $HOME/opt/env.sh
 \end{lstlisting}
   \item ソースコードのダウンロード・展開
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 cd $HOME
 wget --no-check-certificate https://github.com/t-sakashita/rokko/archive/0.1.tar.gz -O rokko-0.1.tar.gz
 tar zxvf rokko-0.1.tar.gz
 \end{lstlisting}
   \item CMake
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 mkdir rokko-build
 cd rokko-build
 cmake -DCMAKE_C_COMPILER=icc -DCMAKE_CXX_COMPILER=icpc -DCMAKE_Fortran_COMPILER=ifort $HOME/rokko-0.1
@@ -715,23 +723,23 @@ std::vector<std::string> names = rokko::solver_factory::solver_names();
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item 逐次密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/serial_solver_factory.cpp}{test/serial\_solver\_factory.cpp}
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 ./test/serial_solver_factory
 \end{lstlisting}
   \item MPI並列密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/solver_factory.cpp}{test/solver\_factory.cpp}
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 ./test/solver_factory
 \end{lstlisting}
   \item LAPACK dsyev を直接使う \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/dsyev.c}{sample\_dense/dsyev.cpp}
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 ./sample_dense/dsyev
 \end{lstlisting}
   \item 逐次密行列solverを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/frank_dense.cpp}{sample\_dense/frank\_dense.cpp}
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 ./sample_dense/frank_dense lapack 5
 \end{lstlisting}
   \item 並列密行列ソルバを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/frank_dense_mpi.cpp}{sample\_dense/frank\_dense\_mpi.cpp}
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample_dense/frank_dense_mpi elpa 5
 \end{lstlisting}
   \end{itemize}
@@ -742,11 +750,11 @@ mpirun -np 4 ./sample_dense/frank_dense_mpi elpa 5
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Heisenberg模型(MPI) \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/heisenberg_dense_mpi.cpp}{sample\_dense/heisenberg\_dense\_mpi.cpp}
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample_dense/heisenberg_dense_mpi elpa
 \end{lstlisting}
   \item XYZ模型(逐次) \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/xyz_dense.cpp}{sample\_dense/xyz\_dense.cpp}
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 ./sample_dense/xyz_dense lapack $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
 \end{lstlisting}
   \item XYZ模型(MPI) \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/xyz_dense_mpi.cpp}{sample\_dense/xyz\_dense\_mpi.cpp}
@@ -761,19 +769,19 @@ mpirun -np 4 ./sample_dense/xyz_dense_mpi elpa $HOME/rokko-0.1/test/input_data/x
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Heisenberg模型(CRS) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/heisenberg_crs_mpi.cpp}{sample\_anasazi/heisenberg\_crs\_mpi.cpp}
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample_anasazi/heisenberg_crs_mpi
 \end{lstlisting}
   \item Heisenberg模型(MatFree) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/heisenberg_matfree_mpi.cpp}{sample\_anasazi/heisenberg\_matfree\_mpi.cpp}
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample_anasazi/heisenberg_matfree_mpi
 \end{lstlisting}
   \item XYZ模型(CRS) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/xyz_crs_mpi.cpp}{sample\_anasazi/xyz\_crs\_mpi.cpp}
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample_anasazi/xyz_crs_mpi
 \end{lstlisting}
   \item XYZ模型(MatFree) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/xyz_matfree_mpi.cpp}{sample\_anasazi/xyz\_matfree\_mpi.cpp}
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample_anasazi/xyz_matfree_mpi
 \end{lstlisting}
   \end{itemize}
