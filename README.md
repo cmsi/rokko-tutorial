@@ -32,6 +32,7 @@ Authors / 著者
 =================
 
 * Synge Todo (Department of Physics/ISSP, Univ. of Tokyo) / 藤堂眞治 (東大院理/物性研)
+* Tatsuya Sakashita (ISSP, Univ. of Tokyo) / 坂下達哉 (東大物性研)
 
 License / ライセンス
 ==========================
