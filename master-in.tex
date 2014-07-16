@@ -2,6 +2,8 @@
 
 \begin{document}
 
+\setbeamertemplate{itemize subitem}[triangle]
+
 \lstset{language=c++,basicstyle=\ttfamily\tiny,showspaces=false,keepspaces=true,rulecolor=\color[cmyk]{0, 0.29,0.84,0}}
 
 \lstdefinestyle{shstyle}{
@@ -191,6 +193,11 @@
     \begin{itemize}
       \item Lanczos, 他
     \end{itemize}
+  \item ARPACK
+    \begin{itemize}
+      \item Implicit Restarted Lanczos
+    \end{itemize}
+  \item BLOPEX: Locally Optimal Block Preconditioned Conjugate Gradient Method (LOBPCG)
   \end{itemize}
 \end{frame}
 
@@ -198,12 +205,6 @@
   \frametitle{既存の線形計算ライブラリ(一部)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item Apple VecLib: LAPACK
-  \item ARPACK
-    \begin{itemize}
-      \item Implicit Restarted Lanczos
-    \end{itemize}
-  \item BLOPEX
   \item Eigen3（逐次版、行列・行列積のみスレッド並列化）
     \begin{itemize}
       \item Householder+QR
@@ -212,8 +213,13 @@
     \begin{itemize}
       \item Householder+MR3
     \end{itemize}
-  \item Fujitsu SSLII: LAPACK, ScaLAPACK(の一部), 他
-  \item Intel MKL: LAPACK, ScaLAPACK
+  \item Trilinos：固有値ソルバライブラリAnasaziを含む
+  \item LAPACK, ScaLAPACKのベンダ実装
+    \begin{itemize}
+    \item Apple VecLib: LAPACK
+    \item Fujitsu SSLII: LAPACK, ScaLAPACK(の一部), 他
+    \item Intel MKL: LAPACK, ScaLAPACK
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
