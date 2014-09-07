@@ -500,10 +500,12 @@ make test
   \end{itemize}
 \end{frame}
 
-\section{並列ソルバの基本概念}
+\section{並列ソルバの基本概念）}
+
+\subsection{密行列向け並列ソルバ}
 
 \begin{frame}
-  \frametitle{プロセスグリッド}
+  \frametitle{２次元プロセスグリッド}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item MPIプロセスの2次元割付けを指定
@@ -719,6 +721,18 @@ std::vector<std::string> names = rokko::solver_factory::solver_names();
   \end{itemize}
 \end{frame}
 
+\subsection{疎行列向け並列ソルバ}
+
+\begin{frame}[c,fragile]
+  \frametitle{CRS格納方式}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{Matrix free方式}
+\end{frame}
+
+
+
 \section{サンプルの実行}
 
 \begin{frame}[c,fragile]
@@ -790,11 +804,33 @@ mpirun -np 4 ./sample_anasazi/xyz_matfree_mpi
   \end{itemize}
 \end{frame}
 
-\end{document}
+\section{TITPACK2へのRokko組み込み実習}
+
+\begin{frame}[c,fragile]
+  \frametitle{TITPACKの概要}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{ディレクトリ構成}
+\end{frame}
 
 \section{アプリケーションからのRokkoの利用}
-\section{ALPS/Baristaパッケージ}
-\section{MateriAppsとMateriApps LIVE!}
+
+\begin{frame}[c,fragile]
+  \frametitle{CMakeによるRokkoライブラリの取り込み方法}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{MakefileによるRokkoライブラリの取り込み方法}
+\end{frame}
+
+\end{document}
+
+
+
+
+%\section{ALPS/Baristaパッケージ}
+%\section{MateriAppsとMateriApps LIVE!}
 
 \begin{frame}
   \frametitle{テスト}
