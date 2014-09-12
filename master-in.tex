@@ -500,6 +500,38 @@ make test
   \end{itemize}
 \end{frame}
 
+\begin{frame}[c,fragile]
+  \frametitle{Rokkoのディレクトリ構造}
+
+\dirtree{%
+ .1 \href{https://github.com/t-sakashita/rokko/tree/develop}{/}.
+ .2
+ \href{https://github.com/t-sakashita/rokko/tree/develop/rokko}{rokko}
+ $\cdots$ Rokko本体（ヘッダファイル・ソースファイル）.
+ .2
+ \href{https://github.com/t-sakashita/rokko/tree/develop/sample}{sample}
+ $\cdots$ C++によるサンプルプログラム.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample/dense}{dense} $\cdots$ 密行列用.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample/sparse}{sparse} $\cdots$ 疎行列用.
+ .2 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c}{sample\_c} $\cdots$ Cによるサンプルプログラム.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/dense}{dense} $\cdots$ 密行列用.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/sparse}{sparse} $\cdots$ 疎行列用.
+ .2 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran}{sample\_fortran}
+ $\cdots$ Fortranによるサンプルプログラム.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/dense}{dense} $\cdots$ 密行列用.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/sparse}{sparse} $\cdots$ 疎行列用.
+ .2
+ \href{https://github.com/t-sakashita/rokko/tree/develop/test}{test}
+ $\cdots$ ctest用（インストール成否の確認）
+ .2 3rd-party $\cdots$ 固有値ソルバ.
+ .2 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial}{tutorial} $\cdots$ チュートリアル用.
+ .3
+ \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack}{titpack}
+ $\cdots$ 厳密対角化パッケージによるチュートリアル.
+}
+
+\end{frame}
+
 \section{並列ソルバの基本概念）}
 
 \subsection{密行列向け並列ソルバ}
