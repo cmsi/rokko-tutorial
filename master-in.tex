@@ -522,7 +522,7 @@ make test
  .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/sparse}{sparse} $\cdots$ 疎行列用.
  .2
  \href{https://github.com/t-sakashita/rokko/tree/develop/test}{test}
- $\cdots$ ctest用（インストール成否の確認）
+ $\cdots$ ctest用（インストール成否の確認）.
  .2 3rd-party $\cdots$ 固有値ソルバ.
  .2 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial}{tutorial} $\cdots$ チュートリアル用.
  .3
@@ -844,7 +844,20 @@ mpirun -np 4 ./sample_anasazi/xyz_matfree_mpi
 
 \begin{frame}[c,fragile]
   \frametitle{ディレクトリ構成}
+
+\dirtree{%
+ .1 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/}{tutorial}.
+ .2
+ \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack}{titpack}.
+ .3
+ \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/00_original}{00\_original} $\cdots$ Fortran版.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/01_lapack}{01\_lapack} $\cdots$ Fortran版.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/01_lapack_cxx}{01\_lapack\_cxx} $\cdots$ Fortran版.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/02_refactored_cxx}{02\_refactored\_cxx} $\cdots$ Fortran版.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/03_rokko_cxx}{03\_rokko\_cxx} $\cdots$ Fortran版.
+}
 \end{frame}
+
 
 \section{アプリケーションからのRokkoの利用}
 
