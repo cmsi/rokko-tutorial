@@ -3,6 +3,8 @@ SRC = ${BASENAME}-in.tex style/*.sty style/*.bb
 
 default: ${BASENAME}-wide.pdf ${BASENAME}.pdf
 
+normal: ${BASENAME}.pdf
+
 ${BASENAME}-wide.dvi: ${BASENAME}-wide.tex ${SRC}
 	TEXINPUTS=.:./style//: platex -shell-escape ${BASENAME}-wide.tex
 	TEXINPUTS=.:./style//: platex ${BASENAME}-wide.tex
