@@ -170,13 +170,9 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{既存の固有値ソルバライブラリ(一部)}
+  \frametitle{既存の固有値ソルバライブラリ（密行列向け）}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item Anasazi: 反復法ソルバ中心
-    \begin{itemize}
-      \item Krylov-Schur, Jacobi-Davidson, XXX-Davidson, LOBPCG, Implicit Riemannian Trust Region Method
-    \end{itemize}
   \item EigenExa: 密行列ソルバ
     \begin{itemize}
       \item Householder (3重対角化, 5重対角化)+分割統治法+QR
@@ -185,9 +181,15 @@
     \begin{itemize}
       \item Householder+分割統治法+QR
     \end{itemize}
-  \item IETL: ALPSに含まれる反復法ソルバ
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{既存の固有値ソルバライブラリ（疎行列向け）}
+  \begin{itemize}
+  \item Anasazi: 反復法ソルバ中心
     \begin{itemize}
-      \item Lanczos, 他
+      \item Krylov-Schur, Jacobi-Davidson, XXX-Davidson, LOBPCG, Implicit Riemannian Trust Region Method
     \end{itemize}
   \item ARPACK
     \begin{itemize}
@@ -197,35 +199,27 @@
     \begin{itemize}
     \item Locally Optimal Block Preconditioned Conjugate Gradient Method (LOBPCG)
     \end{itemize}
+  \item SLEPc: 反復法ソルバ中心, ビルド時に逐次かMPI並列かを選ぶ必要あり
+    \begin{itemize}
+      \item Krylov-Schur, Generalized Davidson, Jacobi-Davidson, Rayleigh Quotient Conjugate Gradient, Contour integral Sakurai-Sugiura, Power method, Subspace Itertation, Arnoldi (explicit restart), Lanczos (explicit restart) \\
+    \end{itemize}
+  \item IETL: ALPSに含まれる反復法ソルバ
+    \begin{itemize}
+      \item Lanczos, 他
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{既存の線形計算ライブラリ(一部)}
+  \frametitle{既存の線形計算ライブラリ（密行列向け）}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item Eigen3（逐次版、行列・行列積のみスレッド並列化）
-    \begin{itemize}
-      \item Householder+QR
-    \end{itemize}
-  \item Elemental：含まれる固有値ソルバMRRRは、プロセス数が平方数の場合のみ確実に動く
-    \begin{itemize}
-      \item Householder+MR3
-    \end{itemize}
-  \item Trilinos：固有値ソルバライブラリAnasaziを含む
   \item LAPACK, ScaLAPACKのベンダ実装
     \begin{itemize}
     \item Apple VecLib: LAPACK
     \item Fujitsu SSLII: LAPACK, ScaLAPACK(の一部), 他
     \item Intel MKL: LAPACK, ScaLAPACK
     \end{itemize}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{既存の線形計算ライブラリ(一部)}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
   \item Netlib LAPACK: LAPACKのリファレンス実装
     \begin{itemize}
       \item Householder+QR, Householder+分割統治法+QR, Householder+二分法, Householder+MR3
@@ -234,10 +228,22 @@
     \begin{itemize}
       \item Householder+QR, Householder+分割統治法+QR, Householder+二分法, Householder+MR3
     \end{itemize}
-  \item SLEPc: 反復法ソルバ中心, ビルド時に逐次かMPI並列かを選ぶ必要あり
+  \item Eigen3（逐次版、行列・行列積のみスレッド並列化）
     \begin{itemize}
-      \item Krylov-Schur, Generalized Davidson, Jacobi-Davidson, Rayleigh Quotient Conjugate Gradient, Contour integral Sakurai-Sugiura, Power method, Subspace Itertation, Arnoldi (explicit restart), Lanczos (explicit restart) \\
+      \item Householder+QR
     \end{itemize}
+  \item Elemental：含まれる固有値ソルバMRRRは、プロセス数が平方数の場合のみ確実に動く
+    \begin{itemize}
+      \item Householder+MR3
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{既存の線形計算ライブラリ(疎行列向け)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item Trilinos：固有値ソルバライブラリAnasaziを含む
   \item Xabclib (ppOpen AT)
   \end{itemize}
 \end{frame}
@@ -455,6 +461,7 @@
   \item 設定は CMakeLists.txt に記述する
   \item テスト(CTest)やバイナリ配布(CPack)の機能もある
   \item ファイルの依存関係の自動検出
+  \item ソースディレクトリとビルドディレクトリの分離（バージョン管理がしやすくなる）
   \end{itemize}
 \end{frame}
 
