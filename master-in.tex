@@ -815,10 +815,113 @@ CRS方式による表現：
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{Matrix free方式}
+  \frametitle{rokko::distributed\_crs\_matrix クラステンプレート}
+\begin{lstlisting}
+namespace rokko {
+class distributed_crs_matrix {
+public:
+  void insert(int row, std::vector<int> const& cols, std::vector<double> const& values);
+  void insert(int row, int col_size, int* cols, double* const values);
+  void complete();
+  int get_dim() const;
+  int num_local_rows() const;
+  int start_row() const;
+  int end_row() const;
+  void print() const;
+};
+}
+\end{lstlisting}
+
 \end{frame}
 
 
+\begin{frame}[c,fragile]
+  \frametitle{Matrix free方式}
+\end{frame}
+
+\begin{frame}[c,fragile]
+rokko::distributed\_mfreeを継承し、 multiply(const double* x, double* y)関数を持つクラスを定義する。
+\begin{lstlisting}
+class heisenberg_op : public rokko::distributed_mfree {
+public:
+  heisenberg_op(int L, const std::vector<std::pair<int, int> >& lattice) : L_(L), lattice_(lattice) {
+    comm_ = MPI_COMM_WORLD;
+    int nproc;
+    MPI_Comm_size(comm_, &nproc);
+    int n = nproc;
+    int p = -1;
+    do {
+      n /= 2;
+      ++p;
+    } while (n > 0);
+    local_N = 1 << (L-p);
+    buffer_.assign(local_N, 0);
+    dim_ = 1 << L;
+  }
+
+  ~heisenberg_op() {}
+
+  void multiply(const double* x, double* y) const {
+    rokko::heisenberg_hamiltonian::multiply(comm_, L_, lattice_, x, y, &(buffer_[0]));
+  }
+  int get_dim() const {
+    return dim_;
+  }
+  int get_num_local_rows() const {
+    return local_N;
+  }
+
+private:
+  MPI_Comm comm_;
+  mutable std::vector<double> buffer_;
+  int L_;
+  int local_N;
+  std::vector<std::pair<int, int> > lattice_;
+  int dim_;
+};
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::parallel\_sparse\_solverクラス(疎行列、MPI並列版)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 初期化
+\begin{lstlisting}
+rokko::parallel_sparse_solver solver(name);
+solver.initialize(argc, argv);
+solver.finalize();
+\end{lstlisting}
+  \item 対角化（CRS行列の場合）
+\begin{lstlisting}
+rokko::distributed_crs_matrix mat(dim, dim, solver);
+...
+solver.diagonalize(mat, num_evals, block_size, max_iters, tol);
+\end{lstlisting}
+  \item 対角化（Matrix Freeの場合）
+\begin{lstlisting}
+class heisenberg_op : public rokko::distributed_mfree {
+      ...
+}
+...
+solver.diagonalize(mat, num_evals, block_size, max_iters, tol);
+\end{lstlisting}
+
+  \item 固有値・固有ベクトルの取り出し
+\begin{lstlisting}
+int i;
+solver.eigenvalue(i);
+std::vector<double> eigvec;
+solver.eigenvector(i, eigvec);
+
+\end{lstlisting}
+  \item 登録されているソルバの一覧
+\begin{lstlisting}
+std::vector<std::string> names = rokko::parallel_sparse_solver::solvers();
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
 
 \section{サンプルの実行}
 
