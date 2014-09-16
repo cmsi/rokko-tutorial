@@ -736,14 +736,38 @@ mat.generate(f);
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::solverクラス(密行列ソルバ)}
+  \frametitle{rokko::serial\_dense\_solverクラス(密行列、逐次版)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item 初期化
 \begin{lstlisting}
-rokko::solver solver(name);
-solver.initialize(boost::unit_test::framework::master_test_suite().argc,
-  boost::unit_test::framework::master_test_suite().argv);
+rokko::serial_dense_solver solver(name);
+solver.initialize(argc, argv);
+solver.finalize();
+\end{lstlisting}
+  \item 対角化 (行列は破壊される)
+\begin{lstlisting}
+rokko::localized_matrix<matrix_col_major> mat(dim, dim, solver);
+...
+rokko::localized_vector evals(dim);
+rokko::localized_matrix<matrix_col_major> evecs(dim, dim, g, solver);
+solver.diagonalize(mat, evals, evecs);
+\end{lstlisting}
+  \item 登録されているソルバの一覧
+\begin{lstlisting}
+std::vector<std::string> names = rokko::serial_dense_solver::solvers();
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::parallel\_dense\_solverクラス(密行列、MPI並列版)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 初期化
+\begin{lstlisting}
+rokko::parallel_dense_solver solver(name);
+solver.initialize(argc, argv);
 solver.finalize();
 \end{lstlisting}
   \item 対角化 (行列は破壊される)
@@ -756,7 +780,7 @@ solver.diagonalize(mat, evals, evecs);
 \end{lstlisting}
   \item 登録されているソルバの一覧
 \begin{lstlisting}
-std::vector<std::string> names = rokko::solver_factory::solver_names();
+std::vector<std::string> names = rokko::parallel_dense_solver::solvers();
 \end{lstlisting}
   \end{itemize}
 \end{frame}
