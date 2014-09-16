@@ -476,7 +476,7 @@
   \frametitle{Rokkoのインストール}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item 下準備 (psi.issp.u-tokyo.ac.jpの場合)
+  \item 下準備 (phi.aics.riken.jpの場合)
 \begin{lstlisting}[style=shstyle]
 ln -s /opt/nano/alps $HOME/opt
 source $HOME/opt/env.sh
@@ -780,17 +780,17 @@ std::vector<std::string> names = rokko::solver_factory::solver_names();
 \begin{lstlisting}[style=shstyle]
 ./test/solver_factory
 \end{lstlisting}
-  \item LAPACK dsyev を直接使う \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/dsyev.c}{sample\_dense/dsyev.cpp}
+  \item LAPACK dsyev を直接使う \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/dsyev.c}{sample/dense/dsyev.cpp}
 \begin{lstlisting}[style=shstyle]
-./sample_dense/dsyev
+./sample/dense/dsyev
 \end{lstlisting}
-  \item 逐次密行列solverを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/frank_dense.cpp}{sample\_dense/frank\_dense.cpp}
+  \item 逐次密行列solverを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/frank_dense.cpp}{sample/dense/frank.cpp}
 \begin{lstlisting}[style=shstyle]
-./sample_dense/frank_dense lapack 5
+./sample/dense/frank lapack 5
 \end{lstlisting}
-  \item 並列密行列ソルバを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/frank_dense_mpi.cpp}{sample\_dense/frank\_dense\_mpi.cpp}
+  \item 並列密行列ソルバを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/frank_dense_mpi.cpp}{sample/dense/frank\_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample_dense/frank_dense_mpi elpa 5
+mpirun -np 4 ./sample/dense/frank_mpi elpa 5
 \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -799,17 +799,17 @@ mpirun -np 4 ./sample_dense/frank_dense_mpi elpa 5
   \frametitle{量子スピン系の対角化(密行列)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item Heisenberg模型(MPI) \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/heisenberg_dense_mpi.cpp}{sample\_dense/heisenberg\_dense\_mpi.cpp}
+  \item Heisenberg模型(MPI) \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/heisenberg_mpi.cpp}{sample/dense/heisenberg\_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample_dense/heisenberg_dense_mpi elpa
+mpirun -np 4 ./sample/dense/heisenberg_mpi elpa
 \end{lstlisting}
-  \item XYZ模型(逐次) \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/xyz_dense.cpp}{sample\_dense/xyz\_dense.cpp}
+  \item XYZ模型(逐次) \href{https://github.com/t-sakashita/rokko/blob/develop/sample/dense/xyz_dense.cpp}{sample/dense/xyz.cpp}
 \begin{lstlisting}[style=shstyle]
-./sample_dense/xyz_dense lapack $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
+./sample/dense/xyz_dense lapack $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
 \end{lstlisting}
-  \item XYZ模型(MPI) \href{https://github.com/t-sakashita/rokko/blob/master/sample_dense/xyz_dense_mpi.cpp}{sample\_dense/xyz\_dense\_mpi.cpp}
+  \item XYZ模型(MPI) \href{https://github.com/t-sakashita/rokko/blob/develop/sample/dense/xyz_mpi.cpp}{sample/dense/xyz\_mpi.cpp}
 \begin{lstlisting}
-mpirun -np 4 ./sample_dense/xyz_dense_mpi elpa $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
+mpirun -np 4 ./sample/dense/xyz_mpi elpa $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
 \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -818,21 +818,21 @@ mpirun -np 4 ./sample_dense/xyz_dense_mpi elpa $HOME/rokko-0.1/test/input_data/x
   \frametitle{量子スピン系の対角化(疎行列, Anasazi)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item Heisenberg模型(CRS) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/heisenberg_crs_mpi.cpp}{sample\_anasazi/heisenberg\_crs\_mpi.cpp}
+  \item Heisenberg模型(CRS) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/heisenberg_crs_mpi.cpp}{sample/sparse/heisenberg\_crs\_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample_anasazi/heisenberg_crs_mpi
+mpirun -np 4 ./sample/sparse/heisenberg_crs_mpi
 \end{lstlisting}
-  \item Heisenberg模型(MatFree) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/heisenberg_matfree_mpi.cpp}{sample\_anasazi/heisenberg\_matfree\_mpi.cpp}
+  \item Heisenberg模型(MatFree) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/heisenberg_mfree_mpi.cpp}{sample/sparse/heisenberg\_mfree\_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample_anasazi/heisenberg_matfree_mpi
+mpirun -np 4 ./sample/sparse/heisenberg_mfree_mpi
 \end{lstlisting}
-  \item XYZ模型(CRS) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/xyz_crs_mpi.cpp}{sample\_anasazi/xyz\_crs\_mpi.cpp}
+  \item XYZ模型(CRS) \href{https://github.com/t-sakashita/rokko/blob/master/sample/sparse/xyz_crs_mpi.cpp}{sample/sparse/xyz\_crs\_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample_anasazi/xyz_crs_mpi
+mpirun -np 4 ./sample/sparse/xyz_crs_mpi
 \end{lstlisting}
-  \item XYZ模型(MatFree) \href{https://github.com/t-sakashita/rokko/blob/master/sample_anasazi/xyz_matfree_mpi.cpp}{sample\_anasazi/xyz\_matfree\_mpi.cpp}
+  \item XYZ模型(Mfree) \href{https://github.com/t-sakashita/rokko/blob/master/sample/sparses/xyz_mfree_mpi.cpp}{sample/sparse/xyz\_mfree\_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample_anasazi/xyz_matfree_mpi
+mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
 \end{lstlisting}
   \end{itemize}
 \end{frame}
