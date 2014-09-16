@@ -26,7 +26,7 @@
     \item 坂下達哉 (東大物性研) \ \href{mailto:t-sakashita@issp.u-tokyo.ac.jp}{t-sakashita@issp.u-tokyo.ac.jp}
     \item 藤堂眞治 (東大院理/物性研) \ \href{mailto:wistaria@phys.s.u-tokyo.ac.jp}{wistaria@phys.s.u-tokyo.ac.jp}
 %    \item 五十嵐 亮 (東大物性研) \ \href{mailto:rigarash@issp.u-tokyo.ac.jp}{rigarash@issp.u-tokyo.ac.jp}
-%    \item 本山裕一 (東大院工 $\Rightarrow $ 物性研) \ \href{mailto:yomichi@looper.u-tokyo.ac.jp}{yomichi@looper.t.u-tokyo.ac.jp}
+%    \item 本山裕一 (東大院工 $\Rightarrow $ 物性研) \ \href{mailto:y-motoyama@issp.u-tokyo.ac.jp}{y-motoyama@issp.u-tokyo.ac.jp}
     \end{itemize}
   \item 主催
     \begin{itemize}
@@ -334,9 +334,9 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{ライブラリ間の依存関係(一部)}
+  \frametitle{ライブラリ間の依存関係（密行列向け）}
   \begin{center}
-    \includegraphics[height=0.8\textheight]{figure/library-dependence.pdf}
+    \includegraphics[height=0.8\textheight]{figure/eigensolver_dependency.pdf}
   \end{center}
 \end{frame}
 
@@ -345,7 +345,7 @@
   \begin{itemize}
     \setlength{\itemsep}{1em}
   \item 坂下達哉 (東大物性研) \ \href{mailto:t-sakashita@issp.u-tokyo.ac.jp}{t-sakashita@issp.u-tokyo.ac.jp}
-  \item 本山裕一 (東大院工 $\Rightarrow $ 物性研) \ \href{mailto:yomichi@looper.u-tokyo.ac.jp}{yomichi@looper.t.u-tokyo.ac.jp}
+  \item 本山裕一 (東大物性研) \ \href{mailto:y-motoyama@issp.u-tokyo.ac.jp}{y-motoyama@issp.u-tokyo.ac.jp}
   \item 五十嵐 亮 (東大物性研) \ \href{mailto:rigarash@issp.u-tokyo.ac.jp}{rigarash@issp.u-tokyo.ac.jp}
   \item 大久保 毅 (東大物性研) \ \href{mailto:t-okubo@issp.u-tokyo.ac.jp}{t-okubo@issp.u-tokyo.ac.jp}
   \item 藤堂眞治 (東大院理/物性研) \ \href{mailto:wistaria@phys.s.u-tokyo.ac.jp}{wistaria@phys.s.u-tokyo.ac.jp}
@@ -868,6 +868,31 @@ mpirun -np 4 ./sample_anasazi/xyz_matfree_mpi
 
 \begin{frame}[c,fragile]
   \frametitle{MakefileによるRokkoライブラリの取り込み方法}
+\end{frame}
+
+\section{トラブルシューティング}
+\begin{frame}[c,fragile]
+  \frametitle{Rokkoに取り込まれたソルバ一覧}
+\begin{lstlisting}[style=shstyle]
+cd rokko/tool
+./rokko_solvers
+\end{lstlisting}
+
+出力結果
+\begin{lstlisting}[style=shstyle]
+[serial dense solvers]
+  eigen3
+  lapack
+[parallel dense solvers]
+  eigen_exa_s
+  eigen_exa_sx
+  scalapack
+  scalapack_pdsyevd
+[parallel sparse solvers]
+  anasazi
+  slepc
+\end{lstlisting}
+
 \end{frame}
 
 \end{document}
