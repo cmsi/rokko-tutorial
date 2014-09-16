@@ -1,5 +1,8 @@
 \title{Rokkoチュートリアル}
 
+\newtheorem{rei}{例}
+\renewcommand{\therei}{}
+
 \begin{document}
 
 \lstset{language=c++,basicstyle=\ttfamily\tiny,showspaces=false,keepspaces=true,rulecolor=\color[cmyk]{0, 0.29,0.84,0}}
@@ -543,7 +546,7 @@ make test
     %\setlength{\itemsep}{1em}
   \item MPIプロセスの2次元割付けを指定
   \item Row-majorとcolumn-majorの二種類
-  \item 4プロセスの例 (左 row-major, 右 column-major)
+  \item 4プロセスの例 (左:row-major, 右:column-major)
   \begin{center}
     \includegraphics[height=0.25\textheight]{figure/grid-row-major.pdf} \ \ \ \
     \includegraphics[height=0.25\textheight]{figure/grid-column-major.pdf}
@@ -757,7 +760,30 @@ std::vector<std::string> names = rokko::solver_factory::solver_names();
 \subsection{疎行列向け並列ソルバ}
 
 \begin{frame}[c,fragile]
-  \frametitle{CRS格納方式}
+  \frametitle{CRS(Compressed Row Storage)方式}
+%疎行列の非ゼロ成分のみを求め固有値ソルバに渡す方法である．
+%この方法で用いられる疎行列の代表的な格納方式には，CRS方式(Compressed Row Storage, 圧縮行格納方式)がある．
+各行ごとに非ゼロ成分とその列添字を格納する方法
+
+\begin{rei}%
+\begin{align*}
+\begin{bmatrix}
+7 & 9 & 0 & 0 \\
+0 & 0 & 0 & 6 \\
+4 & 0 & 0 & 5 \\
+0 & 0 & 7 & 0
+\end{bmatrix}
+\end{align*}
+CRS方式による表現：
+\begin{itemize}
+\item 非ゼロ成分に対する行添字$= [1, 1, 2, 3, 3, 4] $
+\item 非ゼロ成分に対する列添字$= [1, 2, 4, 1, 4, 3]$
+\item 非ゼロ行列成分$= [7, 9, 6, 4, 5, 7]$
+\end{itemize}
+\end{rei}
+
+メモリ分散並列化は行単位
+
 \end{frame}
 
 \begin{frame}[c,fragile]
