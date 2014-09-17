@@ -44,10 +44,11 @@
     %\setlength{\itemsep}{1em}
   \item 座学: 既存の固有値問題の解法・固有値ソルバ/線形計算ライブラリ
   \item 座学: Rokkoの概要と内部構造
-  \item 座学: 密行列向け逐次・MPI並列ソルバの基本概念
-  \item 座学: 疎行列向けソルバの基本概念
   \item 実習: Rokkoのインストール
-  \item 実習: サンプルの実行
+  \item 座学・実習: 密行列向け逐次ソルバの基本概念、サンプル実行
+  \item 座学・実習: 密行列向けMPI並列ソルバの基本概念、サンプル実行
+  \item 座学・実習: 疎行列向けソルバの基本概念、サンプル実行
+  \item 実習: 量子スピン系の対角化のサンプル実行
   \item 実習: TITPACK2へのRokko組み込み実習
   \item 実習: アプリケーションからのRokkoの利用
 %  \item (付録: ALPS/Baristaパッケージ)
@@ -571,9 +572,106 @@ cd rokko/tool
 
 \end{frame}
 
-\section{並列ソルバの基本概念}
+\section{密行列向け逐次ソルバ}
 
-\subsection{密行列向け並列ソルバ}
+\subsection{Rokkoインターフェースの仕様}
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::localized\_matrix クラステンプレート}
+  \begin{itemize}
+  \item \href{https://github.com/t-sakashita/rokko/blob/master/rokko/localized_matrix.hpp}{rokko/localized\_matrix.hpp}
+\begin{lstlisting}
+namespace rokko {
+template<typename MATRIX_MAJOR = rokko::matrix_row_major>
+class localized_matrix {
+public:
+  typedef MATRIX_MAJOR major_type;
+  localized_matrix();
+  localized_matrix(int rows, int cols);
+  template <typename T>
+  localized_matrix(T const& other);
+  template <typename T>
+  matrix_type& operator=(T const& other);
+  double operator[](int i, int j) const;
+  double& operator[](int i, int j);
+  int get_m_global() const;
+  int get_n_global() const;
+  int get_m_local() const;
+  int get_n_local() const;
+  bool is_gindex_myrow(const int& global_i) const;
+};
+}
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::localized\_vector と rokko::localized\_matrix の利用例}
+  \begin{itemize}
+  \item \href{https://github.com/t-sakashita/rokko/blob/master/test/localized_matrix.cpp}{test/localized\_matrix.cpp}
+\begin{lstlisting}
+int dim = 3;
+rokko::localized_matrix<> M(dim,dim);
+M << 1,2,3,4,5,6,7,8,9;
+double a = 5.0;
+rokko::localized_vector u(dim);
+u << 1,2,3;
+rokko::localized_vector v(dim);
+v << 4,5,6;
+rokko::localized_vector w = a*u+M*v;
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::serial\_dense\_solverクラス}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item 初期化
+\begin{lstlisting}
+rokko::serial_dense_solver solver(name);
+solver.initialize(argc, argv);
+solver.finalize();
+\end{lstlisting}
+  \item 対角化 (行列は破壊される)
+\begin{lstlisting}
+rokko::localized_matrix<matrix_col_major> mat(dim, dim, solver);
+...
+rokko::localized_vector evals(dim);
+rokko::localized_matrix<matrix_col_major> evecs(dim, dim, solver);
+solver.diagonalize(mat, evals, evecs);
+\end{lstlisting}
+%  \item 登録されているソルバの一覧
+%\begin{lstlisting}
+%std::vector<std::string> names = rokko::serial_dense_solver::solvers();
+%\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\subsection{サンプルの実行}
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::serial\_dense\_solverクラスの使用}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+%  \item 逐次密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/serial_dense_solvers.cpp}{test/serial\_dense\_solvers.cpp}
+%\begin{lstlisting}[style=shstyle]
+%./test/serial_dense_solvers
+%\end{lstlisting}
+  \item LAPACK dsyev を直接使う \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/dsyev.c}{sample/dense/dsyev.cpp}
+\begin{lstlisting}[style=shstyle]
+./sample/dense/dsyev
+\end{lstlisting}
+  \item 逐次密行列ソルバを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/frank_dense.cpp}{sample/dense/frank.cpp}
+\begin{lstlisting}[style=shstyle]
+./sample/dense/frank lapack 5
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\section{密行列向けMPI並列ソルバ}
+
+\subsection{基本概念}
 
 \begin{frame}
   \frametitle{２次元プロセスグリッド}
@@ -636,52 +734,7 @@ public:
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c,fragile]
-  \frametitle{rokko::localized\_matrix クラステンプレート}
-  \begin{itemize}
-  \item \href{https://github.com/t-sakashita/rokko/blob/master/rokko/localized_matrix.hpp}{rokko/localized\_matrix.hpp}
-\begin{lstlisting}
-namespace rokko {
-template<typename MATRIX_MAJOR = rokko::matrix_row_major>
-class localized_matrix {
-public:
-  typedef MATRIX_MAJOR major_type;
-  localized_matrix();
-  localized_matrix(int rows, int cols);
-  template <typename T>
-  localized_matrix(T const& other);
-  template <typename T>
-  matrix_type& operator=(T const& other);
-  double operator[](int i, int j) const;
-  double& operator[](int i, int j);
-  int get_m_global() const;
-  int get_n_global() const;
-  int get_m_local() const;
-  int get_n_local() const;
-  bool is_gindex_myrow(const int& global_i) const;
-};
-}
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c,fragile]
-  \frametitle{rokko::localized\_vector と rokko::localized\_matrix の利用例}
-  \begin{itemize}
-  \item \href{https://github.com/t-sakashita/rokko/blob/master/test/localized_matrix.cpp}{test/localized\_matrix.cpp}
-\begin{lstlisting}
-int dim = 3;
-rokko::localized_matrix<> M(dim,dim);
-M << 1,2,3,4,5,6,7,8,9;
-double a = 5.0;
-rokko::localized_vector u(dim);
-u << 1,2,3;
-rokko::localized_vector v(dim);
-v << 4,5,6;
-rokko::localized_vector w = a*u+M*v;
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
+\subsection{Rokkoインターフェースの仕様}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::distributed\_matrix クラステンプレート}
@@ -767,32 +820,7 @@ mat.generate(f);
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::serial\_dense\_solverクラス（逐次の密行列）}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item 初期化
-\begin{lstlisting}
-rokko::serial_dense_solver solver(name);
-solver.initialize(argc, argv);
-solver.finalize();
-\end{lstlisting}
-  \item 対角化 (行列は破壊される)
-\begin{lstlisting}
-rokko::localized_matrix<matrix_col_major> mat(dim, dim, solver);
-...
-rokko::localized_vector evals(dim);
-rokko::localized_matrix<matrix_col_major> evecs(dim, dim, solver);
-solver.diagonalize(mat, evals, evecs);
-\end{lstlisting}
-  \item 登録されているソルバの一覧
-\begin{lstlisting}
-std::vector<std::string> names = rokko::serial_dense_solver::solvers();
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c,fragile]
-  \frametitle{rokko::parallel\_dense\_solverクラス(密行列、MPI並列版)}
+  \frametitle{rokko::parallel\_dense\_solverクラス}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item 初期化
@@ -809,14 +837,16 @@ rokko::localized_vector evals(dim);
 rokko::distributed_matrix<matrix_col_major> evecs(dim, dim, g, solver);
 solver.diagonalize(mat, evals, evecs);
 \end{lstlisting}
-  \item 登録されているソルバの一覧
-\begin{lstlisting}
-std::vector<std::string> names = rokko::parallel_dense_solver::solvers();
-\end{lstlisting}
+%  \item 登録されているソルバの一覧
+%\begin{lstlisting}
+%std::vector<std::string> names = rokko::parallel_dense_solver::solvers();
+%\end{lstlisting}
   \end{itemize}
 \end{frame}
 
-\subsection{疎行列向け並列ソルバ}
+\section{疎行列向け並列ソルバ}
+
+\subsection{基本概念}
 
 \begin{frame}[c,fragile]
   \frametitle{CRS(Compressed Row Storage)方式}
@@ -852,6 +882,8 @@ MPI並列化は行単位
 
 \end{frame}
 
+\subsection{Rokkoインターフェースの仕様}
+
 \begin{frame}[c,fragile]
   \frametitle{rokko::distributed\_crs\_matrix クラステンプレート}
 \begin{lstlisting}
@@ -871,6 +903,7 @@ public:
 \end{lstlisting}
 \end{frame}
 
+\subsection{サンプルの実行}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::distributed\_crs\_matrix クラス（使用例）}
@@ -906,6 +939,21 @@ mpirun -np 4 ./sample/sparse/distributed_crs_matrix slepc
   \end{itemize}
 \end{frame}
 
+
+\begin{frame}[c,fragile]
+  \frametitle{密行列、MPI並列版の対角化}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+%  \item MPI並列密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/parallel_dense_solvers.cpp}{test/parallel\_dense\_solvers.cpp}
+%\begin{lstlisting}[style=shstyle]
+%./test/parallel_dense_solvers
+%\end{lstlisting}
+  \item 並列密行列ソルバを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/frank_dense_mpi.cpp}{sample/dense/frank\_mpi.cpp}
+\begin{lstlisting}[style=shstyle]
+mpirun -np 4 ./sample/dense/frank_mpi eigen_exa_sx 5
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
 
 \begin{frame}[c,fragile]
   \frametitle{Matrix free方式}
@@ -992,44 +1040,10 @@ std::vector<std::string> names = rokko::parallel_sparse_solver::solvers();
   \end{itemize}
 \end{frame}
 
-\section{サンプルの実行}
+\section{量子スピン系の対角化}
 
 \begin{frame}[c,fragile]
-  \frametitle{密行列、逐次版の対角化}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-%  \item 逐次密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/serial_dense_solvers.cpp}{test/serial\_dense\_solvers.cpp}
-%\begin{lstlisting}[style=shstyle]
-%./test/serial_dense_solvers
-%\end{lstlisting}
-  \item LAPACK dsyev を直接使う \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/dsyev.c}{sample/dense/dsyev.cpp}
-\begin{lstlisting}[style=shstyle]
-./sample/dense/dsyev
-\end{lstlisting}
-  \item 逐次密行列ソルバを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/frank_dense.cpp}{sample/dense/frank.cpp}
-\begin{lstlisting}[style=shstyle]
-./sample/dense/frank lapack 5
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c,fragile]
-  \frametitle{密行列、MPI並列版の対角化}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-%  \item MPI並列密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/parallel_dense_solvers.cpp}{test/parallel\_dense\_solvers.cpp}
-%\begin{lstlisting}[style=shstyle]
-%./test/parallel_dense_solvers
-%\end{lstlisting}
-  \item 並列密行列ソルバを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/frank_dense_mpi.cpp}{sample/dense/frank\_mpi.cpp}
-\begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample/dense/frank_mpi eigen_exa_sx 5
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c,fragile]
-  \frametitle{量子スピン系の対角化（密行列）}
+  \frametitle{量子スピン系の対角化（密行列、逐次・MPI版）}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Heisenberg模型（逐次版） \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/heisenberg_mpi.cpp}{sample/dense/heisenberg.cpp}
