@@ -505,8 +505,34 @@ bash ./cmake-rokko.sh
 \begin{lstlisting}
 make -j 10
 make test
+make install
 \end{lstlisting}
   \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{インストールの成否の確認}
+Rokkoで使用できる固有値ルーチン一覧の表示
+\begin{lstlisting}[style=shstyle]
+cd rokko/tool
+./rokko_solvers
+\end{lstlisting}
+
+出力結果
+\begin{lstlisting}[style=shstyle]
+[serial dense solvers]
+  eigen3
+  lapack
+[parallel dense solvers]
+  eigen_exa_s
+  eigen_exa_sx
+  scalapack
+  scalapack_pdsyevd
+[parallel sparse solvers]
+  anasazi
+  slepc
+\end{lstlisting}
+
 \end{frame}
 
 \begin{frame}[c,fragile]
@@ -1066,30 +1092,6 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
   \frametitle{MakefileによるRokkoライブラリの取り込み方法}
 \end{frame}
 
-\section{トラブルシューティング}
-\begin{frame}[c,fragile]
-  \frametitle{Rokkoに取り込まれたソルバ一覧}
-\begin{lstlisting}[style=shstyle]
-cd rokko/tool
-./rokko_solvers
-\end{lstlisting}
-
-出力結果
-\begin{lstlisting}[style=shstyle]
-[serial dense solvers]
-  eigen3
-  lapack
-[parallel dense solvers]
-  eigen_exa_s
-  eigen_exa_sx
-  scalapack
-  scalapack_pdsyevd
-[parallel sparse solvers]
-  anasazi
-  slepc
-\end{lstlisting}
-
-\end{frame}
 
 \end{document}
 
