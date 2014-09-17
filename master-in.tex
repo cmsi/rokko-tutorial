@@ -546,15 +546,19 @@ cd rokko/tool
  .2
  \href{https://github.com/t-sakashita/rokko/tree/develop/sample}{sample}
  $\cdots$ C++によるサンプルプログラム.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample/dense}{dense} $\cdots$ 密行列用.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample/sparse}{sparse} $\cdots$ 疎行列用.
+ .3
+ \href{https://github.com/t-sakashita/rokko/tree/develop/sample/dense}{dense}
+ $\cdots$ 密行列用（逐次版、MPI版）.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample/sparse}{sparse} $\cdots$ 疎行列用（MPI版）.
  .2 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c}{sample\_c} $\cdots$ Cによるサンプルプログラム.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/dense}{dense} $\cdots$ 密行列用.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/sparse}{sparse} $\cdots$ 疎行列用.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/dense}{dense} $\cdots$ 密行列用（逐次版、MPI版）.
+ .3
+ \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/sparse}{sparse}
+ $\cdots$ 疎行列用（MPI版）.
  .2 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran}{sample\_fortran}
  $\cdots$ Fortranによるサンプルプログラム.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/dense}{dense} $\cdots$ 密行列用.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/sparse}{sparse} $\cdots$ 疎行列用.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/dense}{dense} $\cdots$ 密行列用（逐次版、MPI版）.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/sparse}{sparse} $\cdots$ 疎行列用（MPI版）.
 % .2
 % \href{https://github.com/t-sakashita/rokko/tree/develop/test}{test}
 % $\cdots$ ctest用（インストール成否の確認）.
@@ -763,7 +767,7 @@ mat.generate(f);
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::serial\_dense\_solverクラス(密行列、逐次版)}
+  \frametitle{rokko::serial\_dense\_solverクラス（逐次の密行列）}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item 初期化
@@ -777,7 +781,7 @@ solver.finalize();
 rokko::localized_matrix<matrix_col_major> mat(dim, dim, solver);
 ...
 rokko::localized_vector evals(dim);
-rokko::localized_matrix<matrix_col_major> evecs(dim, dim, g, solver);
+rokko::localized_matrix<matrix_col_major> evecs(dim, dim, solver);
 solver.diagonalize(mat, evals, evecs);
 \end{lstlisting}
   \item 登録されているソルバの一覧
@@ -1025,7 +1029,7 @@ mpirun -np 4 ./sample/dense/frank_mpi eigen_exa_sx 5
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{量子スピン系の対角化(密行列)}
+  \frametitle{量子スピン系の対角化（密行列）}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Heisenberg模型（逐次版） \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/heisenberg_mpi.cpp}{sample/dense/heisenberg.cpp}
