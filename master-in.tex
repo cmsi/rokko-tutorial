@@ -29,7 +29,7 @@
     \item 坂下達哉 (東大物性研) \ \href{mailto:t-sakashita@issp.u-tokyo.ac.jp}{t-sakashita@issp.u-tokyo.ac.jp}
     \item 藤堂眞治 (東大院理/物性研) \ \href{mailto:wistaria@phys.s.u-tokyo.ac.jp}{wistaria@phys.s.u-tokyo.ac.jp}
 %    \item 五十嵐 亮 (東大物性研) \ \href{mailto:rigarash@issp.u-tokyo.ac.jp}{rigarash@issp.u-tokyo.ac.jp}
-%    \item 本山裕一 (東大院工 $\Rightarrow $ 物性研) \ \href{mailto:y-motoyama@issp.u-tokyo.ac.jp}{y-motoyama@issp.u-tokyo.ac.jp}
+%    \item 本山裕一 (東大物性研) \ \href{mailto:y-motoyama@issp.u-tokyo.ac.jp}{y-motoyama@issp.u-tokyo.ac.jp}
     \end{itemize}
   \item 主催
     \begin{itemize}
@@ -46,10 +46,10 @@
   \item 座学: Rokkoの概要と内部構造
   \item 座学: 密行列向け逐次・MPI並列ソルバの基本概念
   \item 座学: 疎行列向けソルバの基本概念
+  \item 実習: Rokkoのインストール
   \item 実習: サンプルの実行
-  \item 実習：TITPACK2へのRokko組み込み実習
+  \item 実習: TITPACK2へのRokko組み込み実習
   \item 実習: アプリケーションからのRokkoの利用
-  \item（付録: Rokkoのインストール）
 %  \item (付録: ALPS/Baristaパッケージ)
  % \item (付録: MateriAppsとMateriApps LIVE!)
   \end{itemize}
@@ -1084,11 +1084,20 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
  .2
  \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack}{titpack}.
  .3
- \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/00_original}{00\_original} $\cdots$ Fortran版.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/01_lapack}{01\_lapack} $\cdots$ Fortran版.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/01_lapack_cxx}{01\_lapack\_cxx} $\cdots$ Fortran版.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/02_refactored_cxx}{02\_refactored\_cxx} $\cdots$ Fortran版.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/03_rokko_cxx}{03\_rokko\_cxx} $\cdots$ Fortran版.
+ \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/00_original}{00\_original}
+ $\cdots$ 独自固有値ソルバのFortran版.
+ .3
+ \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/01_lapack}{01\_lapack}
+ $\cdots$ FortranのままLAPACK化.
+ .3
+ \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/01_lapack_cxx}{01\_lapack\_cxx}
+ $\cdots$ C++でLAPACK版.
+ .3
+ \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/02_refactored_cxx}{02\_refactored\_cxx}
+ $\cdots$ C++晩のリファクタリング版.
+ .3
+ \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/03_rokko_cxx}{03\_rokko\_cxx}
+ $\cdots$ C++でRokko化.
 }
 \end{frame}
 
