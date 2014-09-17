@@ -651,7 +651,7 @@ solver.diagonalize(mat, evals, evecs);
 \subsection{サンプルの実行}
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::serial\_dense\_solverクラスの使用}
+  \frametitle{対角化のサンプル}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
 %  \item 逐次密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/serial_dense_solvers.cpp}{test/serial\_dense\_solvers.cpp}
@@ -690,7 +690,7 @@ solver.diagonalize(mat, evals, evecs);
 \end{frame}
 
 \begin{frame}
-  \frametitle{分散行列(Distributed Matrix)}
+  \frametitle{2次元ブロック・サイクリック行列(distributed\_matrix)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item ほとんどの並列固有値ソルバにおいて, 密行列は「2次元ブロック・サイクリック形式」でデータ分割される
@@ -768,7 +768,7 @@ public:
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{分散行列の操作}
+  \frametitle{distributed\_matrixの操作}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item 行列の掛け算 $C = \alpha A B + \beta C$
@@ -791,7 +791,7 @@ public:
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{分散行列の生成}
+  \frametitle{distributed\_matrixの生成}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item 要素毎に代入 (globalな添字)
@@ -841,6 +841,23 @@ solver.diagonalize(mat, evals, evecs);
 %\begin{lstlisting}
 %std::vector<std::string> names = rokko::parallel_dense_solver::solvers();
 %\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\subsection{サンプルの実行}
+
+\begin{frame}[c,fragile]
+  \frametitle{対角化のサンプル}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+%  \item MPI並列密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/parallel_dense_solvers.cpp}{test/parallel\_dense\_solvers.cpp}
+%\begin{lstlisting}[style=shstyle]
+%./test/parallel_dense_solvers
+%\end{lstlisting}
+  \item 並列密行列ソルバを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/frank_dense_mpi.cpp}{sample/dense/frank\_mpi.cpp}
+\begin{lstlisting}[style=shstyle]
+mpirun -np 4 ./sample/dense/frank_mpi eigen_exa_sx 5
+\end{lstlisting}
   \end{itemize}
 \end{frame}
 
@@ -940,20 +957,6 @@ mpirun -np 4 ./sample/sparse/distributed_crs_matrix slepc
 \end{frame}
 
 
-\begin{frame}[c,fragile]
-  \frametitle{密行列、MPI並列版の対角化}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-%  \item MPI並列密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/parallel_dense_solvers.cpp}{test/parallel\_dense\_solvers.cpp}
-%\begin{lstlisting}[style=shstyle]
-%./test/parallel_dense_solvers
-%\end{lstlisting}
-  \item 並列密行列ソルバを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/frank_dense_mpi.cpp}{sample/dense/frank\_mpi.cpp}
-\begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample/dense/frank_mpi eigen_exa_sx 5
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
 
 \begin{frame}[c,fragile]
   \frametitle{Matrix free方式}
