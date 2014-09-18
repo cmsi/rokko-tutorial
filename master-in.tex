@@ -56,16 +56,6 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}
-  \frametitle{ネットワーク設定（別紙参照）}
-  \begin{itemize}
-    \setlength{\itemsep}{1em}
-  \item LAN接続 (無線 or 有線)
-  \item 講習会資料ダウンロード
-  \item 実習用ワークステーションのアカウント登録
-  \item 実習用ワークステーションへのログイン確認
-  \end{itemize}
-\end{frame}
 
 \section{固有値問題の解法・固有値ソルバ/線形計算ライブラリ}
 
@@ -924,6 +914,8 @@ MPI並列化は行単位
 namespace rokko {
 class distributed_crs_matrix {
 public:
+  template<typename SOLVER>
+  distributed_crs_matrix(int row_dim, int col_dim, SOLVER& solver_in)
   void insert(int row, std::vector<int> const& cols, std::vector<double> const& values);
   void insert(int row, int col_size, int* cols, double* const values);
   void complete();
