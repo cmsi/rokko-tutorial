@@ -397,7 +397,8 @@
   \item 複数人が同時に更新した場合に衝突を回避するしくみ
   \item ブランチ・マージ・タグ付けなどが可能
   \item 開発者が一人, 公開の予定がない場合でも積極的に使うべき
-  \item 参考資料: バージョン管理web講習会 {\tiny \url{http://www.cms-initiative.jp/ja/research-support/develop-support/how-to-publish/develop-apps/manage-version}}
+  \item 参考資料: バージョン管理web講習会 {\tiny
+      \url{http://www.cms-initiative.jp/ja/research-support/develop-support/how-to-publish/develop-apps/dt0l33}}
   \end{itemize}
 \end{frame}
 
@@ -627,10 +628,13 @@ rokko::localized_vector w = a*u+M*v;
   \frametitle{rokko::serial\_dense\_solverクラス}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item 初期化
+  \item ソルバの初期化
 \begin{lstlisting}
 rokko::serial_dense_solver solver(name);
 solver.initialize(argc, argv);
+\end{lstlisting}
+  \item ソルバの終了
+\begin{lstlisting}
 solver.finalize();
 \end{lstlisting}
   \item 対角化 (行列は破壊される)
@@ -781,7 +785,7 @@ public:
   ...
   rokko::product(alpha, matA, transA, matB, transB, beta, matC);
 \end{lstlisting}
-  \item 分散行列の scatter と gather
+  \item distributed\_matrixの scatter と gather
 \begin{lstlisting}
   rokko::localized_matrix<LOC_MAT_MAJOR> lmat(dim, dim);
   rokko::distributed_matrix<DIST_MAT_MAJOR> mat(dim, dim, g, solver);
@@ -824,10 +828,13 @@ mat.generate(f);
   \frametitle{rokko::parallel\_dense\_solverクラス}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item 初期化
+  \item ソルバの初期化
 \begin{lstlisting}
 rokko::parallel_dense_solver solver(name);
 solver.initialize(argc, argv);
+\end{lstlisting}
+  \item ソルバの終了
+\begin{lstlisting}
 solver.finalize();
 \end{lstlisting}
   \item 対角化 (行列は破壊される)
@@ -1032,10 +1039,13 @@ private:
   \frametitle{rokko::parallel\_sparse\_solverクラス(疎行列、MPI並列版)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item 初期化
+  \item ソルバの初期化
 \begin{lstlisting}
 rokko::parallel_sparse_solver solver(name);
 solver.initialize(argc, argv);
+\end{lstlisting}
+  \item ソルバの終了
+\begin{lstlisting}
 solver.finalize();
 \end{lstlisting}
   \item 対角化（CRS行列の場合）
