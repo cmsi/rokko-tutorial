@@ -979,12 +979,16 @@ mpirun -np 4 ./sample/sparse/distributed_crs_matrix slepc
 　\\
 　\\
 \noindent
-rokko::distributed\_mfreeを継承し、
+作り方
   \begin{itemize}
-   \item void multiply(const double* x, double* y)関数
-   \item void diagonal(double* x)関数 （SLEPcの場合） 
+  \item rokko::distributed\_mfreeを継承したクラスを用意する。
+  \item そのクラスの中で、
+     \begin{itemize}
+     \item void multiply(const double* x, double* y)関数
+     \item void diagonal(double* x)関数 （SLEPcの場合） 
+     \end{itemize}
+というメンバ関数を用意する。
   \end{itemize}
-を持つクラスを定義する。
 \end{frame}
 
 \begin{frame}[c,fragile]
