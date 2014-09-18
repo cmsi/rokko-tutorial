@@ -879,6 +879,7 @@ mpirun -np 4 ./sample_fortran/dense/frank_mpi eigen_exa_sx 5
 各行ごとに非ゼロ成分とその列添字を格納する方法
 
 \begin{rei}%
+\vspace{-2\baselineskip}
 \begin{align*}
 \begin{bmatrix}
 7.1 & 5.2 & 0 & 0 \\
@@ -1002,8 +1003,6 @@ public:
     buffer_.assign(local_N, 0);
     dim_ = 1 << L;
   }
-  ~heisenberg_op() {}
-
   void multiply(const double* x, double* y) const {
     rokko::heisenberg_hamiltonian::multiply(comm_, L_, lattice_, x, y, &(buffer_[0]));
   }
@@ -1032,7 +1031,8 @@ private:
 
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::parallel\_sparse\_solverクラス(疎行列、MPI並列版)}
+  \frametitle{rokko::parallel\_sparse\_solverクラス}
+\vspace{-1\baselineskip}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item ソルバの初期化
@@ -1055,7 +1055,6 @@ solver.diagonalize(mat, num_evals, block_size, max_iters, tol);
 heisenberg_op  mat(L, lattice);
 solver.diagonalize(mat, num_evals, block_size, max_iters, tol);
 \end{lstlisting}
-
   \item 固有値・固有ベクトルの取り出し
 \begin{lstlisting}
 int i;
@@ -1122,9 +1121,9 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
 
 \section{TITPACK2へのRokko組み込み実習}
 
-\begin{frame}[c,fragile]
-  \frametitle{TITPACKの概要}
-\end{frame}
+%\begin{frame}[c,fragile]
+%  \frametitle{TITPACKの概要}
+%\end{frame}
 
 \begin{frame}[c,fragile]
   \frametitle{ディレクトリ構成}
