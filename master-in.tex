@@ -47,7 +47,7 @@
   \item 実習: Rokkoのインストール
   \item 座学・実習: 密行列向け逐次ソルバの基本概念、サンプル実行
   \item 座学・実習: 密行列向けMPI並列ソルバの基本概念、サンプル実行
-  \item 座学・実習: 疎行列向けソルバの基本概念、サンプル実行
+  \item 座学・実習: 疎行列向けMPI並列ソルバの基本概念、サンプル実行
   \item 実習: 量子スピン系の対角化のサンプル実行
   \item 実習: TITPACK2へのRokko組み込み実習
   \item 実習: アプリケーションからのRokkoの利用
@@ -540,7 +540,7 @@ cd rokko/tool
   \frametitle{Rokkoのディレクトリ構造}
 
 \dirtree{%
- .1 \href{https://github.com/t-sakashita/rokko/tree/develop}{/}.
+ .1 \href{https://github.com/t-sakashita/rokko/tree/develop}{rokko}.
  .2
  \href{https://github.com/t-sakashita/rokko/tree/develop/rokko}{rokko}
  $\cdots$ Rokko本体（ヘッダファイル・ソースファイル）.
@@ -854,10 +854,19 @@ solver.diagonalize(mat, evals, evecs);
 %\begin{lstlisting}[style=shstyle]
 %./test/parallel_dense_solvers
 %\end{lstlisting}
-  \item 並列密行列ソルバを使う \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/frank_dense_mpi.cpp}{sample/dense/frank\_mpi.cpp}
+  \item C++ \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/frank_dense_mpi.cpp}{sample/dense/frank\_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample/dense/frank_mpi eigen_exa_sx 5
 \end{lstlisting}
+  \item C \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/frank_dense_mpi.cpp}{sample/dense/frank\_mpi.cpp}
+\begin{lstlisting}[style=shstyle]
+mpirun -np 4 ./sample_c/dense/frank_mpi eigen_exa_sx 5
+\end{lstlisting}
+  \item Fortran \href{https://github.com/t-sakashita/rokko/blob/master/sample/dense/frank_dense_mpi.cpp}{sample/dense/frank\_mpi.cpp}
+\begin{lstlisting}[style=shstyle]
+mpirun -np 4 ./sample_fortran/dense/frank_mpi eigen_exa_sx 5
+\end{lstlisting}
+
   \end{itemize}
 \end{frame}
 
