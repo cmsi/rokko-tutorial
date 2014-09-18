@@ -704,6 +704,8 @@ solver.diagonalize(mat, evals, evecs);
   \end{itemize}
 \end{frame}
 
+\subsection{Rokkoインターフェースの仕様}
+
 \begin{frame}[c,fragile]
   \frametitle{rokko::grid クラス}
   \begin{itemize}
@@ -734,7 +736,6 @@ public:
   \end{itemize}
 \end{frame}
 
-\subsection{Rokkoインターフェースの仕様}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::distributed\_matrix クラステンプレート}
@@ -966,15 +967,14 @@ mpirun -np 4 ./sample/sparse/distributed_crs_matrix slepc
 
 \begin{frame}[c,fragile]
   \frametitle{Matrix free方式}
-たいていの疎行列向け固有値ソルバでは、固有値分解を行うべき行列とベクト
+たいていの疎行列向け固有値ソルバでは、行列そのものではなく、固有値分解を行うべき行列とベクト
 ル積を行うルーチンのみが必要である。
-行列をあらわに作る必要がない。
 　\\
 　\\
 \noindent
 rokko::distributed\_mfreeを継承し、
   \begin{itemize}
-   \item multiply(const double* x, double* y)関数
+   \item void multiply(const double* x, double* y)関数
    \item void diagonal(double* x)関数 （SLEPcの場合） 
   \end{itemize}
 を持つクラスを定義する。
@@ -1084,7 +1084,7 @@ mpirun -np 4 ./sample/dense/heisenberg_mpi eigen_exa_sx
 \begin{lstlisting}[style=shstyle]
 ./sample/dense/xyz_dense lapack $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
 \end{lstlisting}
-  \item XYZ模型(MPI) \href{https://github.com/t-sakashita/rokko/blob/develop/sample/dense/xyz_mpi.cpp}{sample/dense/xyz\_mpi.cpp}
+  \item XYZ模型(MPI版) \href{https://github.com/t-sakashita/rokko/blob/develop/sample/dense/xyz_mpi.cpp}{sample/dense/xyz\_mpi.cpp}
 \begin{lstlisting}
 mpirun -np 4 ./sample/dense/xyz_mpi eigen_exa_sx $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
 \end{lstlisting}
