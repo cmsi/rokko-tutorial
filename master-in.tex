@@ -920,7 +920,6 @@ public:
 \end{lstlisting}
 \end{frame}
 
-\subsection{サンプルの実行}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::distributed\_crs\_matrix クラス（使用例）}
@@ -941,7 +940,6 @@ public:
   mat.complete();
   mat.print();
 \end{lstlisting}
-
 \noindent
 サンプルの実行
   \begin{itemize}
@@ -957,13 +955,24 @@ mpirun -np 4 ./sample/sparse/distributed_crs_matrix slepc
 \end{frame}
 
 
-
 \begin{frame}[c,fragile]
   \frametitle{Matrix free方式}
+たいていの疎行列向け固有値ソルバでは、固有値分解を行うべき行列とベクト
+ル積を行うルーチンのみが必要である。
+行列をあらわに作る必要がない。
+　\\
+　\\
+\noindent
+rokko::distributed\_mfreeを継承し、
+  \begin{itemize}
+   \item multiply(const double* x, double* y)関数
+   \item void diagonal(double* x)関数 （SLEPcの場合） 
+  \end{itemize}
+を持つクラスを定義する。
 \end{frame}
 
 \begin{frame}[c,fragile]
-rokko::distributed\_mfreeを継承し、 multiply(const double* x, double* y)関数を持つクラスを定義する。
+  \frametitle{Matrix free方式（例）}
 \begin{lstlisting}
 class heisenberg_op : public rokko::distributed_mfree {
 public:
@@ -981,7 +990,6 @@ public:
     buffer_.assign(local_N, 0);
     dim_ = 1 << L;
   }
-
   ~heisenberg_op() {}
 
   void multiply(const double* x, double* y) const {
@@ -993,7 +1001,12 @@ public:
   int get_num_local_rows() const {
     return local_N;
   }
+\end{lstlisting}
+\end{frame}
 
+\begin{frame}[c,fragile]
+  \frametitle{Matrix free方式（例の続き）}
+\begin{lstlisting}
 private:
   MPI_Comm comm_;
   mutable std::vector<double> buffer_;
@@ -1034,14 +1047,15 @@ int i;
 solver.eigenvalue(i);
 std::vector<double> eigvec;
 solver.eigenvector(i, eigvec);
-
 \end{lstlisting}
-  \item 登録されているソルバの一覧
-\begin{lstlisting}
-std::vector<std::string> names = rokko::parallel_sparse_solver::solvers();
-\end{lstlisting}
+%  \item 登録されているソルバの一覧
+%\begin{lstlisting}
+%std::vector<std::string> names = rokko::parallel_sparse_solver::solvers();
+%\end{lstlisting}
   \end{itemize}
 \end{frame}
+
+
 
 \section{量子スピン系の対角化}
 
