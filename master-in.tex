@@ -165,11 +165,11 @@
   \frametitle{既存の固有値ソルバライブラリ（密行列向け）}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item EigenExa: 密行列ソルバ
+  \item \href{http://www.aics.riken.jp/labs/lpnctrt/EigenExa.html}{EigenExa}: 密行列ソルバ
     \begin{itemize}
       \item Householder (3重対角化, 5重対角化)+分割統治法+QR
     \end{itemize}
-  \item ELPA
+  \item \href{http://elpa.rzg.mpg.de}{ELPA}
     \begin{itemize}
       \item Householder+分割統治法+QR
     \end{itemize}
@@ -179,23 +179,23 @@
 \begin{frame}
   \frametitle{既存の固有値ソルバライブラリ（疎行列向け）}
   \begin{itemize}
-  \item Anasazi: 反復法ソルバ中心
+  \item \href{http://trilinos.org/packages/anasazi/}{Anasazi}: 反復法ソルバ中心
     \begin{itemize}
       \item Krylov-Schur, Jacobi-Davidson, XXX-Davidson, LOBPCG, Implicit Riemannian Trust Region Method
     \end{itemize}
-  \item ARPACK
+  \item \href{http://www.caam.rice.edu/software/ARPACK/}{ARPACK}
     \begin{itemize}
       \item Implicit Restarted Lanczos
     \end{itemize}
-  \item BLOPEX
+  \item \href{https://code.google.com/p/blopex/}{BLOPEX}
     \begin{itemize}
     \item Locally Optimal Block Preconditioned Conjugate Gradient Method (LOBPCG)
     \end{itemize}
-  \item SLEPc: 反復法ソルバ中心, ビルド時に逐次かMPI並列かを選ぶ必要あり
+  \item \href{http://www.grycap.upv.es/slepc/}{SLEPc}: 反復法ソルバ中心, ビルド時に逐次かMPI並列かを選ぶ必要あり
     \begin{itemize}
       \item Krylov-Schur, Generalized Davidson, Jacobi-Davidson, Rayleigh Quotient Conjugate Gradient, Contour integral Sakurai-Sugiura, Power method, Subspace Itertation, Arnoldi (explicit restart), Lanczos (explicit restart) \\
     \end{itemize}
-  \item IETL: ALPSに含まれる反復法ソルバ
+  \item \href{http://www.comp-phys.org/software/ietl/}{IETL}: ALPSに含まれる反復法ソルバ
     \begin{itemize}
       \item Lanczos, 他
     \end{itemize}
@@ -208,23 +208,23 @@
     %\setlength{\itemsep}{1em}
   \item LAPACK, ScaLAPACKのベンダ実装
     \begin{itemize}
-    \item Apple VecLib: LAPACK
+    \item \href{https://developer.apple.com/library/mac/documentation/Performance/Conceptual/vecLib/Reference/reference.html}{Apple VecLib}: LAPACK
     \item Fujitsu SSLII: LAPACK, ScaLAPACK(の一部), 他
-    \item Intel MKL: LAPACK, ScaLAPACK
+    \item \href{https://software.intel.com/en-us/mkl_11.1_ref}{Intel MKL}: LAPACK, ScaLAPACK
     \end{itemize}
-  \item Netlib LAPACK: LAPACKのリファレンス実装
+  \item \href{http://www.netlib.org/lapack/}{Netlib LAPACK}: LAPACKのリファレンス実装
     \begin{itemize}
       \item Householder+QR, Householder+分割統治法+QR, Householder+二分法, Householder+MR3
     \end{itemize}
-  \item Netlib ScaLAPACK: ScaLAPACKのリファレンス実装
+  \item \href{http://www.netlib.org/scalapack/}{Netlib ScaLAPACK}: ScaLAPACKのリファレンス実装
     \begin{itemize}
       \item Householder+QR, Householder+分割統治法+QR, Householder+二分法, Householder+MR3
     \end{itemize}
-  \item Eigen3（逐次版、行列・行列積のみスレッド並列化）
+  \item \href{http://eigen.tuxfamily.org/}{Eigen3}（逐次版、行列・行列積のみスレッド並列化）
     \begin{itemize}
       \item Householder+QR
     \end{itemize}
-  \item Elemental：含まれる固有値ソルバMRRRは、プロセス数が平方数の場合のみ確実に動く
+  \item \href{https://code.google.com/p/elemental/}{Elemental}：含まれる固有値ソルバMRRRは、プロセス数が平方数の場合のみ確実に動く
     \begin{itemize}
       \item Householder+MR3
     \end{itemize}
@@ -235,8 +235,8 @@
   \frametitle{既存の線形計算ライブラリ(疎行列向け)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item Trilinos：固有値ソルバライブラリAnasaziを含む
-  \item Xabclib (ppOpen AT)
+  \item \href{http://trilinos.org}{Trilinos}：固有値ソルバライブラリAnasaziを含む
+  \item Xabclib (\href{http://ppopenhpc.cc.u-tokyo.ac.jp/}{ppOpen AT})
   \end{itemize}
 \end{frame}
 
@@ -282,10 +282,10 @@
     \setlength{\itemsep}{1em}
   \item 代表的なパッケージ
     \begin{itemize}
-    \item ALPS(fulldiag/sparsediag): LAPACK, IETLを利用
-    \item KOBEPACK: 独自の固有値ソルバを実装
-    \item SPINPACK: LAPACKを利用
-    \item TITPACK2: 独自の固有値ソルバを実装
+    \item ALPS (\href{http://alps.comp-phys.org/static/software/applications/diag/fulldiag/doc/}{fulldiag} / \href{http://alps.comp-phys.org/mediawiki/index.php/Documentation:sparsediag}{sparsediag}): LAPACK, IETLを利用
+    \item \href{http://quattro.phys.sci.kobe-u.ac.jp/Kobe_Pack/Kobe_Pack.html}{KOBEPACK}: 独自の固有値ソルバを実装
+    \item \href{http://www-e.uni-magdeburg.de/jschulen/spin/}{SPINPACK}: LAPACKを利用
+    \item \href{http://www.noc.titech.ac.jp/~phys0016_nishimori/titpack2_new/index-e.html}{TITPACK2}: 独自の固有値ソルバを実装
     \end{itemize}
   \item 逐次 or スレッド並列のみ, MPI並列なし
   \item 最新の超並列スパコン環境を活かしきれていない
