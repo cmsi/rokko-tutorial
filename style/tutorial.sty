@@ -44,8 +44,33 @@
     basicstyle=\ttfamily\tiny,
     frame=single,
     keepspaces=true,
+    showspaces=false,               % show spaces adding particular underscores
+    showstringspaces=false,         % underline spaces within strings
+    showtabs=false,                 % show tabs within strings adding
+    literate={-}{-}1,
+    columns=flexible,
+    breaklines=true,                % sets automatic line breaking
+    breakautoindent=false,
+    breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
     rulecolor=\color[cmyk]{0, 0.29,0.84,0}
 }
+
+\lstset{frame=single}
+\lstset{framesep=10pt}
+\lstset{rulecolor=\color{codeframe}}
+\lstset{upquote=true}
+\lstset{basicstyle=\ttfamily}
+\lstset{showstringspaces=false}
+
+\lstset{showspaces=false}
+\lstset{literate={-}{-}1}
+
+\lstset{columns=flexible}
+\lstset{keepspaces=true}
+\makeatletter
+\def\lst@outputspace{{\ifx\lst@bkgcolor\empty\color{white}\else\lst@bkgcolor\fi{ }}}
+\makeatother
+
 
 % 箇条書きの２階層目のマーカを三角にする
 \setbeamertemplate{itemize subitem}[triangle]

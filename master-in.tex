@@ -483,10 +483,25 @@ source /opt/nano/alps/alpsvars.sh
   \item ソースコードのダウンロード・展開
 \begin{lstlisting}[style=shstyle]
 cd $HOME
-wget --no-check-certificate https://github.com/t-sakashita/rokko/archive/0.2.tar.gz -O rokko-0.2.tar.gz
+wget --no-check-certificate https://github.com/t-sakashita/rokko/archive/0.2.tar.gz \
+ -O rokko-0.2.tar.gz
 tar zxvf rokko-0.2.tar.gz
 \end{lstlisting}
   \item CMake（のコマンドが書かれたスクリプトを実行）
+%\begin{lstlisting}[language=bash]
+%cmake $HOME/rokko-0.2 -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp -DROKKO_SOLVER_DIR=/opt/nano/rokko -DSCALAPACK_LIB="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -mkl=parallel" -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
+%\end{lstlisting}
+\begin{lstlisting}[language=bash]
+cmake $HOME/rokko-0.2 \
+ -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 \
+ -DCMAKE_BUILD_TYPE=Debug \
+ -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort \
+ -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp \
+ -DROKKO_SOLVER_DIR=/opt/nano/rokko \
+ -DSCALAPACK_LIB="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -mkl=parallel" \
+ -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
+\end{lstlisting}
+
 \begin{lstlisting}[style=shstyle]
 mkdir rokko-build
 cd rokko-build
