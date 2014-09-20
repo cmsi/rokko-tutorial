@@ -491,7 +491,7 @@ tar zxvf rokko-0.2.tar.gz
 %\begin{lstlisting}[style=shstyle]
 %cmake $HOME/rokko-0.2 -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp -DROKKO_SOLVER_DIR=/opt/nano/rokko -DSCALAPACK_LIB="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -mkl=parallel" -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
 %\end{lstlisting}
-\begin{lstlisting}[style=shstyle, deletekeywords={local}]
+\begin{lstlisting}[style=shstyle]
 cmake $HOME/rokko-0.2 \
  -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 \
  -DCMAKE_BUILD_TYPE=Debug \
@@ -1105,7 +1105,7 @@ mpirun -np 4 ./sample/dense/heisenberg_mpi eigen_exa_sx
 ./sample/dense/xyz_dense lapack $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
 \end{lstlisting}
   \item XYZ模型(MPI版) \href{https://github.com/t-sakashita/rokko/blob/develop/sample/dense/xyz_mpi.cpp}{sample/dense/xyz\_mpi.cpp}
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample/dense/xyz_mpi eigen_exa_sx $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
 \end{lstlisting}
   \end{itemize}

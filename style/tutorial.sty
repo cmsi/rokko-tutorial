@@ -51,7 +51,8 @@
     breakautoindent=false,
     breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
     backgroundcolor=\color[cmyk]{0., 0. ,0,, 0.1},
-    rulecolor=\color[cmyk]{0., 0. ,0,, 0.5}
+    rulecolor=\color[cmyk]{0., 0. ,0,, 0.5},
+    deletekeywords={local, test}  % bashの予約語としてハイライトされないようにする語を設定
 }
 
 \lstset{frame=single}
@@ -68,7 +69,7 @@
 \def\lst@outputspace{{\ifx\lst@bkgcolor\empty\color{white}\else\lst@bkgcolor\fi{ }}}
 \makeatother
 
-\usepackage{underscore}
+\usepackage[strings]{underscore}
 
 % 箇条書きの２階層目のマーカを三角にする
 \setbeamertemplate{itemize subitem}[triangle]
