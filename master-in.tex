@@ -492,6 +492,9 @@ tar zxvf rokko-0.2.tar.gz
 %cmake $HOME/rokko-0.2 -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp -DROKKO_SOLVER_DIR=/opt/nano/rokko -DSCALAPACK_LIB="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -mkl=parallel" -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
 %\end{lstlisting}
 \begin{lstlisting}[style=shstyle]
+mkdir rokko-build
+cd rokko-build
+
 cmake $HOME/rokko-0.2 \
  -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 \
  -DCMAKE_BUILD_TYPE=Debug \
@@ -501,15 +504,19 @@ cmake $HOME/rokko-0.2 \
  -DSCALAPACK_LIB="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -mkl=parallel" \
  -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
 \end{lstlisting}
+  \end{itemize}
+\end{frame}
 
+\begin{frame}[c,fragile]
+  \frametitle{Rokkoのインストール（続き）}
+  \begin{itemize}
+  \item 上記のコピー＆ペーストがうまく行かなかった方は、スクリプトで実行
 \begin{lstlisting}[style=shstyle]
-mkdir rokko-build
-cd rokko-build
 cp /home/hands-on/rokko_20140918/cmake-rokko.sh  .
 bash ./cmake-rokko.sh
 \end{lstlisting}
   \item Make, テスト
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 make -j 10
 make test
 make install
@@ -526,7 +533,7 @@ cd rokko/tool
 \end{lstlisting}
 
 出力結果
-\begin{lstlisting}
+\begin{lstlisting}[style=shstyle]
 [serial dense solvers]
   eigen3
   lapack
