@@ -224,7 +224,7 @@
     \begin{itemize}
       \item Householder+QR
     \end{itemize}
-  \item \href{https://code.google.com/p/elemental/}{Elemental}：含まれる固有値ソルバMRRRは、プロセス数が平方数の場合のみ確実に動く
+  \item \href{http://libelemental.org}{Elemental}：含まれる固有値ソルバMRRRは、プロセス数が平方数の場合のみ確実に動く
     \begin{itemize}
       \item Householder+MR3
     \end{itemize}
@@ -678,9 +678,18 @@ solver.diagonalize(mat, evals, evecs);
 \begin{lstlisting}[style=shstyle]
 ./sample/dense/dsyev
 \end{lstlisting}
-  \item 逐次密行列ソルバを使う \RokkoFilename{sample/dense/frank.cpp}
+逐次密行列ソルバを使う
+  \item C++版 \RokkoFilename{sample/dense/frank.cpp}
 \begin{lstlisting}[style=shstyle]
 ./sample/dense/frank lapack 5
+\end{lstlisting}
+  \item C版 \RokkoFilename{sample_c/dense/frank.c}
+\begin{lstlisting}[style=shstyle]
+./sample_c/dense/frank lapack 5
+\end{lstlisting}
+  \item Fortran版 \RokkoFilename{sample_c/dense/frank.f90}
+\begin{lstlisting}[style=shstyle]
+./sample_fortran/dense/frank lapack 5
 \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -878,16 +887,21 @@ solver.diagonalize(mat, evals, evecs);
 \begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample/dense/frank_mpi eigen_exa_sx 5
 \end{lstlisting}
-  \item C \RokkoFilename{sample/dense/frank_mpi.cpp}
+  \item C版 \RokkoFilename{sample/dense/frank_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample_c/dense/frank_mpi eigen_exa_sx 5
 \end{lstlisting}
-  \item Fortran \RokkoFilename{sample/dense/frank_mpi.cpp}
+  \item Fortran版 \RokkoFilename{sample/dense/frank_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample_fortran/dense/frank_mpi eigen_exa_sx 5
 \end{lstlisting}
 
   \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{テスト行列：Frank行列}
+
 \end{frame}
 
 \section{疎行列向け並列ソルバ}
@@ -1180,6 +1194,9 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
 \begin{frame}[c,fragile]
   \frametitle{CMakeによるRokkoライブラリの取り込み方法}
 以下を参考にユーザプログラム用のCMakeLists.txtを書く。
+
+そのCMakeLists.txtにshare/rokko/UseRokko.cmakeをインクルードする。
+
 \begin{itemize}
   \item \href{https://github.com/t-sakashita/rokko/tree/develop/sample/CMakeLists.txt}{sample/CMakeLists.txt}
   \item \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/CMakeLists.txt}{sample\_c/CMakeLists.txt}
@@ -1190,6 +1207,8 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
 
 %\begin{frame}[c,fragile]
 %  \frametitle{MakefileによるRokkoライブラリの取り込み方法}
+ユーザプログラムのMakefileにshare/rokko/include.mkをインクルードする。
+
 %\end{frame}
 
 
