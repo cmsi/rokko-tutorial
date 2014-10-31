@@ -3,6 +3,12 @@
 \newtheorem{rei}{例}
 \renewcommand{\therei}{}
 
+\AtBeginSection[]{
+    \begin{frame}
+        \tableofcontents[currentsection]
+    \end{frame}
+}
+
 \begin{document}
 
 \lstset{language=c++,basicstyle=\ttfamily\tiny,showspaces=false,keepspaces=true,rulecolor=\color[cmyk]{0, 0.29,0.84,0}}
