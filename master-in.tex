@@ -912,6 +912,32 @@ mpirun -np 4 ./sample_fortran/dense/frank_mpi eigen_exa_sx 5
 
 \begin{frame}[c,fragile]
   \frametitle{テスト行列：Frank行列}
+Definition: $[a_{ij}]_{i,j = {0, \dots, n-1}} = [ n - \max(i,j) ]$\\
+
+\noindent
+\begin{rei}%
+Example ($n=5$): \quad
+$[a_{ij}]_{i,j = {0, \dots, 4}} =
+\begin{bmatrix}
+5 & 4 & 3 & 2 & 1 \\
+4 & 4 & 3 & 2 & 1 \\
+3 & 3 & 3 & 2 & 1 \\
+2 & 2 & 2 & 2 & 1 \\
+1 & 1 & 1 & 1 & 1 \\
+\end{bmatrix}
+$
+\end{rei}
+
+\vspace{\baselineskip}
+\noindent
+\begin{rei}%
+theoretical eigenvalues $\lambda_k = \dfrac{1}{2 \left( 1 - \cos{\tfrac{2 k + 1}{2 n + 1}\pi} \right)} \quad (k=0,\dots,n-1)$
+\end{rei}%
+
+\noindent
+Frank matrix has an eigenvalue $1$\\
+\quad $\Longleftrightarrow$ $\tfrac{2 k + 1}{2 n + 1} = \tfrac{1}{3}$\\
+\quad $\Longleftrightarrow$ $n-1$ is a multiple of 3.
 
 \end{frame}
 
@@ -1173,6 +1199,63 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
 %\begin{frame}[c,fragile]
 %  \frametitle{TITPACKの概要}
 %\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{ハイゼンベルグ模型}
+\setlength{\fboxsep}{1pt}
+
+\noindent
+\begin{align*}
+\mathcal{H} &= J \sum\limits_{\langle j,k \rangle} {\boldmath S}_j \cdot S_k \\
+&= J \sum\limits_{\langle j,k \rangle} \left\{ S^z_j S^z_k + \tfrac{1}{2}(S^+_j S^-_k + S^-_j S^+_k) \right\}
+\end{align*}
+
+\begin{align*}
+\text{Here, } & S^z_j S^z_k + \tfrac{1}{2}(S^+_j S^-_k + S^-_j S^+_k) \\
+ &=
+\tfrac{1}{2}
+\begin{bmatrix}
+1 & 0 \\
+0 & -1
+\end{bmatrix}
+\otimes
+\tfrac{1}{2}
+\begin{bmatrix}
+1 & 0 \\
+0 & -1
+\end{bmatrix}
++
+\tfrac{1}{2}\left\{
+\begin{bmatrix}
+0 & 1 \\
+0 & 0
+\end{bmatrix}
+\otimes
+\begin{bmatrix}
+0 & 0 \\
+1 & 0
+\end{bmatrix}
++
+\begin{bmatrix}
+0 & 0 \\
+1 & 0
+\end{bmatrix}
+\otimes
+\begin{bmatrix}
+0 & 1 \\
+0 & 0
+\end{bmatrix}
+\right\}\\
+&=
+\begin{bmatrix}
+\tfrac{1}{4} & & & \\
+ & - \tfrac{1}{4} & \tfrac{1}{2} & \\
+ & \tfrac{1}{2} & - \tfrac{1}{4} & \\
+ & & & \tfrac{1}{4}
+\end{bmatrix}
+\end{align*}
+
+\end{frame}
 
 \begin{frame}[c,fragile]
   \frametitle{ディレクトリ構成}
