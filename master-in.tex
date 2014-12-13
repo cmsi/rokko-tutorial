@@ -911,12 +911,12 @@ mpirun -np 4 ./sample_fortran/dense/frank_mpi eigen_exa_sx 5
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{テスト行列：Frank行列}
-Definition: $[a_{ij}]_{i,j = {0, \dots, n-1}} = [ n - \max(i,j) ]$\\
+  \frametitle{テスト行列：Frank行列（定義）}
+\begin{block}{定義}
+$[a_{ij}]_{i,j = {0, \dots, n-1}} = [ n - \max(i,j) ]$\\
+\end{block}
 
-\noindent
-\begin{rei}%
-Example ($n=5$): \quad
+\begin{block}{Example ($n=5$)}
 $[a_{ij}]_{i,j = {0, \dots, 4}} =
 \begin{bmatrix}
 5 & 4 & 3 & 2 & 1 \\
@@ -926,19 +926,20 @@ $[a_{ij}]_{i,j = {0, \dots, 4}} =
 1 & 1 & 1 & 1 & 1 \\
 \end{bmatrix}
 $
-\end{rei}
+\end{block}
+\end{frame}
 
-\vspace{\baselineskip}
-\noindent
-\begin{rei}%
-theoretical eigenvalues $\lambda_k = \dfrac{1}{2 \left( 1 - \cos{\tfrac{2 k + 1}{2 n + 1}\pi} \right)} \quad (k=0,\dots,n-1)$
-\end{rei}%
+\begin{frame}[c,fragile]
+  \frametitle{テスト行列：Frank行列（性質）}
+\begin{block}{理論固有値}%
+$\lambda_k = \dfrac{1}{2 \left( 1 - \cos{\tfrac{2 k + 1}{2 n + 1}\pi} \right)} \quad (k=0,\dots,n-1)$
+\end{block}
 
-\noindent
+\begin{block}{}%
 Frank matrix has an eigenvalue $1$\\
 \quad $\Longleftrightarrow$ $\tfrac{2 k + 1}{2 n + 1} = \tfrac{1}{3}$\\
 \quad $\Longleftrightarrow$ $n-1$ is a multiple of 3.
-
+\end{block}
 \end{frame}
 
 \section{疎行列向け並列ソルバ}
