@@ -1,0 +1,32 @@
+digraph g {
+  graph [fontname = "Depenency of eigensolvers" ];
+  node [color=lightblue2, style=filled, shape=box];
+  node [fontname="MSGOTHIC.TTC"];
+  edge [fontname="MSGOTHIC.TTC"];
+  "LAPACK" [shape=ellipse];
+  "EigenExa" [shape=ellipse];
+  "Eigen3" [shape=ellipse];
+  "ELPA" [shape=ellipse];
+  "Elemental" [shape=ellipse];
+  "ScaLAPACK" [shape=ellipse];
+
+  "LAPACK"->"BLAS";
+  "ScaLAPACK"->"LAPACK";
+  "ScaLAPACK"->"BLACS";
+  "ScaLAPACK"->"PBLAS";
+  "PBLAS"->"BLAS";
+  "PBLAS"->"BLACS";
+  "BLACS"->"MPI";
+  "EigenExa"->"ScaLAPACK";
+  "EigenExa"->"BLACS";
+  "EigenExa"->"LAPACK";
+  "EigenExa"->"BLAS";
+  "EigenExa"->"MPI";
+  "Eigen3"->"BLAS" [style="dashed"];
+  "ELPA"->"LAPACK";
+  "ELPA"->"BLAS"
+  "Elemental"->"LAPACK";
+  "Elemental"->"BLAS";
+  "Elemental"->"MPI";
+}
+
