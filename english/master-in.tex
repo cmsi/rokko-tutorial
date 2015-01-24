@@ -1,5 +1,7 @@
 \title{Rokko tutorial}
 
+\errorcontextlines=5
+
 \newtheorem{rei}{Example}
 \renewcommand{\therei}{}
 
@@ -24,7 +26,7 @@
 %%   \tableofcontents
 %% \end{frame}
 
-\section{Overview of Tutorialチュートリアルの概要}
+\section{Overview of Rokko tutorial}
 
 %% \begin{frame}{Rokkoチュートリアル スタッフ}
 %%   \begin{itemize}
@@ -51,10 +53,10 @@
   \item lecture: Existing eigenvalue algorithms \& solvers / Linear algebra solvers
   \item lecture: Overview of Rokko and its structure
 %  \item hands-on: Rokkoのインストール
-  \item lecture/hands-on: Structure of sequentail dense solvers / Running sample programs
+  \item lecture/hands-on: Structure of sequential dense solvers / Running sample programs
   \item lecture/hands-on: Structure of MPI parallelized dense solvers / Running sample programs
-  \item lecture/hands-on: Structure of sequentail sparse solvers / Running sample programs
-  \item hands-on: sample programs diagonalization for quantum spin systems
+  \item lecture/hands-on: Structure of sequential sparse solvers / Running sample programs
+  \item hands-on: sample programs of diagonalization for quantum spin systems
 %  \item 実習: TITPACK2へのRokko組み込み実習
 %  \item 実習: アプリケーションからのRokkoの利用
 %  \item (付録: ALPS/Baristaパッケージ)
@@ -63,7 +65,7 @@
 \end{frame}
 
 
-\section{Eigenvalue Algorithms / solvers, Linear algebra libraries}
+\section{Eigenvalue Algorithms / Solvers, Linear Algebra Libraries}
 
 \begin{frame}
   \frametitle{Existing eigenvalue algorithms \& solvers / Linear algebra solvers}
@@ -81,12 +83,12 @@
     %\setlength{\itemsep}{1em}
   \item Matrix type
     \begin{itemize}
-    \item real symmetric matrix, real unsymmetric matrix, complex Hermitean matrix, compliex non-Hermitean matrix
+    \item real symmetric matrix, real unsymmetric matrix, complex Hermitean matrix, complex non-Hermitean matrix
     \end{itemize}
   \item Type of matrix storage
     \begin{itemize}
-      \item dense matrix, CRS (Compressed Row Storage) form, MatFree\\
-            (corresponding to ``small'', ``middle'', ``large'' resp.)
+      \item dense matrix, CRS (Compressed Row Storage) format, MatFree\\
+            (corresponding to ``small'', ``middle'', ``large'' in TITPACK2 resp.)
     \end{itemize}
   \item Eigenvalues to be computed
     \begin{itemize}
@@ -104,16 +106,16 @@
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Eigenvalue algorithm
-    \begin{itemize}
-      \item 固有値問題を解くためのアルゴリズム
-    \end{itemize}
-  \item Eigensolver, Eigenvalue problem solver
+%    \begin{itemize}
+%      \item 固有値問題を解くためのアルゴリズム
+%    \end{itemize}
+  \item Eigensolver (solver for eigenvalue problem)
     \begin{itemize}
       \item Implementation of eigenvalue algorithm
     \end{itemize}
-  \item 固有値ソルバライブラリ(Eigensolver Library)
+  \item Eigensolver Library
     \begin{itemize}
-      \item 固有値ソルバのみを含むライブラリ
+      \item a library which consists of only eigensolvers
     \end{itemize}
   \item Linear Algebra Library
     \begin{itemize}
@@ -127,7 +129,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{固有値問題の解法(一部)}
+  \frametitle{Eigenvalue algortihm (part)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Eigenvalue algorithms for tridiagonalized matrix
@@ -140,7 +142,7 @@
     \end{itemize}
   \item Tridiagonalization of dense matrix
     \begin{itemize}
-      \item Householder法
+      \item Householder method
     \end{itemize}
   \item Direct diagonalization of sparse matrix
     \begin{itemize}
@@ -171,7 +173,7 @@
   \frametitle{Existing eigesolver libraries (for dense matrix)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item \href{http://www.aics.riken.jp/labs/lpnctrt/EigenExa.html}{EigenExa}: 密行列ソルバ
+  \item \href{http://www.aics.riken.jp/labs/lpnctrt/EigenExa.html}{EigenExa}: dense solver
     \begin{itemize}
       \item Householder (tri-diagonalization, penta-diagonalization) + divide\&conquer + QR
     \end{itemize}
@@ -215,7 +217,7 @@
   \item Vendor's implementation of LAPACK and ScaLAPACK
     \begin{itemize}
     \item \href{https://developer.apple.com/library/mac/documentation/Performance/Conceptual/vecLib/Reference/reference.html}{Apple VecLib}: LAPACK
-    \item Fujitsu SSLII: LAPACK, a part of ScaLAPACK(の一部), etc.
+    \item Fujitsu SSLII: LAPACK, a part of ScaLAPACK(part), etc.
     \item \href{https://software.intel.com/en-us/mkl_11.1_ref}{Intel MKL}: LAPACK, ScaLAPACK
     \item
       \href{http://developer.amd.com/tools-and-sdks/cpu-development/amd-core-math-library-acml/}{ACML(AMD
@@ -229,7 +231,7 @@
     \end{itemize}
   \item \href{http://www.netlib.org/scalapack/}{Netlib ScaLAPACK}: reference implmentation of ScaLAPACK
     \begin{itemize}
-      \item Householder+QR, Householder+分割統治法+QR, Householder+二分法, Householder+MR3
+      \item Householder + QR, Householder + divide\&conquer + QR, Householder+bisection, Householder + MR3
     \end{itemize}
   \item \href{http://eigen.tuxfamily.org/}{Eigen3}（sequential, thread parallelized for matrix-matrix product)
     \begin{itemize}
@@ -252,38 +254,31 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{recommndedおすすめ順}
+  \frametitle{Recommnded order}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item sequentail dense
+  \item For dense matrix (seq.)
     \begin{itemize}
       \item LAPACK (vendor impl.) $>$ Eigen3
     \end{itemize}
-  \item 密行列・MPI並列
+  \item For dense matrix (MPI)
     \begin{itemize}
-      \item EigenExa $>$ ELPA $>$ ScaLAPACK (のベンダ実装) $>$ Elemental
+      \item EigenExa $>$ ELPA $>$ ScaLAPACK (vendor impl.) $>$ Elemental
     \end{itemize}
-  \item 疎行列（逐次、MPI並列）
+  \item For sparse matrix (seq. MPI)
     \begin{itemize}
       \item Anasazi $>$ SLEPc
     \end{itemize}
   \end{itemize}
 \end{frame}
 
-\begin{frame}{EigenExaによる超巨大密行列の対角化}
-  \begin{center}
-    \includegraphics[height=0.8\textheight]{figure/eigenexa.pdf}
-  \end{center}
-\end{frame}
-
 \begin{frame}
   \frametitle{Latestest eigensolvers}
   \begin{itemize}
     \setlength{\itemsep}{1em}
-  \item ハイブリッド並列(MPI+OpenMP)対応のソルバも増えてきた
-  \item 超並列環境に対応した並列ソルバをユーザ自身が実装・最適化するの
-    はもはや不可能
-  \item 最新の並列固有値ソルバを積極的に活用すべき
+  \item There are several hybrid parallized(MPI+OpenMP) eigensolvers.
+  \item It’s almost impossible for users to implement parallel eigensolvers by themselves.
+  \item Utilize open source hybrid parallelized eigensolvers.
   \end{itemize}
 \end{frame}
 
@@ -291,49 +286,36 @@
   \frametitle{Exact diagonalization package}
   \begin{itemize}
     \setlength{\itemsep}{1em}
-  \item 代表的なパッケージ
+  \item Popular packages
     \begin{itemize}
-    \item ALPS (\href{http://alps.comp-phys.org/static/software/applications/diag/fulldiag/doc/}{fulldiag} / \href{http://alps.comp-phys.org/mediawiki/index.php/Documentation:sparsediag}{sparsediag}): LAPACK, IETLを利用
-    \item \href{http://quattro.phys.sci.kobe-u.ac.jp/Kobe_Pack/Kobe_Pack.html}{KOBEPACK}: 独自の固有値ソルバを実装
-    \item \href{http://www-e.uni-magdeburg.de/jschulen/spin/}{SPINPACK}: LAPACKを利用
-    \item \href{http://www.noc.titech.ac.jp/~phys0016_nishimori/titpack2_new/index-e.html}{TITPACK2}: 独自の固有値ソルバを実装
+    \item ALPS (\href{http://alps.comp-phys.org/static/software/applications/diag/fulldiag/doc/}{fulldiag} / \href{http://alps.comp-phys.org/mediawiki/index.php/Documentation:sparsediag}{sparsediag}): It uses LAPACK, IETL.
+    \item \href{http://quattro.phys.sci.kobe-u.ac.jp/Kobe_Pack/Kobe_Pack.html}{KOBEPACK}: It includes their own eigensolvers
+    \item \href{http://www-e.uni-magdeburg.de/jschulen/spin/}{SPINPACK}: It use LAPACK
+    \item \href{http://www.noc.titech.ac.jp/~phys0016_nishimori/titpack2_new/index-e.html}{TITPACK2}: It includes their own eigensolvers
     \end{itemize}
-  \item 逐次 or スレッド並列のみ, MPI並列なし
-  \item 最新の超並列スパコン環境を活かしきれていない
+  \item sequential or thread parallized, no MPI parallelized.
+  \item It makes calculations for a large number of sites difficult.
   \end{itemize}
 \end{frame}
 
-\begin{frame}
-  \frametitle{固有値解法とソルバ}
-  \begin{itemize}
-    \setlength{\itemsep}{1em}
-    \item GitHub Wikiに, 固有値問題の解法, 固有値ソルバ, 固有値ソルバ/線形計算ライブラリ, 厳密対角化パッケージに関するリファレンス・マニュアルを作成中
-      \begin{itemize}
-        \item 固有値解法とソルバ: \url{https://github.com/t-sakashita/rokko/wiki/EigenvalueAlgorithms}
-      \end{itemize}
-    \item ボランティア募集中!
-  \end{itemize}
-\end{frame}
-        
 \section{Rokkoの概要と内部構造}
 
 \begin{frame}
-  \frametitle{Rokkoの概要と内部構造}
+  \frametitle{Overview and Structure of Rokko}
   \begin{itemize}
     \setlength{\itemsep}{1em}
-  \item 既存のライブラリの問題点
-  \item Rokkoの概要
+  \item Problems in using existing eigensolvers
+  \item Overview of Rokko
   \item 並列ソルバの基本概念
   \item Rokkoの内部構造
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Problems for 既存のライブラリの問題点}
+  \frametitle{Problems in using existing eigensolvers}
   \begin{itemize}
     \setlength{\itemsep}{1em}
   \item Different designs (interface, block size, padding...) for different eigensolvers
-  \item インストール方法もライブラリ毎に異なる
   \item Documentation is insufficient.
   \item Different compiling / link options depending on architectures
   \item Linking problems between languages C++ / C / Fortran
@@ -362,15 +344,15 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Rokkoの概要}
+  \frametitle{Overview of Rokko}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Language
     \begin{itemize}
       %\setlength{\itemsep}{1em}
-    \item core parts: C++
-    \item language binding: C, Fortran90
-    \item benchmark script: Python
+    \item Core parts: C++
+    \item Language binding: C, Fortran90
+    \item Benchmarking script: Python
     \end{itemize}
   \item license
     \begin{itemize}
@@ -387,7 +369,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{VCS (Version Control System)によるソース管理}
+  \frametitle{Management of source code by VCS (Version Control System)}
   \begin{itemize}
   \item 開発者が複数になると, ディレクトリ名やログファイルによるバージョン管理はすぐに破綻する
   \item ソースコードをサーバー上で一括管理
@@ -404,29 +386,30 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Design policy of Rokko}
+  \frametitle{Design Policy of Rokko}
   \begin{itemize}
     \setlength{\itemsep}{1em}
   \item Common vector and matrix class
-  \item absorb difference of solvers by wrappers
+  \item Absorb differences of indivisual solvers by wrappers
     \begin{itemize}
       %\setlength{\itemsep}{1em}
-    \item 個々のソルバに仕様変更があってもRokkoが吸収
+    \item As eigensolvers develop and change, we modify wrapping functions to keep Rokko's interface the same.
     \end{itemize}
-  \item 再コンパイルなしに, 実行時にソルバを選択可能
-  \item less overhead wrappers by virutal functions and template
+  \item Without recompiling Rokko, you can select solver in runtime.
+  \item Multiple solvers can be called at one program.
+  \item Less overhead wrappers by using virutal functions and templates
   \item Available from C++, C, Fortran90
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Rokkoの全体像}
+  \frametitle{Components of Rokko}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Install scripts for eigenvalue solvers / linear algebra libraries
   \item Common fundamental class (distributed matrix, process grid, etc.)
-  \item Eigensolver wrappers (C++)
-  \item Factory for eigensolvers (C++)
+  \item Wrappers for eigensolvers (in C++)
+  \item Factory for eigensolvers (in C++)
   \item C/Fortran wrapper
   \item Test/sample programs
   \item bechmark scripts
@@ -440,16 +423,16 @@
   \end{center}
 \end{frame}
 
-\section{Rokkoのインストール}
+\section{Install Rokko}
 
 \begin{frame}
-  \frametitle{インストール作業に必須のツールとライブラリ}
+  \frametitle{Required tools and libraries to install Rokko}
   \begin{itemize}
     \setlength{\itemsep}{1em}
   \item CMake: \url{http://www.cmake.org}
   \item Boost C++ Libraries: \url{http://www.boost.org}
   \item Install scripts: \url{https://github.com/wistaria/installer}
-  \item 主要なスパコンへのインストール状況 \\
+  \item Lists of installation for primary supercomputer in Japan \\
     \url{https://github.com/wistaria/installer/wiki}
   \end{itemize}
 \end{frame}
@@ -458,47 +441,47 @@
   \frametitle{Building system: CMake}
   \begin{itemize}
     \setlength{\itemsep}{1em}
-  \item Makefileを生成するためのユーティリティー (configureスクリプトに対応)
+  \item Utility to generate Makefile. It is intended to be next-generation autoconf / automake.
     \begin{itemize}
-    \item Windows の Visual C++ 用ソリューションファイル, Mac OS X の Xcode 用プロジェクトファイルの生成も可能
+    \item It can generate Visual C++ solution file for Windows and Xcode project file for Mac OS X.
     \end{itemize}
-  \item 設定は CMakeLists.txt に記述する
-  \item テスト(CTest)やバイナリ配布(CPack)の機能もある
-  \item ファイルの依存関係の自動検出
-  \item ソースディレクトリとビルドディレクトリの分離（バージョン管理がしやすくなる）
+  \item The setting for source code is described in CMakeLists.txt
+  \item It has an integrated test (CTest) and binaray distribution (CPack).
+  \item Automatic detection of dependency of source files
+  \item Separation of source and build directories. (It makes version control easy)
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{サードパーティーの固有値ソルバ/線形計算ライブラリのインストール}
+  \frametitle{Installing Third-party eigensolvers / linear algebra libraries}
   \begin{itemize}
     \setlength{\itemsep}{1em}
-  \item Eigen3 (ベクトル, 行列クラスを内部で利用), LAPACKE (LAPACKのCインターフェース)は, Rokkoに同梱されている
-  \item インストールスクリプト: \href{https://github.com/t-sakashita/rokko/tree/master/3rd-party/install}{3rd-party/install}
+  \item Eigen3 (this vector and matrix class is utilized in Rokko), LAPACKE (C interface of LAPACK) $\rightarrow$ They are bundled in Rokko.
+  \item Install scripts: \href{https://github.com/t-sakashita/rokko/tree/master/3rd-party/install}{3rd-party/install}
     \begin{itemize}
-      \item ライブラリ: Anasazi, EigenExa, Elemental, ELPA, PETSc, ScaLAPACK, SLEPc
-      \item Available architectures対応: K/FX10, x86 supercomputer/cluster (Intel compiler/GCC), Mac OS X (GCC), etc.
+      \item Eigensolver libraries: Anasazi, EigenExa, Elemental, ELPA, PETSc, ScaLAPACK, SLEPc
+      \item Available architectures: K/FX10, x86 supercomputer/cluster (Intel compiler/GCC), Mac OS X (GCC), etc.
     \end{itemize}
-  \item 主要なスパコンにインストール済み: \url{https://github.com/t-sakashita/rokko/wiki/PreInstall}
+  \item These solvers were already installed in primary supercomputers in Japan: \url{https://github.com/t-sakashita/rokko/wiki/PreInstall}
   \end{itemize}
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{Rokkoのインストール}
+  \frametitle{Install Rokko}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item 下準備 (phi.aics.riken.jpの場合)
+  \item Set environment variables (for phi.aics.riken.jp)
 \begin{lstlisting}[style=shstyle]
 source /opt/nano/alps/alpsvars.sh
 \end{lstlisting}
-  \item Downloading and extractソースコードのダウンロード・展開
+  \item Download and decompress source codes
 \begin{lstlisting}[style=shstyle]
 cd $HOME
 wget --no-check-certificate https://github.com/t-sakashita/rokko/archive/0.2.tar.gz \
  -O rokko-0.2.tar.gz
 tar zxvf rokko-0.2.tar.gz
 \end{lstlisting}
-  \item CMakeの実行
+  \item Run CMake
 %\begin{lstlisting}[style=shstyle]
 %cmake $HOME/rokko-0.2 -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp -DROKKO_SOLVER_DIR=/opt/nano/rokko -DSCALAPACK_LIB="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -mkl=parallel" -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
 %\end{lstlisting}
@@ -521,12 +504,12 @@ cmake $HOME/rokko-0.2 \
 \begin{frame}[c,fragile]
   \frametitle{Installing Rokko (cont.)}
   \begin{itemize}
-  \item 上記のコピー＆ペーストがうまく行かなかった方は、スクリプトで実行
+  \item If you can't copy and paste the above, use the following script:
 \begin{lstlisting}[style=shstyle]
 cp /home/hands-on/rokko_20140918/cmake-rokko.sh  .
 bash ./cmake-rokko.sh
 \end{lstlisting}
-  \item Make, test
+  \item Make, test, and install
 \begin{lstlisting}[style=shstyle]
 make -j 10
 make test
@@ -536,8 +519,8 @@ make install
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{インストールの成否の確認}
-Display a list of available eigensolvers in Rokkoで使用できる固有値ルーチン一覧の表示 \RokkoFilename{tool/rokko_solvers.cpp}
+  \frametitle{Verification of installation}
+Display a list of available eigensolvers in Rokko \RokkoFilename{tool/rokko_solvers.cpp}
 \begin{lstlisting}[style=shstyle]
 cd rokko/tool
 ./rokko_solvers
@@ -568,7 +551,7 @@ Output result
  .2 \RokkoFilename{rokko}
  $\cdots$ Rokko body (header \& source files).
  .2 \RokkoFilename{sample}
- $\cdots$ Sample program in C++.
+ $\cdots$ Sample programs in C++.
  .3
  \href{https://github.com/t-sakashita/rokko/tree/develop/sample/dense}{dense}
  $\cdots$ for dense matrix (seq\. \& MPI).
@@ -577,26 +560,26 @@ Output result
  .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/dense}{dense} $\cdots$ for dense matrix (seq\. \& MPI).
  .3
  \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/sparse}{sparse}
- $\cdots$ 疎行列用（MPI版）.
+ $\cdots$ spapse matrix (MPI).
  .2 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran}{sample_fortran}
  $\cdots$ Sample programs in Fortran.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/dense}{dense} $\cdots$ 密行列用（逐次版、MPI版）.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/sparse}{sparse} $\cdots$ 疎行列用（MPI版）.
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/dense}{dense} $\cdots$ dense (seq\.\&MPI).
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/sparse}{sparse} $\cdots$ sparse matrix (MPI).
 % .2
 % \href{https://github.com/t-sakashita/rokko/tree/develop/test}{test}
 % $\cdots$ ctest用（インストール成否の確認）.
 % .2 3rd-party $\cdots$ 固有値ソルバ.
- .2 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial}{tutorial} $\cdots$ チュートリアル.
+ .2 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial}{tutorial} $\cdots$ Tutorial.
  .3
  \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack}{titpack}
- $\cdots$ 厳密対角化パッケージの書き換え.
+ $\cdots$ Gradually rewriting TITPACK2 to use Rokko.
 }
 
 \end{frame}
 
 \section{Parallel sequentail solvers}
 
-\subsection{specification of Rokko interface}
+\subsection{Specification of Rokko interface}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::localized\_matrix class template}
@@ -628,7 +611,7 @@ public:
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::localized\_vector と rokko::localized\_matrix の利用例}
+  \frametitle{Usage example of rokko::localized\_vector and rokko::localized\_matrix}
   \begin{itemize}
   \item \RokkoFilename{test/localized\_matrix.cpp}
 \begin{lstlisting}
@@ -658,7 +641,7 @@ solver.initialize(argc, argv);
 \begin{lstlisting}
 solver.finalize();
 \end{lstlisting}
-  \item Diagonalization (the matrix will be overwritten)
+  \item Diagonalize a dense matrix (the matrix will be overwritten)
 \begin{lstlisting}
 rokko::localized_matrix<matrix_col_major> mat(dim, dim, solver);
 ...
@@ -673,21 +656,21 @@ solver.diagonalize(mat, evals, evecs);
   \end{itemize}
 \end{frame}
 
-\subsection{Run sample programs}
+\subsection{Sample programs}
 
 \begin{frame}[c,fragile]
-  \frametitle{対角化のサンプル}
+  \frametitle{Sample for diagonalization}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
 %  \item 逐次密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/serial_dense_solvers.cpp}{test/serial\_dense\_solvers.cpp}
 %\begin{lstlisting}[style=shstyle]
 %./test/serial_dense_solvers
 %\end{lstlisting}
-  \item Use dsyev in LAPACK directyly \RokkoFilename{sample/dense/dsyev.cpp}
+  \item Using dsyev in LAPACK directyly \RokkoFilename{sample/dense/dsyev.cpp}
 \begin{lstlisting}[style=shstyle]
 ./sample/dense/dsyev
 \end{lstlisting}
-Use seq. dense solvers
+Using seq. dense solvers
   \item C++ ver. \RokkoFilename{sample/dense/frank.cpp}
 \begin{lstlisting}[style=shstyle]
 ./sample/dense/frank lapack 5
@@ -711,23 +694,23 @@ Use seq. dense solvers
   \frametitle{2D process grid}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item MPI processプロセスの2次元割付けを指定
-  \item two type of majors: Row-major / column-major
-  \item 4プロセスの例 (left:row-major, right:column-major)
+  \item Assigning MPI processes in 2-dimension
+  \item Two types of majors: row-major / column-major
+  \item Example: 4 processes (no. {\color{blue}0,1,2,3}) (left:row-major, right:column-major)
   \begin{center}
     \includegraphics[height=0.25\textheight]{figure/grid-row-major.pdf} \ \ \ \
     \includegraphics[height=0.25\textheight]{figure/grid-column-major.pdf}
   \end{center}
-  \item 全てのソルバは両方の種類をサポート
+  \item All dense solvers support both grid majors.
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{2-dimensional block cyclic matrix (distributed\_matrix)}
+  \frametitle{2-dimensional block cyclic matrix (distributed_matrix)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Parallel linear algebra libraries for dense matrices employ 2D process grid.
-  \item 4プロセスでの例 (左 ローカルビュー, 右 グローバルビュー)
+  \item Example (using the 2D process grid in the last page):(left:local view, right:global view)
   \begin{center}
     \includegraphics[height=0.45\textheight]{figure/local-view.pdf} \ \ \ \ \ \ \ \
     \includegraphics[height=0.35\textheight]{figure/global-view.pdf}
@@ -737,7 +720,7 @@ Use seq. dense solvers
   \end{itemize}
 \end{frame}
 
-\subsection{Rokko interfaceインターフェースの仕様}
+\subsection{Specification of Rokko interface}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::grid class}
@@ -802,7 +785,7 @@ public:
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{Operation for distributed\_matrix}
+  \frametitle{Operation for distributed_matrix}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item matrix-matrix product $C = \alpha A B + \beta C$
@@ -825,10 +808,10 @@ public:
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{distributed\_matrixの生成}
+  \frametitle{generating distributed_matrix}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item 要素毎に代入 (globalな添字)
+  \item assign matrix elements (global indices)
 \begin{lstlisting}
 for(int global_i=0; global_i < mat.m_global; ++global_i) {
   for(int global_j=0; global_j < mat.n_global; ++global_j) {
@@ -866,7 +849,7 @@ solver.initialize(argc, argv);
 \begin{lstlisting}
 solver.finalize();
 \end{lstlisting}
-  \item diagonalization (the matrix is broken)
+  \item diagonalization (the matrix is overwrriten)
 \begin{lstlisting}
 rokko::distributed_matrix<matrix_col_major> mat(dim, dim, g, solver);
 ...
@@ -928,11 +911,11 @@ $
 
 \begin{frame}[c,fragile]
   \frametitle{Test matrix: Frank matrix (properties)}
-\begin{block}{analytical eigenvalues}%
+\begin{block}{Analytical eigenvalues}%
 $\lambda_k = \dfrac{1}{2 \left( 1 - \cos{\tfrac{2 k + 1}{2 n + 1}\pi} \right)} \quad (k=0,\dots,n-1)$
 \end{block}
 
-\begin{block}{}%
+\begin{block}{Remark}%
 Frank matrix has an eigenvalue $1$\\
 \quad $\Longleftrightarrow$ $\tfrac{2 k + 1}{2 n + 1} = \tfrac{1}{3}$\\
 \quad $\Longleftrightarrow$ $n-1$ is a multiple of 3.
@@ -962,8 +945,8 @@ For each row, nonzero entries and their column indices are stored.
 Representation in CRS format:
 \begin{itemize}
 %\item 非ゼロ成分に対する行添字$= [1, 1, 2, 3, 3, 4] $
-\item row indices (for nonzero entries) $num\_nonzero\_cols = [2, 1, 2, 1]$
-\item column indices (for nonzero entries) $nonzero\_cols = [1, 2, 4, 1, 4, 3]$
+\item $nonzero\_rows = [2, 1, 2, 1]$
+\item $nonzero\_cols = [1, 2, 4, 1, 4, 3]$
 %\begin{bmatrix}
 %1 & 2 \\
 %4 \\
@@ -982,7 +965,7 @@ This parallelization is automatically done by eigensolvers.
 \subsection{Specifications for Rokko interfaces}
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::distributed\_crs\_matrix class template}
+  \frametitle{rokko::distributed_crs_matrix class template}
 \begin{lstlisting}
 namespace rokko {
 class distributed_crs_matrix {
@@ -1004,7 +987,7 @@ public:
 
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::distributed\_crs\_matrix class (example)
+  \frametitle{rokko::distributed_crs_matrix class (example)
     \RokkoFilename{sample/sparse/distributed_crs_matrix anasazi.cpp} }
 \begin{lstlisting}
   rokko::parallel_sparse_solver solver("anasazi");
@@ -1024,13 +1007,13 @@ public:
   mat.print();
 \end{lstlisting}
 \noindent
-running sample
+Run sample
   \begin{itemize}
-  \item Anasaziの場合
+  \item For using Anasazi
 \begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample/sparse/distributed_crs_matrix anasazi
 \end{lstlisting}
-  \item SLEPcの場合
+  \item For using SLEPc
 \begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample/sparse/distributed_crs_matrix slepc
 \end{lstlisting}
@@ -1040,14 +1023,12 @@ mpirun -np 4 ./sample/sparse/distributed_crs_matrix slepc
 
 \begin{frame}[c,fragile]
   \frametitle{Matrix free method}
-たいていの疎行列向け固有値ソルバでは、行列そのものではなく、固有値分解を行うべき行列とベクト
-ル積を行うルーチンのみが必要である。
-　\\
+%たいていの疎行列向け固有値ソルバでは、行列そのものではなく、固有値分解を行うべき行列とベクトル積を行うルーチンのみが必要である。
 　\\
 \noindent
 作り方
   \begin{itemize}
-  \item Prepare a class 
+  \item Write a class 
 \begin{lstlisting}
 class heisenberg_op : public rokko::distributed_mfree {
 public:
@@ -1079,7 +1060,7 @@ public:
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{Matrix free method（例の続き）}
+  \frametitle{Matrix free method (cont.)}
 \begin{lstlisting}
 private:
   MPI_Comm comm_;
@@ -1094,7 +1075,7 @@ private:
 
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::parallel\_sparse\_solver class}
+  \frametitle{rokko::parallel_sparse_solver class}
 \vspace{-1\baselineskip}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
@@ -1107,13 +1088,13 @@ solver.initialize(argc, argv);
 \begin{lstlisting}
 solver.finalize();
 \end{lstlisting}
-  \item Diagonalization for CRS matrix
+  \item diagonalize a sparse matrix in CRS format
 \begin{lstlisting}
 rokko::distributed_crs_matrix mat(dim, dim, solver);
 ...
 solver.diagonalize(mat, num_evals, block_size, max_iters, tol);
 \end{lstlisting}
-  \item Diagonalization (for Matrix Free case)
+  \item Diagonalize MatFree
 \begin{lstlisting}
 heisenberg_op  mat(L, lattice);
 solver.diagonalize(mat, num_evals, block_size, max_iters, tol);
