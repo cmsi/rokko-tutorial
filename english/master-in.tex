@@ -968,7 +968,7 @@ This parallelization is automatically done by eigensolvers.
 \begin{frame}[c,fragile]
   \frametitle{rokko::distributed_crs_matrix class template}
   \begin{itemize}
-  \item \RokkoFilename{rokko/distributed_matrix.hpp}
+  \item \RokkoFilename{rokko/distributed_crs_matrix.hpp}
 \begin{lstlisting}
 namespace rokko {
 class distributed_crs_matrix {
@@ -1005,7 +1005,7 @@ public:
   int current = 0;
   for (int row = 0; row < dim; ++row) {
     mat.insert(row, num_nonzero_cols[row], &nonzero_cols[current], &values[current]);
-    current += num_nonzero_cols[row]; 
+    current += num_nonzero_cols[row];
   }
   mat.complete();
   mat.print();
@@ -1028,11 +1028,11 @@ mpirun -np 4 ./sample/sparse/distributed_crs_matrix slepc
 \begin{frame}[c,fragile]
   \frametitle{Matrix free method}
 %たいていの疎行列向け固有値ソルバでは、行列そのものではなく、固有値分解を行うべき行列とベクトル積を行うルーチンのみが必要である。
-　\\
+%　\\
 \noindent
-作り方
+Write a class
   \begin{itemize}
-  \item Write a class 
+  \item \RokkoFilename{rokko/utility/heisenberg_hamiltonian.hpp}
 \begin{lstlisting}
 class heisenberg_op : public rokko::distributed_mfree {
 public:
