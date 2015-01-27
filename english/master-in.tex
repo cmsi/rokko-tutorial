@@ -697,11 +697,30 @@ Using seq. dense solvers
     %\setlength{\itemsep}{1em}
   \item Assigning MPI processes in 2-dimension
   \item Two types of majors: row-major / column-major
-  \item Example: 4 processes (no. {\color{blue}0,1,2,3}) (left:row-major, right:column-major)
-  \begin{center}
-    \includegraphics[height=0.25\textheight]{figure/grid-row-major.pdf} \ \ \ \
-    \includegraphics[height=0.25\textheight]{figure/grid-column-major.pdf}
-  \end{center}
+  \item Example: 4 processes (no. {\color{blue}0,1,2,3})
+%  \begin{center}
+%    \includegraphics[height=0.25\textheight]{figure/grid-row-major.pdf} \ \ \ \
+%    \includegraphics[height=0.25\textheight]{figure/grid-column-major.pdf}\\
+%  (left:row-major, right:column-major)
+%  \end{center}
+  \begin{figure}[htbp]
+\begin{tabular}{cc}
+\begin{minipage}{0.4\hsize}
+\begin{center}
+\includegraphics[height=0.25\textheight]{figure/grid-row-major.pdf}
+\caption{row-major}
+\label{fig:winter}
+\end{center}
+\end{minipage}
+\begin{minipage}{0.4\hsize}
+\begin{center}
+\includegraphics[height=0.25\textheight]{figure/grid-column-major.pdf}
+\caption{column-major}
+\label{fig:fall}
+\end{center}
+\end{minipage}
+\end{tabular}
+\end{figure}
   \item All dense solvers support both grid majors.
   \end{itemize}
 \end{frame}
@@ -954,7 +973,7 @@ Representation in CRS format:
 %1 & 4 \\
 %3
 %\end{bmatrix}$
-\item nonzero entries $values = [7.1, 5.2, 6.4, 0.2, 4.3, 0.5]$
+\item $nonzero\_entries = [7.1, 5.2, 6.4, 0.2, 4.3, 0.5]$
 \end{itemize}
 \end{rei}
 
