@@ -1,5 +1,13 @@
 \title{Rokko tutorial}
 
+\setlength{\floatsep}{5pt plus 0pt minus 0pt}                                   
+\setlength{\dblfloatsep}{5pt plus 0pt minus 0pt}  % 図表と図表の間のマージン（二段組みバージョン）
+\setlength{\textfloatsep}{5pt plus 0pt minus 0pt}                               
+\setlength{\dbltextfloatsep}{5pt plus 0pt minus 0pt} % 図表と本文の間のマージン 
+\setlength{\intextsep}{5pt plus 0pt minus 0pt}                                  
+\setlength{\abovecaptionskip}{5pt plus 0pt minus 0pt}   % 図表の caption と図表本体の間のマージン
+\setlength{\belowcaptionskip}{5pt plus 0pt minus 0pt}   % 図表の caption 下部のマージン
+
 \errorcontextlines=5
 
 \newtheorem{rei}{Example}
@@ -720,7 +728,7 @@ Using seq. dense solvers
 \end{center}
 \end{minipage}
 \end{tabular}
-\end{figure}
+  \end{figure}
   \item All dense solvers support both grid majors.
   \end{itemize}
 \end{frame}
@@ -730,11 +738,29 @@ Using seq. dense solvers
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Parallel linear algebra libraries for dense matrices employ 2D process grid.
-  \item Example (using the 2D process grid in the last page):(left:local view, right:global view)
-  \begin{center}
-    \includegraphics[height=0.45\textheight]{figure/local-view.pdf} \ \ \ \ \ \ \ \
-    \includegraphics[height=0.35\textheight]{figure/global-view.pdf}
-  \end{center}
+  \item Example (using the 2D process grid in the last page):
+  \begin{figure}[htbp]
+\begin{tabular}{cc}
+\begin{minipage}{0.4\hsize}
+\begin{center}
+\includegraphics[height=0.45\textheight]{figure/local-view.pdf}
+\caption{local view}
+\label{fig:local-view}
+\end{center}
+\end{minipage}
+\begin{minipage}{0.4\hsize}
+\begin{center}
+\includegraphics[height=0.45\textheight]{figure/global-view.pdf}
+\caption{global view}
+\label{fig:global-view}
+\end{center}
+\end{minipage}
+\end{tabular}
+  \end{figure}
+%  \begin{center}
+%    \includegraphics[height=0.45\textheight]{figure/local-view.pdf} \ \ \ \ \ \ \ \
+%    \includegraphics[height=0.35\textheight]{figure/global-view.pdf}
+%  \end{center}
   \item ScaLAPACK and ELPA support arabitrary block sizes.
   \item EigenExa and Elemental support $1 \times 1$.
   \end{itemize}
