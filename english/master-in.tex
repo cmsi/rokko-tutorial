@@ -320,7 +320,7 @@
   \item Different compiling / link options depending on architectures
   \item Linking problems between languages C++ / C / Fortran
   \item Complicated dependency among lower level libraries
-  \item Rough estimate for performace before trying it
+  \item Users want rough estimate for performace of eigensolvers before trying it.
   \end{itemize}
 \end{frame}
 
@@ -354,12 +354,12 @@
     \item Language binding: C, Fortran90
     \item Benchmarking script: Python
     \end{itemize}
-  \item license
+  \item License
     \begin{itemize}
       %\setlength{\itemsep}{1em}
     \item Boost licene (almost freely available)
     \end{itemize}
-  \item source code
+  \item Source code
     \begin{itemize}
       %\setlength{\itemsep}{1em}
     \item Open to the public by GitHub\\
@@ -755,7 +755,7 @@ public:
 
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::distributed\_matrix class template}
+  \frametitle{rokko::distributed_matrix class template}
   \begin{itemize}
   \item \RokkoFilename{rokko/distributed_matrix.hpp}
 \begin{lstlisting}
@@ -789,7 +789,7 @@ public:
   \frametitle{Operation for distributed_matrix}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item matrix-matrix product $C = \alpha A B + \beta C$
+  \item Matrix-matrix product $C = \alpha A B + \beta C$
 \begin{lstlisting}
   ...
   rokko::distributed_matrix<rokko::matrix_col_major> matA(dim, dim, g, solver);
@@ -838,7 +838,7 @@ mat.generate(f);
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::parallel\_dense\_solver class}
+  \frametitle{rokko::parallel_dense_solver class}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Initialize solver
@@ -850,7 +850,7 @@ solver.initialize(argc, argv);
 \begin{lstlisting}
 solver.finalize();
 \end{lstlisting}
-  \item diagonalization (the matrix is overwrriten)
+  \item Diagonalize a matrix (the matrix is overwrriten)
 \begin{lstlisting}
 rokko::distributed_matrix<matrix_col_major> mat(dim, dim, g, solver);
 ...
@@ -967,6 +967,8 @@ This parallelization is automatically done by eigensolvers.
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::distributed_crs_matrix class template}
+  \begin{itemize}
+  \item \RokkoFilename{rokko/distributed_matrix.hpp}
 \begin{lstlisting}
 namespace rokko {
 class distributed_crs_matrix {
@@ -984,12 +986,13 @@ public:
 };
 }
 \end{lstlisting}
+  \end{itemize}
 \end{frame}
 
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::distributed_crs_matrix class (example)
-    \RokkoFilename{sample/sparse/distributed_crs_matrix anasazi.cpp} }
+  \frametitle{rokko::distributed_crs_matrix class (example)}
+\RokkoFilename{sample/sparse/distributed_crs_matrix.cpp}
 \begin{lstlisting}
   rokko::parallel_sparse_solver solver("anasazi");
   int dim = 4;
@@ -1089,7 +1092,7 @@ solver.initialize(argc, argv);
 \begin{lstlisting}
 solver.finalize();
 \end{lstlisting}
-  \item diagonalize a sparse matrix in CRS format
+  \item Diagonalize a sparse matrix in CRS format
 \begin{lstlisting}
 rokko::distributed_crs_matrix mat(dim, dim, solver);
 ...
