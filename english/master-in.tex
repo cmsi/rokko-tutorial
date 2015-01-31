@@ -230,18 +230,18 @@
     \item
       \href{http://developer.amd.com/tools-and-sdks/cpu-development/amd-core-math-library-acml/}{ACML(AMD
         Core Math Library)}: LAPACK
-    \item \href{http://www.openblas.net}{OpenBLAS}: BLAS + a part of LAPACK routines（sucessive implementation for GotoBLAS）
+    \item \href{http://www.openblas.net}{OpenBLAS}: BLAS + a part of LAPACK routines (sucessive implementation for GotoBLAS)
 
     \end{itemize}
-  \item \href{http://www.netlib.org/lapack/}{Netlib LAPACK}: LAPACKのreference implementation
+  \item \href{http://www.netlib.org/lapack/}{Netlib LAPACK}: Reference implementation of LAPACK
     \begin{itemize}
       \item Householder+QR, Householder + divide\&conquer + QR, Householder+bisection method, Householder+MR3
     \end{itemize}
-  \item \href{http://www.netlib.org/scalapack/}{Netlib ScaLAPACK}: reference implmentation of ScaLAPACK
+  \item \href{http://www.netlib.org/scalapack/}{Netlib ScaLAPACK}: Reference implmentation of ScaLAPACK
     \begin{itemize}
       \item Householder + QR, Householder + divide\&conquer + QR, Householder+bisection, Householder + MR3
     \end{itemize}
-  \item \href{http://eigen.tuxfamily.org/}{Eigen3}（sequential, thread parallelized for matrix-matrix product)
+  \item \href{http://eigen.tuxfamily.org/}{Eigen3}: sequential, thread parallelized for matrix-matrix product)
     \begin{itemize}
       \item Householder+QR
     \end{itemize}
@@ -284,24 +284,24 @@
   \frametitle{Latestest eigensolvers}
   \begin{itemize}
     \setlength{\itemsep}{1em}
-  \item There are several hybrid parallized(MPI+OpenMP) eigensolvers.
-  \item It’s almost impossible for users to implement parallel eigensolvers by themselves.
-  \item Utilize open source hybrid parallelized eigensolvers.
+  \item There are several hybrid-parallized(MPI+OpenMP) eigensolvers.
+  \item It's almost impossible for users to implement parallel eigensolvers by themselves.
+  \item Utilize open source hybrid-parallelized eigensolvers.
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Exact diagonalization package}
+  \frametitle{Existing Exact diagonalization package}
   \begin{itemize}
     \setlength{\itemsep}{1em}
   \item Popular packages
     \begin{itemize}
-    \item ALPS (\href{http://alps.comp-phys.org/static/software/applications/diag/fulldiag/doc/}{fulldiag} / \href{http://alps.comp-phys.org/mediawiki/index.php/Documentation:sparsediag}{sparsediag}): It uses LAPACK, IETL.
+    \item \href{http://alps.comp-phys.org/mediawiki/index.php/Main_Page}{ALPS} (\href{http://alps.comp-phys.org/static/software/applications/diag/fulldiag/doc/}{fulldiag} / \href{http://alps.comp-phys.org/mediawiki/index.php/Documentation:sparsediag}{sparsediag}): It uses LAPACK, IETL.
     \item \href{http://quattro.phys.sci.kobe-u.ac.jp/Kobe_Pack/Kobe_Pack.html}{KOBEPACK}: It includes their own eigensolvers
     \item \href{http://www-e.uni-magdeburg.de/jschulen/spin/}{SPINPACK}: It use LAPACK
     \item \href{http://www.noc.titech.ac.jp/~phys0016_nishimori/titpack2_new/index-e.html}{TITPACK2}: It includes their own eigensolvers
     \end{itemize}
-  \item sequential or thread parallized, no MPI parallelized.
+  \item Sequential or thread parallized. No MPI parallelized.
   \item It makes calculations for a large number of sites difficult.
   \end{itemize}
 \end{frame}
@@ -529,7 +529,8 @@ make install
 
 \begin{frame}[c,fragile]
   \frametitle{Verification of installation}
-Display a list of available eigensolvers in Rokko \RokkoFilename{tool/rokko_solvers.cpp}
+Display a list of available eigensolvers in Rokko\\
+\RokkoFilename{tool/rokko_solvers.cpp}
 \begin{lstlisting}[style=shstyle]
 cd rokko/tool
 ./rokko_solvers
@@ -586,7 +587,7 @@ Output result
 
 \end{frame}
 
-\section{Parallel sequentail solvers}
+\section{Parallel sequential solvers}
 
 \subsection{Specification of Rokko interface}
 
@@ -765,6 +766,26 @@ Using seq. dense solvers
   \item EigenExa and Elemental support $1 \times 1$.
   \end{itemize}
 \end{frame}
+
+\note{%
+As far as I know, all eigensolvers for dense matrices empoly 2D block cyclic distributed matrix.
+Not only eigensolvers, dense linear algebra libraries (such as linear equation solver, LU / QR decomposition) use block-cyclic distribution.
+
+Block-cyclic distribution is decomposed way to squared tiles according to 2D process grid defined in the last slide. 
+Each tile is assigned to one of processes in 2D process grid.
+The size of squared tile is called block size.
+The colors of tiles show assigned MPI processes.
+
+As an example, I use 2D process grid appeared in the previous page.
+Paving the whole matrix with the patterns of 2D process grids of given block size, you obtain block cyclic distribution.
+It’s virtual global view.
+
+Actual local storage is obtained by pulling out the same color tiles.
+For example, the part of process 0 is obtained by pulling out the cyan-colored tiles.
+Similarly, the part of process 1 is obtained by pulling out the green-colored tiles.
+
+EigenExa and Elemental support only 1x1 block size for computational efficiency.
+}
 
 \subsection{Specification of Rokko interface}
 
