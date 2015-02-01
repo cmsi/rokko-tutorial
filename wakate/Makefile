@@ -1,0 +1,33 @@
+BASENAME = tutorial
+SRC = ${BASENAME}-en-in.tex ../style/*.sty ../style/*.bb
+
+default: ${BASENAME}-en-wide.pdf ${BASENAME}-en.pdf
+
+try:  ${BASENAME}-en.tex ${SRC}
+	TEXINPUTS=.:../style//: platex -shell-escape ${BASENAME}-en.tex
+	TEXINPUTS=.:../style//: dvipdfmx ${BASENAME}-en.dvi
+
+normal: ${BASENAME}-en.pdf
+
+${BASENAME}-en-wide.dvi: ${BASENAME}-en-wide.tex ${SRC}
+	TEXINPUTS=.:../style//: platex -shell-escape ${BASENAME}-en-wide.tex
+	TEXINPUTS=.:../style//: platex ${BASENAME}-en-wide.tex
+	TEXINPUTS=.:../style//: platex ${BASENAME}-en-wide.tex
+
+${BASENAME}-en-wide.pdf: ${BASENAME}-en-wide.dvi
+	TEXINPUTS=.:../style//: dvipdfmx ${BASENAME}-en-wide.dvi
+
+${BASENAME}-en.dvi: ${BASENAME}-en.tex ${SRC}
+	TEXINPUTS=.:../style//: platex -shell-escape ${BASENAME}-en.tex
+	TEXINPUTS=.:../style//: platex ${BASENAME}-en.tex
+	TEXINPUTS=.:../style//: platex ${BASENAME}-en.tex
+
+${BASENAME}-en.pdf: ${BASENAME}-en.dvi
+	TEXINPUTS=.:./style//: dvipdfmx ${BASENAME}-en.dvi
+
+clean:
+	rm -f ${BASENAME}-en*.aux ${BASENAME}-en*.dvi ${BASENAME}-en*.log ${BASENAME}-en*.nav ${BASENAME}-en*.out ${BASENAME}-en*.snm ${BASENAME}-en*.toc ${BASENAME}-en*.vrb
+	rm -rf auto *.xbb ../figure/*.xbb ../style/*.xbb
+
+distclean: clean
+	rm -f ${BASENAME}-en-wide.pdf ${BASENAME}-en.pdf
