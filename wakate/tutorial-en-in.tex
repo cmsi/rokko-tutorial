@@ -46,39 +46,19 @@
 
 \section{Overview of Rokko tutorial}
 
-%% \begin{frame}{Rokkoチュートリアル スタッフ}
-%%   \begin{itemize}
-%%   \item 講師
-%%     \setlength{\itemsep}{1em}
-%%     \begin{itemize}
-%%       \setlength{\itemsep}{1em}
-%%     \item 坂下達哉 (東大物性研) \ \href{mailto:t-sakashita@issp.u-tokyo.ac.jp}{t-sakashita@issp.u-tokyo.ac.jp}
-%% %    \item 藤堂眞治 (東大院理/物性研) \ \href{mailto:wistaria@phys.s.u-tokyo.ac.jp}{wistaria@phys.s.u-tokyo.ac.jp}
-%% %    \item 五十嵐 亮 (東大物性研) \ \href{mailto:rigarash@issp.u-tokyo.ac.jp}{rigarash@issp.u-tokyo.ac.jp}
-%% %    \item 本山裕一 (東大物性研) \ \href{mailto:y-motoyama@issp.u-tokyo.ac.jp}{y-motoyama@issp.u-tokyo.ac.jp}
-%%     \end{itemize}
-%%   \item 主催
-%%     \begin{itemize}
-%%     \item CMSI: Computational Materials Science Initiative \url{http://cms-initiative.jp/}
-%%     \end{itemize}
-%%   \end{itemize}
-%% \end{frame}
 
 \begin{frame}
-  \frametitle{Contents of the tutorail}
+  \frametitle{Contents of the tutorial}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item lecture: Existing eigenvalue algorithms \& solvers / Linear algebra solvers
-  \item lecture: Overview of Rokko and its structure
-%  \item hands-on: Rokkoのインストール
-  \item lecture/hands-on: Structure of sequential dense solvers / Running sample programs
-  \item lecture/hands-on: Structure of MPI parallelized dense solvers / Running sample programs
-  \item lecture/hands-on: Structure of sequential sparse solvers / Running sample programs
-  \item hands-on: sample programs of diagonalization for quantum spin systems
-%  \item 実習: TITPACK2へのRokko組み込み実習
-%  \item 実習: アプリケーションからのRokkoの利用
-%  \item (付録: ALPS/Baristaパッケージ)
- % \item (付録: MateriAppsとMateriApps LIVE!)
+  \item Lecture: Existing eigenvalue algorithms \& solvers / Linear algebra solvers
+  \item Lecture: Overview of Rokko and its structure
+ programs
+  \item Lecture/hands-on: Structure of MPI parallelized dense solvers / Running sample programs
+  \item Lecture/hands-on: Structure of sequential sparse solvers / Running sample programs
+  \item Hands-on: sample programs of diagonalization for quantum spin systems
+  \item Appendix: Installing Rokko
+%  \item Lecture/hands-on: Structure of sequential dense solvers / Running sample
   \end{itemize}
 \end{frame}
 
@@ -124,9 +104,6 @@
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Eigenvalue algorithm
-%    \begin{itemize}
-%      \item 固有値問題を解くためのアルゴリズム
-%    \end{itemize}
   \item Eigensolver (solver for eigenvalue problem)
     \begin{itemize}
       \item Implementation of eigenvalue algorithm
@@ -386,22 +363,6 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Management of source code by VCS (Version Control System)}
-  \begin{itemize}
-  \item 開発者が複数になると, ディレクトリ名やログファイルによるバージョン管理はすぐに破綻する
-  \item ソースコードをサーバー上で一括管理
-    \begin{itemize}
-    \item ネットワーク経由でソースを check out/check in
-    \end{itemize}
-  \item 全ての修正履歴を保存
-  \item 複数人が同時に更新した場合に衝突を回避するしくみ
-  \item ブランチ・マージ・タグ付けなどが可能
-  \item 開発者が一人, 公開の予定がない場合でも積極的に使うべき
-  \item 参考資料: バージョン管理web講習会 {\tiny
-      \url{http://www.cms-initiative.jp/ja/research-support/develop-support/how-to-publish/develop-apps/dt0l33}}
-  \end{itemize}
-\end{frame}
 
 \begin{frame}
   \frametitle{Design Policy of Rokko}
@@ -1244,11 +1205,6 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
   \end{itemize}
 \end{frame}
 
-\section{TITPACK2へのRokko組み込み実習}
-
-%\begin{frame}[c,fragile]
-%  \frametitle{TITPACKの概要}
-%\end{frame}
 
 \begin{frame}[c,fragile]
   \frametitle{ハイゼンベルグ模型}
@@ -1307,62 +1263,12 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
 
 \end{frame}
 
-\begin{frame}[c,fragile]
-  \frametitle{ディレクトリ構成}
-
-\dirtree{%
- .1 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/}{tutorial}.
- .2
- \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack}{titpack}.
- .3
- \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/00_original}{00\_original}
- $\cdots$ 独自固有値ソルバのFortran版.
- .3
- \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/01_lapack}{01\_lapack}
- $\cdots$ FortranのままLAPACK化.
- .3
- \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/01_lapack_cxx}{01\_lapack\_cxx}
- $\cdots$ C++でLAPACK版.
- .3
- \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/02_refactored_cxx}{02\_refactored\_cxx}
- $\cdots$ C++版のリファクタリング版.
- .3
- \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/03_rokko_cxx}{03\_rokko\_cxx}
- $\cdots$ C++でRokko化.
-}
-\end{frame}
-
-
-\section{アプリケーションからのRokkoの利用}
-
-\begin{frame}[c,fragile]
-  \frametitle{CMakeによるRokkoライブラリの取り込み方法}
-以下を参考にユーザプログラム用のCMakeLists.txtを書く。
-
-そのCMakeLists.txtにshare/rokko/UseRokko.cmakeをインクルードする。
-
-\begin{itemize}
-  \item \href{https://github.com/t-sakashita/rokko/tree/develop/sample/CMakeLists.txt}{sample/CMakeLists.txt}
-  \item \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/CMakeLists.txt}{sample\_c/CMakeLists.txt}
-  \item \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/CMakeLists.txt}{sample\_fortran/CMakeLists.txt}
-\end{itemize}
-\end{frame}
-
-
-%\begin{frame}[c,fragile]
-%  \frametitle{MakefileによるRokkoライブラリの取り込み方法}
-ユーザプログラムのMakefileにshare/rokko/include.mkをインクルードする。
-
-%\end{frame}
-
 
 \end{document}
 
 
 
 
-%\section{ALPS/Baristaパッケージ}
-%\section{MateriAppsとMateriApps LIVE!}
 
 \begin{frame}
   \frametitle{テスト}
