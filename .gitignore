@@ -116,3 +116,8 @@ sympy-plots-for-*.tex/
 
 # xindy
 *.xdy
+
+# added by Sakashita
+*.xbb
+*.pdf
+
