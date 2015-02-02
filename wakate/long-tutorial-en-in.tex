@@ -1,4 +1,4 @@
-\title{Rokko Tutorial}
+\title{Rokko Tutorial (long version)}
 
 % 講習会名 (例: "CMSI柏ハンズオン")
 \author{11th CMSI Young Researcher Technical Workshop}
@@ -7,6 +7,9 @@
 \date{4th-6th, Feb 2015}
 
 \newcommand{\RokkoRootDir}{/opt/hands-on/rokko}
+\usepackage{graphicx}
+\newcommand{\smallscr}[1]{\scalebox{0.4}{$#1$}}
+\newcommand{\middlescr}[1]{\scalebox{0.60}{$#1$}}
 
 \setbeamertemplate{note page}{\insertnote\par}
 
@@ -35,7 +38,7 @@
 
 \begin{frame}
   \titlepage
-  \noindent {\footnotesize PDF file: \url{http://sf.net/projects/rokko-tutorial/files/tutorial-en.pdf}} \\
+  \noindent {\footnotesize PDF file: \url{http://sf.net/projects/rokko-tutorial/files/long-tutorial-en.pdf}} \\
   \noindent {\footnotesize LaTeX source: \url{http://github.com/cmsi/rokko-tutorial/wakate}}
 \end{frame}
 
@@ -43,24 +46,6 @@
 %% \begin{frame}
 %%   \tableofcontents
 %% \end{frame}
-
-\section{Overview of Rokko tutorial}
-
-
-\begin{frame}
-  \frametitle{Contents of the tutorial}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item Lecture: Existing eigenvalue algorithms \& solvers / Linear algebra solvers
-  \item Lecture: Overview of Rokko and its structure
- programs
-  \item Lecture/hands-on: Structure of MPI parallelized dense solvers / Running sample programs
-  \item Lecture/hands-on: Structure of sequential sparse solvers / Running sample programs
-  \item Hands-on: sample programs of diagonalization for quantum spin systems
-  \item Appendix: Installing Rokko
-%  \item Lecture/hands-on: Structure of sequential dense solvers / Running sample
-  \end{itemize}
-\end{frame}
 
 
 \section{Eigenvalue Algorithms / Solvers, Linear Algebra Libraries}
@@ -206,7 +191,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Existing eigesolver libraries (for dense matrix)}
+  \frametitle{Existing linear algebra libraries (for dense matrix)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Vendor's implementation of LAPACK and ScaLAPACK
@@ -232,15 +217,15 @@
     \begin{itemize}
       \item Householder+QR
     \end{itemize}
-  \item \href{http://libelemental.org}{Elemental}：included eigensolvers ''MRRR'' works well, only for square processes.
-    \begin{itemize}
-      \item Householder+MR3
-    \end{itemize}
+%  \item \href{http://libelemental.org}{Elemental}：included eigensolvers ''MRRR'' works well, only for square processes.
+%    \begin{itemize}
+%      \item Householder+MR3
+%    \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Existing eigesolver libraries (for sparse matrix)}
+  \frametitle{Existing linear algebra libraries (for sparse matrix)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item \href{http://trilinos.org}{Trilinos}: It includes eigensolvers Anasazi.
@@ -1126,75 +1111,37 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
 
 
 \begin{frame}[c,fragile]
-  \frametitle{ハイゼンベルグ模型}
+  \frametitle{Quantum XYZ model}
 \setlength{\fboxsep}{1pt}
 
 \noindent
-\begin{align*}
-\mathcal{H} &= J \sum\limits_{\langle j,k \rangle} {\boldmath S}_j \cdot S_k \\
-&= J \sum\limits_{\langle j,k \rangle} \left\{ S^z_j S^z_k + \tfrac{1}{2}(S^+_j S^-_k + S^-_j S^+_k) \right\}
-\end{align*}
+$\mathcal{H}
+ := \sum\limits_{\middlescr{{\langle i,j \rangle}}} \left(
+  J_x^{\smallscr{\langle i,j \rangle}} \, S^x_i \cdot S^x_j
++ J_y^{\smallscr{\langle i,j \rangle}} \, S^y_i \cdot S^y_j
++ J_z^{\smallscr{\langle i,j \rangle}} \, S^z_i \cdot S^z_j
+\right)$
 
-\begin{align*}
-\text{Here, } & S^z_j S^z_k + \tfrac{1}{2}(S^+_j S^-_k + S^-_j S^+_k) \\
- &=
-\tfrac{1}{2}
+\noindent
+$\mathcal{H} =
+\sum\limits_{\middlescr{\langle i,j \rangle}}  \mathcal{H}_{\smallscr{\langle i,j \rangle}}$ \\
+$\text{where} \quad  H_{\smallscr{\langle i,j \rangle}} :=
+\dfrac{1}{4}
 \begin{bmatrix}
-1 & 0 \\
-0 & -1
-\end{bmatrix}
-\otimes
-\tfrac{1}{2}
-\begin{bmatrix}
-1 & 0 \\
-0 & -1
-\end{bmatrix}
-+
-\tfrac{1}{2}\left\{
-\begin{bmatrix}
-0 & 1 \\
-0 & 0
-\end{bmatrix}
-\otimes
-\begin{bmatrix}
-0 & 0 \\
-1 & 0
-\end{bmatrix}
-+
-\begin{bmatrix}
-0 & 0 \\
-1 & 0
-\end{bmatrix}
-\otimes
-\begin{bmatrix}
-0 & 1 \\
-0 & 0
-\end{bmatrix}
-\right\}\\
-&=
-\begin{bmatrix}
-\tfrac{1}{4} & & & \\
- & - \tfrac{1}{4} & \tfrac{1}{2} & \\
- & \tfrac{1}{2} & - \tfrac{1}{4} & \\
- & & & \tfrac{1}{4}
-\end{bmatrix}
-\end{align*}
+J_z & & & J_x-J_y \\
+ & - J_z & J_x+J_y & \\
+ & J_x+J_y & - J_z & \\
+J_x-J_y & & & J_z
+\end{bmatrix}$
 
 \end{frame}
 
 
-\end{document}
-
-
-
-
-
-\begin{frame}
-  \frametitle{テスト}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item テスト
-  \end{itemize}
+\begin{frame}[c,fragile]
+  \frametitle{Test}
+\begin{lstlisting}[style=shstyle]
+ctest
+\end{lstlisting}
 \end{frame}
 
 
@@ -1213,6 +1160,7 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
   \item Separation of source and build directories. (It makes version control easy)
   \end{itemize}
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Installing Third-party eigensolvers / linear algebra libraries}
@@ -1263,6 +1211,7 @@ cmake $HOME/rokko-0.2 \
   \end{itemize}
 \end{frame}
 
+\lstset{escapechar=\#}
 \begin{frame}[c,fragile]
   \frametitle{Installing Rokko (cont.)}
   \begin{itemize}
@@ -1274,8 +1223,12 @@ bash ./cmake-rokko.sh
   \item Make, test, and install
 \begin{lstlisting}[style=shstyle]
 make -j 10
-make test
+make test     #$\leftarrow$#or #'ctest'#
 make install
 \end{lstlisting}
   \end{itemize}
 \end{frame}
+
+
+\end{document}
+
