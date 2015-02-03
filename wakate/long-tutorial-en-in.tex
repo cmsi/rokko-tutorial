@@ -361,31 +361,6 @@
 \end{frame}
 
 
-\begin{frame}[c,fragile]
-  \frametitle{Available Eigensolvers}
-Display a list of available eigensolvers in Rokko\\
-\RokkoFilename{tool/rokko_solvers.cpp}
-\begin{lstlisting}[style=shstyle]
-cd rokko/tool
-./rokko_solvers
-\end{lstlisting}
-
-Output result
-\begin{lstlisting}[style=shstyle]
-[serial dense solvers]
-  eigen3
-  lapack
-[parallel dense solvers]
-  eigen_exa_s
-  eigen_exa_sx
-  scalapack
-  scalapack_pdsyevd
-[parallel sparse solvers]
-  anasazi
-  slepc
-\end{lstlisting}
-
-\end{frame}
 
 \begin{frame}[c,fragile]
   \frametitle{Directory structure of Rokko}
@@ -704,7 +679,7 @@ Frank matrix has an eigenvalue $1$\\
 
 
 
-\section{Diagonalization for the quantum spin system}
+\section{Diagonalization of Hamailtonian matrix for quantum spin system}
 
 \begin{frame}[c,fragile]
   \frametitle{Quantum XYZ model}
@@ -740,7 +715,7 @@ J_x-J_y & & & J_z
 %\lstset{escapechar=#}
 
 \begin{frame}[c,fragile]
-  \frametitle{Diagonalization for the quantum spin system (dense matrix, seq. / MPI)}
+  \frametitle{Diagonalization of Hamailtonian matrix for quantum spin system (dense matrix, seq. / MPI)}
 xyz.dat
 \begin{lstlisting}[style=shstyle]
 8 8    #$\longleftarrow$number of sites, number of bonds#
@@ -771,7 +746,7 @@ $ for each bond ${\langle i,j \rangle}$#
   
 
 \begin{frame}[c,fragile]
-  \frametitle{Diagonalization for the quantum spin system (dense matrix, seq. / MPI)}
+  \frametitle{Diagonalization of Hamailtonian matrix for quantum spin system (dense matrix, seq. / MPI)}
   \begin{itemize}
 %%   \item Heisenberg model (seq.) \RokkoFilename{sample/dense/heisenberg.cpp}
 %% \begin{lstlisting}[style=shstyle]
@@ -1192,7 +1167,7 @@ solver.eigenvector(i, eigvec);
 
 
 \begin{frame}[c,fragile]
-  \frametitle{Diagonalization for quantum spin system (sprase matrix, MPI)}
+  \frametitle{Diagonalization of Hamailtonian matrix for quantum spin system (sprase matrix, MPI)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Heisenberg model(CRS) \RokkoFilename{sample/sparse/heisenberg_crs_mpi.cpp}
@@ -1216,6 +1191,31 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
 \end{frame}
 
 
+\begin{frame}[c,fragile]
+  \frametitle{Verification of Installation}
+Display a list of available eigensolvers in Rokko\\
+\RokkoFilename{tool/rokko_solvers.cpp}
+\begin{lstlisting}[style=shstyle]
+cd rokko/tool
+./rokko_solvers
+\end{lstlisting}
+
+Output result
+\begin{lstlisting}[style=shstyle]
+[serial dense solvers]
+  eigen3
+  lapack
+[parallel dense solvers]
+  eigen_exa_s
+  eigen_exa_sx
+  scalapack
+  scalapack_pdsyevd
+[parallel sparse solvers]
+  anasazi
+  slepc
+\end{lstlisting}
+
+\end{frame}
 
 \end{document}
 
