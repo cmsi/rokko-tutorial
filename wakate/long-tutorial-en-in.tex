@@ -1165,14 +1165,18 @@ ctest
 \begin{frame}
   \frametitle{Installing Third-party eigensolvers / linear algebra libraries}
   \begin{itemize}
-    \setlength{\itemsep}{1em}
-  \item Eigen3 (this vector and matrix class is utilized in Rokko), LAPACKE (C interface of LAPACK) $\rightarrow$ They are bundled in Rokko.
+  \item Bundled packages in Rokko
+    \begin{itemize}
+    \item Eigen3 (This vector and matrix class is utilized in Rokko)
+    \item LAPACKE (C interface of LAPACK)
+    \end{itemize}
   \item Install scripts: \href{https://github.com/t-sakashita/rokko/tree/master/3rd-party/install}{3rd-party/install}
     \begin{itemize}
       \item Eigensolver libraries: Anasazi, EigenExa, Elemental, ELPA, PETSc, ScaLAPACK, SLEPc
       \item Available architectures: K/FX10, x86 supercomputer/cluster (Intel compiler/GCC), Mac OS X (GCC), etc.
     \end{itemize}
-  \item These solvers were already installed in primary supercomputers in Japan: \url{https://github.com/t-sakashita/rokko/wiki/PreInstall}
+  \item These solvers were already installed in psi.issp.u-tokyo.ac.jp:
+/opt/MateriApps/rokko/
   \end{itemize}
 \end{frame}
 
@@ -1180,33 +1184,26 @@ ctest
   \frametitle{Install Rokko}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item Set environment variables (for phi.aics.riken.jp)
+  \item Set environment variables (for psi.issp.u-tokyo.ac.jp)
 \begin{lstlisting}[style=shstyle]
-source /opt/nano/alps/alpsvars.sh
+source /opt/MateriApps/env.sh
+source /opt/MateriApps/rokko/rokkoenv.sh
 \end{lstlisting}
-  \item Download and decompress source codes
+  \item Copy Rokko's source code
 \begin{lstlisting}[style=shstyle]
-cd $HOME
-wget --no-check-certificate https://github.com/t-sakashita/rokko/archive/0.2.tar.gz \
- -O rokko-0.2.tar.gz
-tar zxvf rokko-0.2.tar.gz
+cp -r /opt/wakate/rokko/src .
 \end{lstlisting}
   \item Run CMake
 %\begin{lstlisting}[style=shstyle]
-%cmake $HOME/rokko-0.2 -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp -DROKKO_SOLVER_DIR=/opt/nano/rokko -DSCALAPACK_LIB="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -mkl=parallel" -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
+%cmake /opt/wakate/rokko/src -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp -DROKKO_SOLVER_DIR=/opt/nano/rokko -DSCALAPACK_LIB="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -mkl=parallel" -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
 %\end{lstlisting}
 \begin{lstlisting}[style=shstyle]
 mkdir rokko-build
 cd rokko-build
-
-cmake $HOME/rokko-0.2 \
- -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 \
- -DCMAKE_BUILD_TYPE=Debug \
- -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort \
- -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp \
- -DROKKO_SOLVER_DIR=/opt/nano/rokko \
- -DSCALAPACK_LIB="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -mkl=parallel" \
- -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
+\end{lstlisting}
+\begin{lstlisting}[style=shstyle]
+cmake -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_C_COMPILER=mpicc \
+ -DCMAKE_Fortran_COMPILER=mpif90 $HOME/src
 \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -1217,7 +1214,7 @@ cmake $HOME/rokko-0.2 \
   \begin{itemize}
   \item If you can't copy and paste the above, use the following script:
 \begin{lstlisting}[style=shstyle]
-cp /home/hands-on/rokko_20140918/cmake-rokko.sh  .
+cp /opt/wakate/rokko/src/cmake-rokko.sh  .
 bash ./cmake-rokko.sh
 \end{lstlisting}
   \item Make, test, and install
