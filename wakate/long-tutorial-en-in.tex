@@ -50,15 +50,6 @@
 
 \section{Eigenvalue Algorithms / Solvers, Linear Algebra Libraries}
 
-\begin{frame}
-  \frametitle{Existing eigenvalue algorithms \& solvers / Linear algebra solvers}
-  \begin{itemize}
-    \setlength{\itemsep}{1em}
-  \item Diagonalization of matrix
-  \item Eigenvalue algorithms
-  \item Existing eigenvalue solvers / Linear algebra libraries
-  \end{itemize}
-\end{frame}
 
 \begin{frame}
   \frametitle{Matrix diagonalization}
@@ -278,18 +269,7 @@
   \end{itemize}
 \end{frame}
 
-\section{Rokkoの概要と内部構造}
-
-\begin{frame}
-  \frametitle{Overview and Structure of Rokko}
-  \begin{itemize}
-    \setlength{\itemsep}{1em}
-  \item Problems in using existing eigensolvers
-  \item Overview of Rokko
-  \item 並列ソルバの基本概念
-  \item Rokkoの内部構造
-  \end{itemize}
-\end{frame}
+\section{Overview and Structure of Rokko}
 
 \begin{frame}
   \frametitle{Problems in using existing eigensolvers}
@@ -380,30 +360,9 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Rokko Software Stack}
-  \begin{center}
-    \includegraphics[height=0.8\textheight]{figure/rokko-software-stack.jpg}
-  \end{center}
-\end{frame}
-
-\section{Install Rokko}
-
-\begin{frame}
-  \frametitle{Required tools and libraries to install Rokko}
-  \begin{itemize}
-    \setlength{\itemsep}{1em}
-  \item CMake: \url{http://www.cmake.org}
-  \item Boost C++ Libraries: \url{http://www.boost.org}
-  \item Install scripts: \url{https://github.com/wistaria/installer}
-  \item Lists of installation for primary supercomputer in Japan \\
-    \url{https://github.com/wistaria/installer/wiki}
-  \end{itemize}
-\end{frame}
-
 
 \begin{frame}[c,fragile]
-  \frametitle{Verification of installation}
+  \frametitle{Available Eigensolvers}
 Display a list of available eigensolvers in Rokko\\
 \RokkoFilename{tool/rokko_solvers.cpp}
 \begin{lstlisting}[style=shstyle]
@@ -464,7 +423,7 @@ Output result
 
 \section{Parallel sequential solvers}
 
-\subsection{Specification of Rokko interface}
+\subsection{Specifications of Rokko interface}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::localized\_matrix class template}
@@ -662,7 +621,7 @@ Similarly, the part of process 1 is obtained by pulling out the green-colored ti
 EigenExa and Elemental support only 1x1 block size for computational efficiency.
 }
 
-\subsection{Specification of Rokko interface}
+\subsection{Specifications of Rokko interface}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::grid class}
@@ -1140,13 +1099,18 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
 \end{frame}
 
 
+\section{Install Rokko}
 
-
-\begin{frame}[c,fragile]
-  \frametitle{Test}
-\begin{lstlisting}[style=shstyle]
-ctest
-\end{lstlisting}
+\begin{frame}
+  \frametitle{Required tools and libraries to install Rokko}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item CMake: \url{http://www.cmake.org}
+  \item Boost C++ Libraries: \url{http://www.boost.org}
+  \item Install scripts: \url{https://github.com/wistaria/installer}
+  \item Lists of installation for primary supercomputer in Japan \\
+    \url{https://github.com/wistaria/installer/wiki}
+  \end{itemize}
 \end{frame}
 
 
@@ -1208,7 +1172,7 @@ cd rokko-build
 \end{lstlisting}
 \begin{lstlisting}[style=shstyle]
 cmake -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_C_COMPILER=mpicc \
- -DCMAKE_Fortran_COMPILER=mpif90 $HOME/src
+ -DCMAKE_Fortran_COMPILER=mpif90 /opt/wakate/rokko/src
 \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -1219,8 +1183,7 @@ cmake -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_C_COMPILER=mpicc \
   \begin{itemize}
   \item If you can't copy and paste the above, use the following script:
 \begin{lstlisting}[style=shstyle]
-cp /opt/wakate/rokko/src/cmake-rokko.sh  .
-bash ./cmake-rokko.sh
+bash /opt/wakate/rokko/build_script/cmake-rokko.sh
 \end{lstlisting}
   \item Make, test, and install
 \begin{lstlisting}[style=shstyle]
