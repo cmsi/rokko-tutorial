@@ -1036,8 +1036,39 @@ J_x-J_y & & & J_z
 
 \end{frame}
 
+\lstset{escapechar=\#}
+%\lstset{escapechar=#}
 
+\begin{frame}[c,fragile]
+  \frametitle{Diagonalization for the quantum spin system (dense matrix, seq. / MPI)}
+xyz.dat
+\begin{lstlisting}[style=shstyle]
+8 8    #$\longleftarrow$number of sites, number of bonds#
 
+0 1
+1 2
+2 3
+3 4    #$\longleftarrow$ bonds $\langle i,j \rangle$ (pairs of site numbers)#
+4 5
+5 6
+6 7
+7 0
+
+1.0 1.0 0.0
+1.0 1.0 0.0
+1.0 1.0 0.0
+1.0 1.0 0.0
+1.0 1.0 0.0    #$\longleftarrow
+J_x^{\smallscr{\langle i,j \rangle}},\, 
+J_y^{\smallscr{\langle i,j \rangle}},\,
+J_z^{\smallscr{\langle i,j \rangle}}
+$ for each bond ${\langle i,j \rangle}$#
+1.0 1.0 0.0
+1.0 1.0 0.0
+1.0 1.0 0.0
+\end{lstlisting}
+\end{frame}
+  
 
 \begin{frame}[c,fragile]
   \frametitle{Diagonalization for the quantum spin system (dense matrix, seq. / MPI)}
@@ -1139,7 +1170,6 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
 \begin{frame}[c,fragile]
   \frametitle{Install Rokko}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
   \item Set environment variables (for psi.issp.u-tokyo.ac.jp)
 \begin{lstlisting}[style=shstyle]
 source /opt/MateriApps/env.sh
@@ -1150,9 +1180,6 @@ source /opt/MateriApps/rokko/rokkoenv.sh
 cp -r /opt/wakate/rokko/src .
 \end{lstlisting}
   \item Run CMake
-%\begin{lstlisting}[style=shstyle]
-%cmake /opt/wakate/rokko/src -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp -DROKKO_SOLVER_DIR=/opt/nano/rokko -DSCALAPACK_LIB="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -mkl=parallel" -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
-%\end{lstlisting}
 \begin{lstlisting}[style=shstyle]
 mkdir rokko-build
 cd rokko-build
@@ -1164,7 +1191,6 @@ cmake -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_C_COMPILER=mpicc \
   \end{itemize}
 \end{frame}
 
-\lstset{escapechar=\#}
 \begin{frame}[c,fragile]
   \frametitle{Installing Rokko (cont.)}
   \begin{itemize}
