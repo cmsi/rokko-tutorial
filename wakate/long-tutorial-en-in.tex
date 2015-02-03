@@ -671,14 +671,19 @@ mpirun -np 4 ./sample/dense/frank_mpi eigen_exa_sx 10
 \end{lstlisting}
     \begin{itemize}
     \item 1st argument: solver name ('eigen_exa_s', scalapack', 'scalapack_pdsyevd' is also available) \\
-    \item 2nd argument: size of Frank matrix (The above example deal with $10\times 10$ size Frank matrix.)
+    \item 2nd argument: size of Frank matrix (The above example deals with $10\times 10$ size Frank matrix.)
     \end{itemize}
-  \item Job script file for psi.issp.u-tokyo.ac.jp:  /opt/wakate/rokko/script/xyz_mpi.sh
+  \item Run by job script file /opt/wakate/rokko/script/frank_mpi.sh for psi.issp.u-tokyo.ac.jp
+\begin{lstlisting}[style=shstyle]
+cp -r /opt/wakate/rokko/script/ .
+cd script
+qsub frank_mpi.sh
+\end{lstlisting}
   \end{itemize}
 \end{frame}
 
 
-\section{Hamailtonian matrix for quantum spin system}
+\section{Diagonalization of Hamailtonian matrix for quantum spin system}
 
 \begin{frame}[c,fragile]
   \frametitle{Quantum XYZ model}
@@ -714,9 +719,7 @@ J_x-J_y & & & J_z
   
 
 \begin{frame}[c,fragile]
-  \frametitle{Sample program for Hamailtonian matrix for quantum spin system (dense matrix, MPI)}
-
-XYZ model (MPI) \RokkoFilename{sample/dense/xyz_mpi.cpp}
+  \frametitle{Sample program for Hamailtonian matrix of quantum XYZ model (dense matrix, MPI)}
 %%   \item Heisenberg model (seq.) \RokkoFilename{sample/dense/heisenberg.cpp}
 %% \begin{lstlisting}[style=shstyle]
 %% ./sample/dense/heisenberg lapack
@@ -730,7 +733,13 @@ XYZ model (MPI) \RokkoFilename{sample/dense/xyz_mpi.cpp}
 %% ./sample/dense/xyz_dense lapack $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
 %% \end{lstlisting}
   \begin{itemize}
-  \item command to run
+  \item Preperation
+\begin{lstlisting}[style=shstyle]
+source /opt/MateriApps/env.sh
+source /opt/MateriApps/rokko/rokkoenv.sh
+\end{lstlisting}
+    \item Source file: \RokkoFilename{sample/dense/xyz_mpi.cpp}
+    \item Command to run
 \begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample/dense/xyz_mpi eigen_exa_sx ./xyz.dat
 \end{lstlisting}
@@ -738,14 +747,19 @@ mpirun -np 4 ./sample/dense/xyz_mpi eigen_exa_sx ./xyz.dat
     \item 1st argument: solver name ('eigen_exa_s', scalapack', 'scalapack_pdsyevd' is also available) \\
     \item 2nd argument: input file (ref. next slide)
     \end{itemize}
-  \item job script file for psi.issp.u-tokyo.ac.jp:  /opt/wakate/rokko/script/xyz_mpi.sh
-  \end{itemize}
+  \item Run by job script file /opt/wakate/rokko/script/xyz_mpi.sh for psi.issp.u-tokyo.ac.jp
+\begin{lstlisting}[style=shstyle]
+cp -r /opt/wakate/rokko/script/ .
+cd script
+qsub xyz_mpi.sh
+\end{lstlisting}
+\end{itemize}
 \end{frame}
 
 
 \begin{frame}[c,fragile]
-  \frametitle{Sample program for Hamailtonian matrix for quantum spin system (dense matrix, MPI)}
-xyz.dat
+  \frametitle{Sample program for Hamailtonian matrix of quantum XYZ model (dense matrix, MPI)}
+input file: xyz.dat
 \begin{lstlisting}[style=shstyle]
 8 8    #$\longleftarrow$number of sites, number of bonds#
 
@@ -1172,7 +1186,7 @@ solver.eigenvector(i, eigvec);
 
 
 \begin{frame}[c,fragile]
-  \frametitle{Diagonalization of Hamailtonian matrix for quantum spin system (sprase matrix, MPI)}
+  \frametitle{Diagonalization Hamailtonian matrix for quantum spin system (sprase matrix, MPI)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Heisenberg model(CRS) \RokkoFilename{sample/sparse/heisenberg_crs_mpi.cpp}
