@@ -483,25 +483,25 @@ Output result
   \end{itemize}
 \end{frame}
 
-\note{%
-As far as I know, all eigensolvers for dense matrices empoly 2D block cyclic distributed matrix.
-Not only eigensolvers, dense linear algebra libraries (such as linear equation solver, LU / QR decomposition) use block-cyclic distribution.
+%% \note{%
+%% As far as I know, all eigensolvers for dense matrices empoly 2D block cyclic distributed matrix.
+%% Not only eigensolvers, dense linear algebra libraries (such as linear equation solver, LU / QR decomposition) use block-cyclic distribution.
 
-Block-cyclic distribution is decomposed way to squared tiles according to 2D process grid defined in the last slide. 
-Each tile is assigned to one of processes in 2D process grid.
-The size of squared tile is called block size.
-The colors of tiles show assigned MPI processes.
+%% Block-cyclic distribution is decomposed way to squared tiles according to 2D process grid defined in the last slide. 
+%% Each tile is assigned to one of processes in 2D process grid.
+%% The size of squared tile is called block size.
+%% The colors of tiles show assigned MPI processes.
 
-As an example, I use 2D process grid appeared in the previous page.
-Paving the whole matrix with the patterns of 2D process grids of given block size, you obtain block cyclic distribution.
-It’s virtual global view.
+%% As an example, I use 2D process grid appeared in the previous page.
+%% Paving the whole matrix with the patterns of 2D process grids of given block size, you obtain block cyclic distribution.
+%% It’s virtual global view.
 
-Actual local storage is obtained by pulling out the same color tiles.
-For example, the part of process 0 is obtained by pulling out the cyan-colored tiles.
-Similarly, the part of process 1 is obtained by pulling out the green-colored tiles.
+%% Actual local storage is obtained by pulling out the same color tiles.
+%% For example, the part of process 0 is obtained by pulling out the cyan-colored tiles.
+%% Similarly, the part of process 1 is obtained by pulling out the green-colored tiles.
 
-EigenExa support only 1x1 block size for computational efficiency.
-}
+%% EigenExa support only 1x1 block size for computational efficiency.
+%% }
 
 \subsection{Specifications of Rokko interface}
 
@@ -979,19 +979,21 @@ solver.diagonalize(mat, evals, evecs);
 \begin{lstlisting}[style=shstyle]
 ./sample/dense/dsyev
 \end{lstlisting}
-Using seq. dense solvers
-  \item C++ ver. \RokkoFilename{sample/dense/frank.cpp}
+  \item Using seq. dense solvers thorugh Rokko
+  \begin{itemize}
+    \item C++ ver. \RokkoFilename{sample/dense/frank.cpp}
 \begin{lstlisting}[style=shstyle]
 ./sample/dense/frank lapack 5
 \end{lstlisting}
-  \item C ver. \RokkoFilename{sample_c/dense/frank.c}
+    \item C ver. \RokkoFilename{sample_c/dense/frank.c}
 \begin{lstlisting}[style=shstyle]
 ./sample_c/dense/frank lapack 5
 \end{lstlisting}
-  \item Fortran ver. \RokkoFilename{sample_c/dense/frank.f90}
+    \item Fortran ver. \RokkoFilename{sample_c/dense/frank.f90}
 \begin{lstlisting}[style=shstyle]
 ./sample_fortran/dense/frank lapack 5
 \end{lstlisting}
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
