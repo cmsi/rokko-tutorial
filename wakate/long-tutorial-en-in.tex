@@ -621,35 +621,6 @@ solver.diagonalize(mat, evals, evecs);
 
 \subsection{Run sample}
 
-\begin{frame}[c,fragile]
-  \frametitle{Sample programs for diagonalization}
-
-\noindent
-Preperation
-\begin{lstlisting}[style=shstyle]
-source /opt/MateriApps/env.sh
-source /opt/MateriApps/rokko/rokkoenv.sh
-\end{lstlisting}
-
-\begin{itemize}
-%  \item MPI並列密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/parallel_dense_solvers.cpp}{test/parallel\_dense\_solvers.cpp}
-%\begin{lstlisting}[style=shstyle]
-%./test/parallel_dense_solvers
-%\end{lstlisting}
-  \item C++ \RokkoFilename{sample/dense/frank_mpi.cpp}
-\begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample/dense/frank_mpi eigen_exa_sx 5
-\end{lstlisting}
-%\item C \RokkoFilename{sample/dense/frank_mpi.cpp}
-%\begin{lstlisting}[style=shstyle]
-%mpirun -np 4 ./sample_c/dense/frank_mpi eigen_exa_sx 5
-%\end{lstlisting}
-%  \item Fortran \RokkoFilename{sample/dense/frank_mpi.cpp}
-%\begin{lstlisting}[style=shstyle]
-%mpirun -np 4 ./sample_fortran/dense/frank_mpi eigen_exa_sx 5
-%\end{lstlisting}
-  \end{itemize}
-\end{frame}
 
 \begin{frame}[c,fragile]
   \frametitle{Test matrix: Frank matrix (definition)}
@@ -684,9 +655,30 @@ Frank matrix has an eigenvalue $1$\\
 \end{frame}
 
 
+\begin{frame}[c,fragile]
+  \frametitle{Sample program for Frank matrix (dense matrix, MPI)}
+
+  \begin{itemize}
+    \item Preperation
+\begin{lstlisting}[style=shstyle]
+source /opt/MateriApps/env.sh
+source /opt/MateriApps/rokko/rokkoenv.sh
+\end{lstlisting}
+    \item Source file: \RokkoFilename{sample/dense/frank_mpi.cpp}
+    \item Command to run
+\begin{lstlisting}[style=shstyle]
+mpirun -np 4 ./sample/dense/frank_mpi eigen_exa_sx 10
+\end{lstlisting}
+    \begin{itemize}
+    \item 1st argument: solver name ('eigen_exa_s', scalapack', 'scalapack_pdsyevd' is also available) \\
+    \item 2nd argument: size of Frank matrix (The above example deal with $10\times 10$ size Frank matrix.)
+    \end{itemize}
+  \item Job script file for psi.issp.u-tokyo.ac.jp:  /opt/wakate/rokko/script/xyz_mpi.sh
+  \end{itemize}
+\end{frame}
 
 
-\section{Diagonalization of Hamailtonian matrix for quantum spin system}
+\section{Hamailtonian matrix for quantum spin system}
 
 \begin{frame}[c,fragile]
   \frametitle{Quantum XYZ model}
@@ -722,7 +714,7 @@ J_x-J_y & & & J_z
   
 
 \begin{frame}[c,fragile]
-  \frametitle{Diagonalization of Hamailtonian matrix for quantum spin system (dense matrix, MPI)}
+  \frametitle{Sample program for Hamailtonian matrix for quantum spin system (dense matrix, MPI)}
 
 XYZ model (MPI) \RokkoFilename{sample/dense/xyz_mpi.cpp}
 %%   \item Heisenberg model (seq.) \RokkoFilename{sample/dense/heisenberg.cpp}
@@ -742,17 +734,17 @@ XYZ model (MPI) \RokkoFilename{sample/dense/xyz_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
 mpirun -np 4 ./sample/dense/xyz_mpi eigen_exa_sx ./xyz.dat
 \end{lstlisting}
-  \begin{itemize}
+    \begin{itemize}
     \item 1st argument: solver name ('eigen_exa_s', scalapack', 'scalapack_pdsyevd' is also available) \\
     \item 2nd argument: input file (ref. next slide)
-  \end{itemize}
+    \end{itemize}
   \item job script file for psi.issp.u-tokyo.ac.jp:  /opt/wakate/rokko/script/xyz_mpi.sh
   \end{itemize}
 \end{frame}
 
 
 \begin{frame}[c,fragile]
-  \frametitle{Diagonalization of Hamailtonian matrix for quantum spin system (dense matrix, MPI)}
+  \frametitle{Sample program for Hamailtonian matrix for quantum spin system (dense matrix, MPI)}
 xyz.dat
 \begin{lstlisting}[style=shstyle]
 8 8    #$\longleftarrow$number of sites, number of bonds#
