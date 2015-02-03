@@ -234,7 +234,7 @@
     \end{itemize}
   \item For dense matrix (MPI)
     \begin{itemize}
-      \item EigenExa $>$ ELPA $>$ ScaLAPACK (vendor impl.) $>$ Elemental
+      \item EigenExa $>$ ELPA $>$ ScaLAPACK (vendor impl.) %$>$ Elemental
     \end{itemize}
   \item For sparse matrix (seq. MPI)
     \begin{itemize}
@@ -587,7 +587,7 @@ Using seq. dense solvers
 \end{tabular}
   \end{figure}
   \item ScaLAPACK and ELPA support arabitrary block sizes.
-  \item EigenExa and Elemental support $1 \times 1$.
+  \item EigenExa support $1 \times 1$.
   \end{itemize}
 \end{frame}
 
@@ -608,7 +608,7 @@ Actual local storage is obtained by pulling out the same color tiles.
 For example, the part of process 0 is obtained by pulling out the cyan-colored tiles.
 Similarly, the part of process 1 is obtained by pulling out the green-colored tiles.
 
-EigenExa and Elemental support only 1x1 block size for computational efficiency.
+EigenExa support only 1x1 block size for computational efficiency.
 }
 
 \subsection{Specifications of Rokko interface}
@@ -1159,7 +1159,7 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
     \end{itemize}
   \item Install scripts: \href{https://github.com/t-sakashita/rokko/tree/master/3rd-party/install}{3rd-party/install}
     \begin{itemize}
-      \item Eigensolver libraries: Anasazi, EigenExa, Elemental, ELPA, PETSc, ScaLAPACK, SLEPc
+      \item Eigensolver libraries: Anasazi, EigenExa, ELPA, PETSc, ScaLAPACK, SLEPc
       \item Available architectures: K/FX10, x86 supercomputer/cluster (Intel compiler/GCC), Mac OS X (GCC), etc.
     \end{itemize}
   \item These solvers were already installed in psi.issp.u-tokyo.ac.jp:
