@@ -537,15 +537,9 @@ Using seq. dense solvers
 \begin{frame}
   \frametitle{2D process grid}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
   \item Assigning MPI processes in 2-dimension
   \item Two types of majors: row-major / column-major
   \item Example: 4 processes (no. {\color{blue}0,1,2,3})
-%  \begin{center}
-%    \includegraphics[height=0.25\textheight]{figure/grid-row-major.pdf} \ \ \ \
-%    \includegraphics[height=0.25\textheight]{figure/grid-column-major.pdf}\\
-%  (left:row-major, right:column-major)
-%  \end{center}
   \begin{figure}[htbp]
 \begin{tabular}{cc}
 \begin{minipage}{0.4\hsize}
@@ -592,10 +586,6 @@ Using seq. dense solvers
 \end{minipage}
 \end{tabular}
   \end{figure}
-%  \begin{center}
-%    \includegraphics[height=0.45\textheight]{figure/local-view.pdf} \ \ \ \ \ \ \ \
-%    \includegraphics[height=0.35\textheight]{figure/global-view.pdf}
-%  \end{center}
   \item ScaLAPACK and ELPA support arabitrary block sizes.
   \item EigenExa and Elemental support $1 \times 1$.
   \end{itemize}
@@ -688,7 +678,6 @@ public:
 \begin{frame}[c,fragile]
   \frametitle{Operation for distributed_matrix}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
   \item Matrix-matrix product $C = \alpha A B + \beta C$
 \begin{lstlisting}
   ...
@@ -711,7 +700,6 @@ public:
 \begin{frame}[c,fragile]
   \frametitle{generating distributed_matrix}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
   \item assign matrix elements (global indices)
 \begin{lstlisting}
 for(int global_i=0; global_i < mat.m_global; ++global_i) {
@@ -740,7 +728,6 @@ mat.generate(f);
 \begin{frame}[c,fragile]
   \frametitle{rokko::parallel_dense_solver class}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
   \item Initialize solver
 \begin{lstlisting}
 rokko::parallel_dense_solver solver(name);
@@ -770,7 +757,6 @@ solver.diagonalize(mat, evals, evecs);
 \begin{frame}[c,fragile]
   \frametitle{Sample programs for diagonalization}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
 %  \item MPI並列密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/parallel_dense_solvers.cpp}{test/parallel\_dense\_solvers.cpp}
 %\begin{lstlisting}[style=shstyle]
 %./test/parallel_dense_solvers
@@ -982,7 +968,6 @@ private:
   \frametitle{rokko::parallel_sparse_solver class}
 \vspace{-1\baselineskip}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
   \item Initialize solver
 \begin{lstlisting}
 rokko::parallel_sparse_solver solver(name);
@@ -1051,10 +1036,12 @@ J_x-J_y & & & J_z
 
 \end{frame}
 
+
+
+
 \begin{frame}[c,fragile]
   \frametitle{Diagonalization for the quantum spin system (dense matrix, seq. / MPI)}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
   \item Heisenberg model (seq.) \RokkoFilename{sample/dense/heisenberg.cpp}
 \begin{lstlisting}[style=shstyle]
 ./sample/dense/heisenberg lapack
