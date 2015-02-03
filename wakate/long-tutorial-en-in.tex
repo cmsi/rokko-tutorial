@@ -1063,6 +1063,36 @@ solver.eigenvector(i, eigvec);
 \section{Diagonalization for the quantum spin system}
 
 \begin{frame}[c,fragile]
+  \frametitle{Quantum XYZ model}
+\setlength{\fboxsep}{1pt}
+
+\noindent
+$\mathcal{H}
+ := \sum\limits_{\middlescr{{\langle i,j \rangle}}} \left(
+  J_x^{\smallscr{\langle i,j \rangle}} \, S^x_i \cdot S^x_j
++ J_y^{\smallscr{\langle i,j \rangle}} \, S^y_i \cdot S^y_j
++ J_z^{\smallscr{\langle i,j \rangle}} \, S^z_i \cdot S^z_j
+\right)$
+
+\vspace{1\baselineskip}
+
+\noindent
+It is written as an sum of local Hamiltonians:\\
+\noindent
+$\mathcal{H} =
+\sum\limits_{\middlescr{\langle i,j \rangle}}  \mathcal{H}_{\smallscr{\langle i,j \rangle}}$ \\
+$\text{where} \quad  H_{\smallscr{\langle i,j \rangle}} :=
+\dfrac{1}{4}
+\begin{bmatrix}
+J_z & & & J_x-J_y \\
+ & - J_z & J_x+J_y & \\
+ & J_x+J_y & - J_z & \\
+J_x-J_y & & & J_z
+\end{bmatrix}$
+
+\end{frame}
+
+\begin{frame}[c,fragile]
   \frametitle{Diagonalization for the quantum spin system (dense matrix, seq. / MPI)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
@@ -1110,31 +1140,6 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
 \end{frame}
 
 
-\begin{frame}[c,fragile]
-  \frametitle{Quantum XYZ model}
-\setlength{\fboxsep}{1pt}
-
-\noindent
-$\mathcal{H}
- := \sum\limits_{\middlescr{{\langle i,j \rangle}}} \left(
-  J_x^{\smallscr{\langle i,j \rangle}} \, S^x_i \cdot S^x_j
-+ J_y^{\smallscr{\langle i,j \rangle}} \, S^y_i \cdot S^y_j
-+ J_z^{\smallscr{\langle i,j \rangle}} \, S^z_i \cdot S^z_j
-\right)$
-
-\noindent
-$\mathcal{H} =
-\sum\limits_{\middlescr{\langle i,j \rangle}}  \mathcal{H}_{\smallscr{\langle i,j \rangle}}$ \\
-$\text{where} \quad  H_{\smallscr{\langle i,j \rangle}} :=
-\dfrac{1}{4}
-\begin{bmatrix}
-J_z & & & J_x-J_y \\
- & - J_z & J_x+J_y & \\
- & J_x+J_y & - J_z & \\
-J_x-J_y & & & J_z
-\end{bmatrix}$
-
-\end{frame}
 
 
 \begin{frame}[c,fragile]
