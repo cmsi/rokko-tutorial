@@ -1,4 +1,4 @@
-\title{Rokko Tutorial}
+\title{Rokko Tutorial (long version)}
 
 % 講習会名 (例: "CMSI柏ハンズオン")
 \author{11th CMSI Young Researcher Technical Workshop}
@@ -7,6 +7,9 @@
 \date{4th-6th, Feb 2015}
 
 \newcommand{\RokkoRootDir}{/opt/hands-on/rokko}
+\usepackage{graphicx}
+\newcommand{\smallscr}[1]{\scalebox{0.4}{$#1$}}
+\newcommand{\middlescr}[1]{\scalebox{0.60}{$#1$}}
 
 \setbeamertemplate{note page}{\insertnote\par}
 
@@ -35,7 +38,7 @@
 
 \begin{frame}
   \titlepage
-  \noindent {\footnotesize PDF file: \url{http://sf.net/projects/rokko-tutorial/files/tutorial-en.pdf}} \\
+  \noindent {\footnotesize PDF file: \url{http://sf.net/projects/rokko-tutorial/files/long-tutorial-en.pdf}} \\
   \noindent {\footnotesize LaTeX source: \url{http://github.com/cmsi/rokko-tutorial/wakate}}
 \end{frame}
 
@@ -44,36 +47,9 @@
 %%   \tableofcontents
 %% \end{frame}
 
-\section{Overview of Rokko tutorial}
-
-
-\begin{frame}
-  \frametitle{Contents of the tutorial}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item Lecture: Existing eigenvalue algorithms \& solvers / Linear algebra solvers
-  \item Lecture: Overview of Rokko and its structure
- programs
-  \item Lecture/hands-on: Structure of MPI parallelized dense solvers / Running sample programs
-  \item Lecture/hands-on: Structure of sequential sparse solvers / Running sample programs
-  \item Hands-on: sample programs of diagonalization for quantum spin systems
-  \item Appendix: Installing Rokko
-%  \item Lecture/hands-on: Structure of sequential dense solvers / Running sample
-  \end{itemize}
-\end{frame}
-
 
 \section{Eigenvalue Algorithms / Solvers, Linear Algebra Libraries}
 
-\begin{frame}
-  \frametitle{Existing eigenvalue algorithms \& solvers / Linear algebra solvers}
-  \begin{itemize}
-    \setlength{\itemsep}{1em}
-  \item Diagonalization of matrix
-  \item Eigenvalue algorithms
-  \item Existing eigenvalue solvers / Linear algebra libraries
-  \end{itemize}
-\end{frame}
 
 \begin{frame}
   \frametitle{Matrix diagonalization}
@@ -179,34 +155,34 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Existing eigesolver libraries (for sparse matrix)}
-  \begin{itemize}
-  \item \href{http://trilinos.org/packages/anasazi/}{Anasazi}: Mainly iteration solvers
-    \begin{itemize}
-      \item Krylov-Schur, Jacobi-Davidson, XXX-Davidson, LOBPCG, Implicit Riemannian Trust Region Method
-    \end{itemize}
-  \item \href{http://www.caam.rice.edu/software/ARPACK/}{ARPACK}
-    \begin{itemize}
-      \item Implicit Restarted Lanczos
-    \end{itemize}
-  \item \href{https://code.google.com/p/blopex/}{BLOPEX}
-    \begin{itemize}
-    \item Locally Optimal Block Preconditioned Conjugate Gradient Method (LOBPCG)
-    \end{itemize}
-  \item \href{http://www.grycap.upv.es/slepc/}{SLEPc}: Mainly iteration solvers, Need to select seq or MPI parallel in building time
-    \begin{itemize}
-      \item Krylov-Schur, Generalized Davidson, Jacobi-Davidson, Rayleigh Quotient Conjugate Gradient, Contour integral Sakurai-Sugiura, Power method, Subspace Itertation, Arnoldi (explicit restart), Lanczos (explicit restart) \\
-    \end{itemize}
-  \item \href{http://www.comp-phys.org/software/ietl/}{IETL}: iterative solvers included in ALPS
-    \begin{itemize}
-      \item Lanczos, etc.
-    \end{itemize}
-  \end{itemize}
-\end{frame}
+%% \begin{frame}
+%%   \frametitle{Existing eigesolver libraries (for sparse matrix)}
+%%   \begin{itemize}
+%%   \item \href{http://trilinos.org/packages/anasazi/}{Anasazi}: Mainly iteration solvers
+%%     \begin{itemize}
+%%       \item Krylov-Schur, Jacobi-Davidson, XXX-Davidson, LOBPCG, Implicit Riemannian Trust Region Method
+%%     \end{itemize}
+%%   \item \href{http://www.caam.rice.edu/software/ARPACK/}{ARPACK}
+%%     \begin{itemize}
+%%       \item Implicit Restarted Lanczos
+%%     \end{itemize}
+%%   \item \href{https://code.google.com/p/blopex/}{BLOPEX}
+%%     \begin{itemize}
+%%     \item Locally Optimal Block Preconditioned Conjugate Gradient Method (LOBPCG)
+%%     \end{itemize}
+%%   \item \href{http://www.grycap.upv.es/slepc/}{SLEPc}: Mainly iteration solvers, Need to select seq or MPI parallel in building time
+%%     \begin{itemize}
+%%       \item Krylov-Schur, Generalized Davidson, Jacobi-Davidson, Rayleigh Quotient Conjugate Gradient, Contour integral Sakurai-Sugiura, Power method, Subspace Itertation, Arnoldi (explicit restart), Lanczos (explicit restart) \\
+%%     \end{itemize}
+%%   \item \href{http://www.comp-phys.org/software/ietl/}{IETL}: iterative solvers included in ALPS
+%%     \begin{itemize}
+%%       \item Lanczos, etc.
+%%     \end{itemize}
+%%   \end{itemize}
+%% \end{frame}
 
 \begin{frame}
-  \frametitle{Existing eigesolver libraries (for dense matrix)}
+  \frametitle{Existing linear algebra libraries (for dense matrix)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Vendor's implementation of LAPACK and ScaLAPACK
@@ -232,21 +208,21 @@
     \begin{itemize}
       \item Householder+QR
     \end{itemize}
-  \item \href{http://libelemental.org}{Elemental}：included eigensolvers ''MRRR'' works well, only for square processes.
-    \begin{itemize}
-      \item Householder+MR3
-    \end{itemize}
+%  \item \href{http://libelemental.org}{Elemental}：included eigensolvers ''MRRR'' works well, only for square processes.
+%    \begin{itemize}
+%      \item Householder+MR3
+%    \end{itemize}
   \end{itemize}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Existing eigesolver libraries (for sparse matrix)}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item \href{http://trilinos.org}{Trilinos}: It includes eigensolvers Anasazi.
-  \item Xabclib (\href{http://ppopenhpc.cc.u-tokyo.ac.jp/}{ppOpen AT})
-  \end{itemize}
-\end{frame}
+%% \begin{frame}
+%%   \frametitle{Existing linear algebra libraries (for sparse matrix)}
+%%   \begin{itemize}
+%%     %\setlength{\itemsep}{1em}
+%%   \item \href{http://trilinos.org}{Trilinos}: It includes eigensolvers Anasazi.
+%%   \item Xabclib (\href{http://ppopenhpc.cc.u-tokyo.ac.jp/}{ppOpen AT})
+%%   \end{itemize}
+%% \end{frame}
 
 \begin{frame}
   \frametitle{Recommnded order}
@@ -258,12 +234,12 @@
     \end{itemize}
   \item For dense matrix (MPI)
     \begin{itemize}
-      \item EigenExa $>$ ELPA $>$ ScaLAPACK (vendor impl.) $>$ Elemental
+      \item EigenExa $>$ ELPA $>$ ScaLAPACK (vendor impl.) %$>$ Elemental
     \end{itemize}
-  \item For sparse matrix (seq. MPI)
-    \begin{itemize}
-      \item Anasazi $>$ SLEPc
-    \end{itemize}
+  %% \item For sparse matrix (seq. MPI)
+  %%   \begin{itemize}
+  %%     \item Anasazi $>$ SLEPc
+  %%   \end{itemize}
   \end{itemize}
 \end{frame}
 
@@ -288,23 +264,12 @@
     \item \href{http://www-e.uni-magdeburg.de/jschulen/spin/}{SPINPACK}: It use LAPACK
     \item \href{http://www.noc.titech.ac.jp/~phys0016_nishimori/titpack2_new/index-e.html}{TITPACK2}: It includes their own eigensolvers
     \end{itemize}
-  \item Sequential or thread parallized. No MPI parallelized.
+  \item Sequential or thread parallelized. No MPI parallelized.
   \item It makes calculations for a large number of sites difficult.
   \end{itemize}
 \end{frame}
 
-\section{Rokkoの概要と内部構造}
-
-\begin{frame}
-  \frametitle{Overview and Structure of Rokko}
-  \begin{itemize}
-    \setlength{\itemsep}{1em}
-  \item Problems in using existing eigensolvers
-  \item Overview of Rokko
-  \item 並列ソルバの基本概念
-  \item Rokkoの内部構造
-  \end{itemize}
-\end{frame}
+\section{Overview and Structure of Rokko}
 
 \begin{frame}
   \frametitle{Problems in using existing eigensolvers}
@@ -386,7 +351,7 @@
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Install scripts for eigenvalue solvers / linear algebra libraries
-  \item Common fundamental class (distributed matrix, process grid, etc.)
+  \item Common fundamental classes (distributed matrix, process grid, etc.)
   \item Wrappers for eigensolvers (in C++)
   \item Factory for eigensolvers (in C++)
   \item C/Fortran wrapper
@@ -395,134 +360,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Rokko Software Stack}
-  \begin{center}
-    \includegraphics[height=0.8\textheight]{figure/rokko-software-stack.jpg}
-  \end{center}
-\end{frame}
 
-\section{Install Rokko}
-
-\begin{frame}
-  \frametitle{Required tools and libraries to install Rokko}
-  \begin{itemize}
-    \setlength{\itemsep}{1em}
-  \item CMake: \url{http://www.cmake.org}
-  \item Boost C++ Libraries: \url{http://www.boost.org}
-  \item Install scripts: \url{https://github.com/wistaria/installer}
-  \item Lists of installation for primary supercomputer in Japan \\
-    \url{https://github.com/wistaria/installer/wiki}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Building system: CMake}
-  \begin{itemize}
-    \setlength{\itemsep}{1em}
-  \item Utility to generate Makefile.\\
-  It is intended to be next-generation autoconf / automake.
-    \begin{itemize}
-    \item It can generate Visual C++ solution file for Windows and Xcode project file for Mac OS X.
-    \end{itemize}
-  \item The setting for source code is described in CMakeLists.txt
-  \item It has an integrated test (CTest) and binaray distribution (CPack).
-  \item Automatic detection of dependency of source files
-  \item Separation of source and build directories. (It makes version control easy)
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Installing Third-party eigensolvers / linear algebra libraries}
-  \begin{itemize}
-    \setlength{\itemsep}{1em}
-  \item Eigen3 (this vector and matrix class is utilized in Rokko), LAPACKE (C interface of LAPACK) $\rightarrow$ They are bundled in Rokko.
-  \item Install scripts: \href{https://github.com/t-sakashita/rokko/tree/master/3rd-party/install}{3rd-party/install}
-    \begin{itemize}
-      \item Eigensolver libraries: Anasazi, EigenExa, Elemental, ELPA, PETSc, ScaLAPACK, SLEPc
-      \item Available architectures: K/FX10, x86 supercomputer/cluster (Intel compiler/GCC), Mac OS X (GCC), etc.
-    \end{itemize}
-  \item These solvers were already installed in primary supercomputers in Japan: \url{https://github.com/t-sakashita/rokko/wiki/PreInstall}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c,fragile]
-  \frametitle{Install Rokko}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item Set environment variables (for phi.aics.riken.jp)
-\begin{lstlisting}[style=shstyle]
-source /opt/nano/alps/alpsvars.sh
-\end{lstlisting}
-  \item Download and decompress source codes
-\begin{lstlisting}[style=shstyle]
-cd $HOME
-wget --no-check-certificate https://github.com/t-sakashita/rokko/archive/0.2.tar.gz \
- -O rokko-0.2.tar.gz
-tar zxvf rokko-0.2.tar.gz
-\end{lstlisting}
-  \item Run CMake
-%\begin{lstlisting}[style=shstyle]
-%cmake $HOME/rokko-0.2 -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp -DROKKO_SOLVER_DIR=/opt/nano/rokko -DSCALAPACK_LIB="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -mkl=parallel" -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
-%\end{lstlisting}
-\begin{lstlisting}[style=shstyle]
-mkdir rokko-build
-cd rokko-build
-
-cmake $HOME/rokko-0.2 \
- -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 \
- -DCMAKE_BUILD_TYPE=Debug \
- -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort \
- -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp \
- -DROKKO_SOLVER_DIR=/opt/nano/rokko \
- -DSCALAPACK_LIB="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -mkl=parallel" \
- -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c,fragile]
-  \frametitle{Installing Rokko (cont.)}
-  \begin{itemize}
-  \item If you can't copy and paste the above, use the following script:
-\begin{lstlisting}[style=shstyle]
-cp /home/hands-on/rokko_20140918/cmake-rokko.sh  .
-bash ./cmake-rokko.sh
-\end{lstlisting}
-  \item Make, test, and install
-\begin{lstlisting}[style=shstyle]
-make -j 10
-make test
-make install
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c,fragile]
-  \frametitle{Verification of installation}
-Display a list of available eigensolvers in Rokko\\
-\RokkoFilename{tool/rokko_solvers.cpp}
-\begin{lstlisting}[style=shstyle]
-cd rokko/tool
-./rokko_solvers
-\end{lstlisting}
-
-Output result
-\begin{lstlisting}[style=shstyle]
-[serial dense solvers]
-  eigen3
-  lapack
-[parallel dense solvers]
-  eigen_exa_s
-  eigen_exa_sx
-  scalapack
-  scalapack_pdsyevd
-[parallel sparse solvers]
-  anasazi
-  slepc
-\end{lstlisting}
-
-\end{frame}
 
 \begin{frame}[c,fragile]
   \frametitle{Directory structure of Rokko}
@@ -558,9 +396,565 @@ Output result
 
 \end{frame}
 
-\section{Parallel sequential solvers}
 
-\subsection{Specification of Rokko interface}
+\section{Parallel MPI dense eigensolvers}
+
+\subsection{Basic concepts}
+
+\begin{frame}
+  \frametitle{2D process grid}
+  \begin{itemize}
+  \item Assigning MPI processes in 2-dimension
+  \item Two types of majors: row-major / column-major
+  \item Example: 4 processes (no. {\color{blue}0,1,2,3})
+  \begin{figure}[htbp]
+\begin{tabular}{cc}
+\begin{minipage}{0.4\hsize}
+\begin{center}
+\includegraphics[height=0.25\textheight]{figure/grid-row-major.pdf}
+\caption{row-major}
+\label{fig:winter}
+\end{center}
+\end{minipage}
+\begin{minipage}{0.4\hsize}
+\begin{center}
+\includegraphics[height=0.25\textheight]{figure/grid-column-major.pdf}
+\caption{column-major}
+\label{fig:fall}
+\end{center}
+\end{minipage}
+\end{tabular}
+  \end{figure}
+  \item All dense solvers support both grid majors.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{2-dimensional block cyclic matrix (distributed_matrix)}
+  \begin{itemize}
+    %\setlength{\itemsep}{1em}
+  \item Parallel linear algebra libraries for dense matrices employ 2D process grid.
+  \item Example (using the 2D process grid in the last page):
+  \begin{figure}[htbp]
+\begin{tabular}{cc}
+\begin{minipage}{0.4\hsize}
+\begin{center}
+\includegraphics[height=0.45\textheight]{figure/local-view.pdf}
+\caption{local view}
+\label{fig:local-view}
+\end{center}
+\end{minipage}
+\begin{minipage}{0.4\hsize}
+\begin{center}
+\includegraphics[height=0.45\textheight]{figure/global-view.pdf}
+\caption{global view}
+\label{fig:global-view}
+\end{center}
+\end{minipage}
+\end{tabular}
+  \end{figure}
+  \item ScaLAPACK and ELPA support arabitrary block sizes.
+  \item EigenExa support $1 \times 1$.
+  \end{itemize}
+\end{frame}
+
+%% \note{%
+%% As far as I know, all eigensolvers for dense matrices empoly 2D block cyclic distributed matrix.
+%% Not only eigensolvers, dense linear algebra libraries (such as linear equation solver, LU / QR decomposition) use block-cyclic distribution.
+
+%% Block-cyclic distribution is decomposed way to squared tiles according to 2D process grid defined in the last slide. 
+%% Each tile is assigned to one of processes in 2D process grid.
+%% The size of squared tile is called block size.
+%% The colors of tiles show assigned MPI processes.
+
+%% As an example, I use 2D process grid appeared in the previous page.
+%% Paving the whole matrix with the patterns of 2D process grids of given block size, you obtain block cyclic distribution.
+%% It’s virtual global view.
+
+%% Actual local storage is obtained by pulling out the same color tiles.
+%% For example, the part of process 0 is obtained by pulling out the cyan-colored tiles.
+%% Similarly, the part of process 1 is obtained by pulling out the green-colored tiles.
+
+%% EigenExa support only 1x1 block size for computational efficiency.
+%% }
+
+\subsection{Specifications of Rokko interface}
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::grid class}
+  \begin{itemize}
+  \item \RokkoFilename{rokko/grid.hpp}
+\begin{lstlisting}
+namespace rokko {
+extern struct grid_row_major_t {} grid_row_major;
+extern struct grid_col_major_t {} grid_col_major;
+class grid {
+public:
+  explicit grid(MPI_Comm comm_in = MPI_COMM_WORLD);
+  template <typename GRID_MAJOR>
+  grid(MPI_Comm comm_in, GRID_MAJOR const& grid_major);
+  MPI_Comm get_comm() const { return comm; }
+  int get_nprocs() const;
+  int get_nprow() const;
+  int get_npcol() const;
+  int get_myrank() const;
+  int get_myrow() const;
+  int get_mycol() const;
+  bool is_row_major() const;
+  bool is_col_major() const;
+  int calculate_grid_row(int proc_rank) const;
+  int calculate_grid_col(int proc_rank) const;
+};
+}
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::distributed_matrix class template}
+  \begin{itemize}
+  \item \RokkoFilename{rokko/distributed_matrix.hpp}
+\begin{lstlisting}
+namespace rokko {
+template<typename MATRIX_MAJOR = rokko::matrix_row_major>
+class distributed_matrix {
+public:
+  template<typename SOLVER>
+  distributed_matrix(int m_global_in, int n_global_in, const grid& g_in, SOLVER const& solver_in);
+  template<typename SOLVER>
+  void initialize(int m_global_in, int n_global_in, const grid& g_in, SOLVER const& solver_in);
+  int get_mb() const;
+  int get_nb() const;
+  int get_nprow() const;
+  ...
+  bool is_gindex_myrow(const int& global_i) const;
+  bool is_gindex_mycol(const int& global_j) const;
+  bool is_gindex(const int& global_i, const int& global_j) const;
+  void set_local(int local_i, int local_j, double value);
+  double get_local(int local_i, int local_j) const;
+  void update_local(int local_i, int local_j, double value);
+  void set_global(int global_i, int global_j, double value);
+  double get_global(int global_i, int global_j) const;
+};
+}
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+%% \begin{frame}[c,fragile]
+%%   \frametitle{Operation for distributed_matrix}
+%%   \begin{itemize}
+%%   \item Matrix-matrix product $C = \alpha A B + \beta C$
+%% \begin{lstlisting}
+%%   ...
+%%   rokko::distributed_matrix<rokko::matrix_col_major> matA(dim, dim, g, solver);
+%%   rokko::distributed_matrix<rokko::matrix_col_major> matB(dim, dim, g, solver);
+%%   rokko::distributed_matrix<rokko::matrix_col_major> matC(dim, dim, g, solver);
+%%   ...
+%%   rokko::product(alpha, matA, transA, matB, transB, beta, matC);
+%% \end{lstlisting}
+%%   \item Scatter \& Gather for distributed_matrix
+%% \begin{lstlisting}
+%%   rokko::localized_matrix<LOC_MAT_MAJOR> lmat(dim, dim);
+%%   rokko::distributed_matrix<DIST_MAT_MAJOR> mat(dim, dim, g, solver);
+%%   rokko::scatter(lmat, mat, root);
+%%   rokko::gather(mat, lmat, root);
+%% \end{lstlisting}
+%%   \end{itemize}
+%% \end{frame}
+
+%% \begin{frame}[c,fragile]
+%%   \frametitle{generating distributed_matrix}
+%%   \begin{itemize}
+%%   \item Assign matrix elements (global indices)
+%% \begin{lstlisting}
+%% for(int global_i=0; global_i < mat.m_global; ++global_i) {
+%%   for(int global_j=0; global_j < mat.n_global; ++global_j) {
+%%     mat.set_global(global_i, global_j, f(global_i, global_j));
+%%   }
+%% }
+%% \end{lstlisting}
+%%   \item Assign matrix elements (local indices)
+%% \begin{lstlisting}
+%% for(int local_i = 0; local_i < mat.get_m_local(); ++local_i) {
+%%   for(int local_j = 0; local_j < mat.get_n_local(); ++local_j) {
+%%     int global_i = mat.translate_l2g_row(local_i);
+%%     int global_j = mat.translate_l2g_col(local_j);
+%%     mat.set_local(local_i, local_j, f(global_i, global_j));
+%%   }
+%% }
+%% \end{lstlisting}
+%% %  \item generate all matrix elements by function
+%% %\begin{lstlisting}
+%% %mat.generate(f);
+%% %\end{lstlisting}
+%%   \end{itemize}
+%% \end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::parallel_dense_solver class}
+  \begin{itemize}
+  \item Initialize solver
+\begin{lstlisting}
+rokko::parallel_dense_solver solver(name);
+solver.initialize(argc, argv);
+\end{lstlisting}
+  \item Finalize solver
+\begin{lstlisting}
+solver.finalize();
+\end{lstlisting}
+  \item Diagonalize a matrix (the matrix is overwrriten)
+\begin{lstlisting}
+rokko::distributed_matrix<matrix_col_major> mat(dim, dim, g, solver);
+...
+rokko::localized_vector evals(dim);
+rokko::distributed_matrix<matrix_col_major> evecs(dim, dim, g, solver);
+solver.diagonalize(mat, evals, evecs);
+\end{lstlisting}
+%  \item 登録されているソルバの一覧
+%\begin{lstlisting}
+%std::vector<std::string> names = rokko::parallel_dense_solver::solvers();
+%\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\subsection{Run sample}
+
+
+\begin{frame}[c,fragile]
+  \frametitle{Test matrix: Frank matrix (definition)}
+\begin{block}{Definition}
+$[a_{ij}]_{i,j = {0, \dots, n-1}} = [ n - \max(i,j) ]$\\
+\end{block}
+
+\begin{block}{Example ($n=5$)}
+$[a_{ij}]_{i,j = {0, \dots, 4}} =
+\begin{bmatrix}
+5 & 4 & 3 & 2 & 1 \\
+4 & 4 & 3 & 2 & 1 \\
+3 & 3 & 3 & 2 & 1 \\
+2 & 2 & 2 & 2 & 1 \\
+1 & 1 & 1 & 1 & 1 \\
+\end{bmatrix}
+$
+\end{block}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{Test matrix: Frank matrix (properties)}
+\begin{block}{Analytical eigenvalues}%
+$\lambda_k = \dfrac{1}{2 \left( 1 - \cos{\tfrac{2 k + 1}{2 n + 1}\pi} \right)} \quad (k=0,\dots,n-1)$
+\end{block}
+
+\begin{block}{Remark}%
+Frank matrix has an eigenvalue $1$\\
+\quad $\Longleftrightarrow$ $\tfrac{2 k + 1}{2 n + 1} = \tfrac{1}{3}$\\
+\quad $\Longleftrightarrow$ $n-1$ is a multiple of 3.
+\end{block}
+\end{frame}
+
+
+\begin{frame}[c,fragile]
+  \frametitle{Sample program for Frank matrix (dense matrix, MPI)}
+
+  \begin{itemize}
+%%     \item Preperation
+%% \begin{lstlisting}[style=shstyle]
+%% source /opt/MateriApps/env.sh
+%% source /opt/MateriApps/rokko/rokkoenv.sh
+%% \end{lstlisting}
+    \item Source file: \RokkoFilename{sample/dense/frank_mpi.cpp}
+    \item Command to run
+\begin{lstlisting}[style=shstyle]
+mpirun -np 4 ./sample/dense/frank_mpi eigen_exa_sx 10
+\end{lstlisting}
+    \begin{itemize}
+    \item 1st argument: solver name ('eigen_exa_s', scalapack', 'scalapack_pdsyevd' is also available) \\
+    \item 2nd argument: size of Frank matrix (The above example deals with $10\times 10$ size Frank matrix.)
+    \end{itemize}
+  \item Run by job script file /opt/wakate/rokko/script/frank_mpi.sh for psi.issp.u-tokyo.ac.jp
+\begin{lstlisting}[style=shstyle]
+cp -r /opt/wakate/rokko/script/ .
+cd script
+qsub frank_mpi.sh
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\lstset{escapechar=\#}
+
+
+\begin{frame}[c,fragile]
+  \frametitle{Output result for Frank matrix (dense matrix, MPI)}
+\setlength { \fboxrule } { 1.5pt }
+\begin{lstlisting}[style=shstyle]
+Eigenvalue decomposition of Frank matrix
+num_procs = 4
+num_threads per process = 12
+solver = eigen_exa_sx
+dimension = 10
+largest eigenvalues: 44.766 5.0489 1.873 #\fcolorbox{red}{white}{1}# 0.6431 0.46523 0.36621 0.30798 0.27379 0.25568
+residual of the largest eigenvalue/vector: |x A x - lambda| = 2.1316e-14
+timer: enabled
+timer: trace = disabled
+timer: detailed report = disabled
+timer:     1 solver::construct                                              0.000          1
+timer:     2 solver::initialize                                             0.000          1
+timer:     3 solver::finalize                                               0.000          1
+timer:     4 diagonalize::initialize                                        0.217          1
+timer:     5 diagonalize::diagonalize                                       0.961          1
+timer:     6 diagonalize::finalize                                          0.000          1
+timer:    10 main                                                           2.682          1
+timer:    11 generate_matrix                                                0.051          1
+timer:    12 output_results                                                 0.027          1
+\end{lstlisting}
+You can find an eigenvalue 1\\
+$\longrightarrow$ The calculation result seems correct!
+\end{frame}
+
+
+\section{Diagonalization of Hamailtonian matrix for quantum spin system}
+
+\begin{frame}[c,fragile]
+  \frametitle{Quantum XYZ model}
+\setlength{\fboxsep}{1pt}
+
+\noindent
+$\mathcal{H}
+ := \sum\limits_{\middlescr{{\langle i,j \rangle}}} \left(
+  J_x^{\smallscr{\langle i,j \rangle}} \, S^x_i \cdot S^x_j
++ J_y^{\smallscr{\langle i,j \rangle}} \, S^y_i \cdot S^y_j
++ J_z^{\smallscr{\langle i,j \rangle}} \, S^z_i \cdot S^z_j
+\right)$
+
+\vspace{1\baselineskip}
+
+\noindent
+$\mathcal{H}$ is written as an sum of local Hamiltonians:\\
+\noindent
+$\mathcal{H} =
+\sum\limits_{\middlescr{\langle i,j \rangle}}  \mathcal{H}_{\smallscr{\langle i,j \rangle}}$ \\
+$\text{where} \quad  H_{\smallscr{\langle i,j \rangle}} :=
+\dfrac{1}{4}
+\begin{bmatrix}
+J_z & & & J_x-J_y \\
+ & - J_z & J_x+J_y & \\
+ & J_x+J_y & - J_z & \\
+J_x-J_y & & & J_z
+\end{bmatrix}$
+
+\end{frame}
+
+
+\begin{frame}[c,fragile]
+  \frametitle{Sample program for Hamailtonian matrix of quantum XYZ model (dense matrix, MPI)}
+%%   \item Heisenberg model (seq.) \RokkoFilename{sample/dense/heisenberg.cpp}
+%% \begin{lstlisting}[style=shstyle]
+%% ./sample/dense/heisenberg lapack
+%% \end{lstlisting}
+%%   \item Heisenberg model (MPI) \RokkoFilename{sample/dense/heisenberg_mpi.cpp}
+%% \begin{lstlisting}[style=shstyle]
+%% mpirun -np 4 ./sample/dense/heisenberg_mpi eigen_exa_sx
+%% \end{lstlisting}
+%%   \item XYZ model (seq.) \RokkoFilename{sample/dense/xyz.cpp}
+%% \begin{lstlisting}[style=shstyle]
+%% ./sample/dense/xyz_dense lapack $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
+%% \end{lstlisting}
+  \begin{itemize}
+%%   \item Preperation
+%% \begin{lstlisting}[style=shstyle]
+%% source /opt/MateriApps/env.sh
+%% source /opt/MateriApps/rokko/rokkoenv.sh
+%% \end{lstlisting}
+    \item Source file: \RokkoFilename{sample/dense/xyz_mpi.cpp}
+    \item Command to run
+\begin{lstlisting}[style=shstyle]
+mpirun -np 4 ./sample/dense/xyz_mpi eigen_exa_sx ./xyz.dat
+\end{lstlisting}
+    \begin{itemize}
+    \item 1st argument: solver name ('eigen_exa_s', scalapack', 'scalapack_pdsyevd' is also available) \\
+    \item 2nd argument: input file (ref. next slide)
+    \end{itemize}
+  \item Run by job script file /opt/wakate/rokko/script/xyz_mpi.sh for psi.issp.u-tokyo.ac.jp
+\begin{lstlisting}[style=shstyle]
+cp -r /opt/wakate/rokko/script/ .
+cd script
+qsub xyz_mpi.sh
+\end{lstlisting}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[c,fragile]
+  \frametitle{Input file for Hamailtonian matrix of quantum XYZ model (dense matrix, MPI)}
+xyz.dat
+\begin{lstlisting}[style=shstyle]
+8 8    #$\longleftarrow$number of sites, number of bonds#
+
+0 1
+1 2
+2 3
+3 4    #$\longleftarrow$ bonds $\langle i,j \rangle$ (pairs of site numbers)#
+4 5
+5 6
+6 7
+7 0
+
+1.0 1.0 0.0
+1.0 1.0 0.0
+1.0 1.0 0.0
+1.0 1.0 0.0
+1.0 1.0 0.0    #$\longleftarrow
+J_x^{\smallscr{\langle i,j \rangle}},\, 
+J_y^{\smallscr{\langle i,j \rangle}},\,
+J_z^{\smallscr{\langle i,j \rangle}}
+$ for each bond ${\langle i,j \rangle}$#
+1.0 1.0 0.0
+1.0 1.0 0.0
+1.0 1.0 0.0
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{Output result for Hamailtonian matrix of quantum XYZ model (dense matrix, MPI)}
+\begin{lstlisting}[style=shstyle]
+Eigenvalue decomposition of XYZ model
+num_procs = 4
+num_threads per process = 12
+solver = eigen_exa_sx
+lattice file = ./xyz.dat
+number of sites = 8
+number of bonds = 8
+dimension = 256
+smallest eigenvalues: -2.6131 -2.4142 -2.4142 -1.8478 -1.8478 -1.8478 -1.8478 -1.8478 -1.8478 -1.7071
+residual of the smallest eigenvalue/vector: |x A x - lambda| = 1.7764e-15
+timer: enabled
+timer: trace = disabled
+timer: detailed report = disabled
+timer:     1 solver::construct                                              0.000          1
+timer:     2 solver::initialize                                             0.000          1
+timer:     3 solver::finalize                                               0.000          1
+timer:     4 diagonalize::initialize                                        0.204          1
+timer:     5 diagonalize::diagonalize                                      24.244          1
+timer:     6 diagonalize::finalize                                          0.000          1
+timer:    10 main                                                          25.955          1
+timer:    11 generate_matrix                                                0.045          1
+timer:    12 output_results                                                 0.019          1
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{Summary}
+ \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item Review of existing eigensolvers
+  \item Overview and Structure of Rokko
+  \item Diagonalization of Hamailtonian matrix for quantum spin system
+  \end{itemize}
+
+  \begin{itemize}
+  \item In this tutorial, we dealt with only MPI dense solvers
+  \item Rokko has interfaces for sequential dense / MPI sparse solvers.
+  \end{itemize}
+\end{frame}
+  
+  
+\section{Install Rokko}
+
+\begin{frame}
+  \frametitle{Required tools and libraries to install Rokko}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item CMake: \url{http://www.cmake.org}
+  \item Boost C++ Libraries: \url{http://www.boost.org}
+  \item Install scripts: \url{https://github.com/wistaria/installer}
+  \item Lists of installation for primary supercomputer in Japan \\
+    \url{https://github.com/wistaria/installer/wiki}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Building system: CMake}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+  \item Utility to generate Makefile.\\
+  It is intended to be next-generation autoconf / automake.
+    \begin{itemize}
+    \item It can generate Visual C++ solution file for Windows and Xcode project file for Mac OS X.
+    \end{itemize}
+  \item The setting for source code is described in CMakeLists.txt
+  \item It has an integrated test (CTest) and binaray distribution (CPack).
+  \item Automatic detection of dependency of source files
+  \item Separation of source and build directories. (It makes version control easy)
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Installing Third-party eigensolvers / linear algebra libraries}
+  \begin{itemize}
+  \item Bundled packages in Rokko
+    \begin{itemize}
+    \item Eigen3 (This vector and matrix class is utilized in Rokko)
+    \item LAPACKE (C interface of LAPACK)
+    \end{itemize}
+  \item Install scripts: \href{https://github.com/t-sakashita/rokko/tree/master/3rd-party/install}{3rd-party/install}
+    \begin{itemize}
+      \item Eigensolver libraries: Anasazi, EigenExa, ELPA, PETSc, ScaLAPACK, SLEPc
+      \item Available architectures: K/FX10, x86 supercomputer/cluster (Intel compiler/GCC), Mac OS X (GCC), etc.
+    \end{itemize}
+  \item These solvers were already installed in psi.issp.u-tokyo.ac.jp:
+/opt/MateriApps/rokko/
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{Install Rokko}
+  \begin{itemize}
+  \item Set environment variables (for psi.issp.u-tokyo.ac.jp)
+\begin{lstlisting}[style=shstyle]
+source /opt/MateriApps/env.sh
+source /opt/MateriApps/rokko/rokkoenv.sh
+\end{lstlisting}
+  \item Copy Rokko's source code
+\begin{lstlisting}[style=shstyle]
+cp -r /opt/wakate/rokko/src .
+\end{lstlisting}
+  \item Run CMake
+\begin{lstlisting}[style=shstyle]
+mkdir rokko-build
+cd rokko-build
+\end{lstlisting}
+\begin{lstlisting}[style=shstyle]
+cmake -DCMAKE_CXX_COMPILER=mpicxx -DCMAKE_C_COMPILER=mpicc \
+ -DCMAKE_Fortran_COMPILER=mpif90 /opt/wakate/rokko/src
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}[c,fragile]
+  \frametitle{Installing Rokko (cont.)}
+  \begin{itemize}
+  \item If you can't copy and paste the above, use the following script:
+\begin{lstlisting}[style=shstyle]
+bash /opt/wakate/rokko/build_script/cmake-rokko.sh
+\end{lstlisting}
+  \item Make, test, and install
+\begin{lstlisting}[style=shstyle]
+make -j 10
+make test     #$\leftarrow$#or #'ctest'#
+make install
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+
+\section{Sequential dense solvers}
+
+\subsection{Specifications of Rokko interface}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::localized\_matrix class template}
@@ -651,316 +1045,25 @@ solver.diagonalize(mat, evals, evecs);
 \begin{lstlisting}[style=shstyle]
 ./sample/dense/dsyev
 \end{lstlisting}
-Using seq. dense solvers
-  \item C++ ver. \RokkoFilename{sample/dense/frank.cpp}
+  \item Using seq. dense solvers thorugh Rokko
+  \begin{itemize}
+    \item C++ ver. \RokkoFilename{sample/dense/frank.cpp}
 \begin{lstlisting}[style=shstyle]
 ./sample/dense/frank lapack 5
 \end{lstlisting}
-  \item C ver. \RokkoFilename{sample_c/dense/frank.c}
+    \item C ver. \RokkoFilename{sample_c/dense/frank.c}
 \begin{lstlisting}[style=shstyle]
 ./sample_c/dense/frank lapack 5
 \end{lstlisting}
-  \item Fortran ver. \RokkoFilename{sample_c/dense/frank.f90}
+    \item Fortran ver. \RokkoFilename{sample_c/dense/frank.f90}
 \begin{lstlisting}[style=shstyle]
 ./sample_fortran/dense/frank lapack 5
 \end{lstlisting}
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
-\section{Parallel MPI eigensolvers}
-
-\subsection{Basic concepts}
-
-\begin{frame}
-  \frametitle{2D process grid}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item Assigning MPI processes in 2-dimension
-  \item Two types of majors: row-major / column-major
-  \item Example: 4 processes (no. {\color{blue}0,1,2,3})
-%  \begin{center}
-%    \includegraphics[height=0.25\textheight]{figure/grid-row-major.pdf} \ \ \ \
-%    \includegraphics[height=0.25\textheight]{figure/grid-column-major.pdf}\\
-%  (left:row-major, right:column-major)
-%  \end{center}
-  \begin{figure}[htbp]
-\begin{tabular}{cc}
-\begin{minipage}{0.4\hsize}
-\begin{center}
-\includegraphics[height=0.25\textheight]{figure/grid-row-major.pdf}
-\caption{row-major}
-\label{fig:winter}
-\end{center}
-\end{minipage}
-\begin{minipage}{0.4\hsize}
-\begin{center}
-\includegraphics[height=0.25\textheight]{figure/grid-column-major.pdf}
-\caption{column-major}
-\label{fig:fall}
-\end{center}
-\end{minipage}
-\end{tabular}
-  \end{figure}
-  \item All dense solvers support both grid majors.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{2-dimensional block cyclic matrix (distributed_matrix)}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item Parallel linear algebra libraries for dense matrices employ 2D process grid.
-  \item Example (using the 2D process grid in the last page):
-  \begin{figure}[htbp]
-\begin{tabular}{cc}
-\begin{minipage}{0.4\hsize}
-\begin{center}
-\includegraphics[height=0.45\textheight]{figure/local-view.pdf}
-\caption{local view}
-\label{fig:local-view}
-\end{center}
-\end{minipage}
-\begin{minipage}{0.4\hsize}
-\begin{center}
-\includegraphics[height=0.45\textheight]{figure/global-view.pdf}
-\caption{global view}
-\label{fig:global-view}
-\end{center}
-\end{minipage}
-\end{tabular}
-  \end{figure}
-%  \begin{center}
-%    \includegraphics[height=0.45\textheight]{figure/local-view.pdf} \ \ \ \ \ \ \ \
-%    \includegraphics[height=0.35\textheight]{figure/global-view.pdf}
-%  \end{center}
-  \item ScaLAPACK and ELPA support arabitrary block sizes.
-  \item EigenExa and Elemental support $1 \times 1$.
-  \end{itemize}
-\end{frame}
-
-\note{%
-As far as I know, all eigensolvers for dense matrices empoly 2D block cyclic distributed matrix.
-Not only eigensolvers, dense linear algebra libraries (such as linear equation solver, LU / QR decomposition) use block-cyclic distribution.
-
-Block-cyclic distribution is decomposed way to squared tiles according to 2D process grid defined in the last slide. 
-Each tile is assigned to one of processes in 2D process grid.
-The size of squared tile is called block size.
-The colors of tiles show assigned MPI processes.
-
-As an example, I use 2D process grid appeared in the previous page.
-Paving the whole matrix with the patterns of 2D process grids of given block size, you obtain block cyclic distribution.
-It’s virtual global view.
-
-Actual local storage is obtained by pulling out the same color tiles.
-For example, the part of process 0 is obtained by pulling out the cyan-colored tiles.
-Similarly, the part of process 1 is obtained by pulling out the green-colored tiles.
-
-EigenExa and Elemental support only 1x1 block size for computational efficiency.
-}
-
-\subsection{Specification of Rokko interface}
-
-\begin{frame}[c,fragile]
-  \frametitle{rokko::grid class}
-  \begin{itemize}
-  \item \RokkoFilename{rokko/grid.hpp}
-\begin{lstlisting}
-namespace rokko {
-extern struct grid_row_major_t {} grid_row_major;
-extern struct grid_col_major_t {} grid_col_major;
-class grid {
-public:
-  explicit grid(MPI_Comm comm_in = MPI_COMM_WORLD);
-  template <typename GRID_MAJOR>
-  grid(MPI_Comm comm_in, GRID_MAJOR const& grid_major);
-  MPI_Comm get_comm() const { return comm; }
-  int get_nprocs() const;
-  int get_nprow() const;
-  int get_npcol() const;
-  int get_myrank() const;
-  int get_myrow() const;
-  int get_mycol() const;
-  bool is_row_major() const;
-  bool is_col_major() const;
-  int calculate_grid_row(int proc_rank) const;
-  int calculate_grid_col(int proc_rank) const;
-};
-}
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-
-\begin{frame}[c,fragile]
-  \frametitle{rokko::distributed_matrix class template}
-  \begin{itemize}
-  \item \RokkoFilename{rokko/distributed_matrix.hpp}
-\begin{lstlisting}
-namespace rokko {
-template<typename MATRIX_MAJOR = rokko::matrix_row_major>
-class distributed_matrix {
-public:
-  template<typename SOLVER>
-  distributed_matrix(int m_global_in, int n_global_in, const grid& g_in, SOLVER const& solver_in);
-  template<typename SOLVER>
-  void initialize(int m_global_in, int n_global_in, const grid& g_in, SOLVER const& solver_in);
-  int get_mb() const;
-  int get_nb() const;
-  int get_nprow() const;
-  ...
-  bool is_gindex_myrow(const int& global_i) const;
-  bool is_gindex_mycol(const int& global_j) const;
-  bool is_gindex(const int& global_i, const int& global_j) const;
-  void set_local(int local_i, int local_j, double value);
-  double get_local(int local_i, int local_j) const;
-  void update_local(int local_i, int local_j, double value);
-  void set_global(int global_i, int global_j, double value);
-  double get_global(int global_i, int global_j) const;
-};
-}
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c,fragile]
-  \frametitle{Operation for distributed_matrix}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item Matrix-matrix product $C = \alpha A B + \beta C$
-\begin{lstlisting}
-  ...
-  rokko::distributed_matrix<rokko::matrix_col_major> matA(dim, dim, g, solver);
-  rokko::distributed_matrix<rokko::matrix_col_major> matB(dim, dim, g, solver);
-  rokko::distributed_matrix<rokko::matrix_col_major> matC(dim, dim, g, solver);
-  ...
-  rokko::product(alpha, matA, transA, matB, transB, beta, matC);
-\end{lstlisting}
-  \item Scatter \& Gather for distributed_matrix
-\begin{lstlisting}
-  rokko::localized_matrix<LOC_MAT_MAJOR> lmat(dim, dim);
-  rokko::distributed_matrix<DIST_MAT_MAJOR> mat(dim, dim, g, solver);
-  rokko::scatter(lmat, mat, root);
-  rokko::gather(mat, lmat, root);
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c,fragile]
-  \frametitle{generating distributed_matrix}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item assign matrix elements (global indices)
-\begin{lstlisting}
-for(int global_i=0; global_i < mat.m_global; ++global_i) {
-  for(int global_j=0; global_j < mat.n_global; ++global_j) {
-    mat.set_global(global_i, global_j, f(global_i, global_j));
-  }
-}
-\end{lstlisting}
-  \item assign matrix elements (local indices)
-\begin{lstlisting}
-for(int local_i = 0; local_i < mat.get_m_local(); ++local_i) {
-  for(int local_j = 0; local_j < mat.get_n_local(); ++local_j) {
-    int global_i = mat.translate_l2g_row(local_i);
-    int global_j = mat.translate_l2g_col(local_j);
-    mat.set_local(local_i, local_j, f(global_i, global_j));
-  }
-}
-\end{lstlisting}
-  \item generate all matrix elements by function
-\begin{lstlisting}
-mat.generate(f);
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c,fragile]
-  \frametitle{rokko::parallel_dense_solver class}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item Initialize solver
-\begin{lstlisting}
-rokko::parallel_dense_solver solver(name);
-solver.initialize(argc, argv);
-\end{lstlisting}
-  \item Finalize solver
-\begin{lstlisting}
-solver.finalize();
-\end{lstlisting}
-  \item Diagonalize a matrix (the matrix is overwrriten)
-\begin{lstlisting}
-rokko::distributed_matrix<matrix_col_major> mat(dim, dim, g, solver);
-...
-rokko::localized_vector evals(dim);
-rokko::distributed_matrix<matrix_col_major> evecs(dim, dim, g, solver);
-solver.diagonalize(mat, evals, evecs);
-\end{lstlisting}
-%  \item 登録されているソルバの一覧
-%\begin{lstlisting}
-%std::vector<std::string> names = rokko::parallel_dense_solver::solvers();
-%\end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-\subsection{Run sample}
-
-\begin{frame}[c,fragile]
-  \frametitle{Sample programs for diagonalization}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-%  \item MPI並列密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/parallel_dense_solvers.cpp}{test/parallel\_dense\_solvers.cpp}
-%\begin{lstlisting}[style=shstyle]
-%./test/parallel_dense_solvers
-%\end{lstlisting}
-  \item C++ \RokkoFilename{sample/dense/frank_mpi.cpp}
-\begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample/dense/frank_mpi eigen_exa_sx 5
-\end{lstlisting}
-  \item C \RokkoFilename{sample/dense/frank_mpi.cpp}
-\begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample_c/dense/frank_mpi eigen_exa_sx 5
-\end{lstlisting}
-  \item Fortran \RokkoFilename{sample/dense/frank_mpi.cpp}
-\begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample_fortran/dense/frank_mpi eigen_exa_sx 5
-\end{lstlisting}
-
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c,fragile]
-  \frametitle{Test matrix: Frank matrix (definition)}
-\begin{block}{Definition}
-$[a_{ij}]_{i,j = {0, \dots, n-1}} = [ n - \max(i,j) ]$\\
-\end{block}
-
-\begin{block}{Example ($n=5$)}
-$[a_{ij}]_{i,j = {0, \dots, 4}} =
-\begin{bmatrix}
-5 & 4 & 3 & 2 & 1 \\
-4 & 4 & 3 & 2 & 1 \\
-3 & 3 & 3 & 2 & 1 \\
-2 & 2 & 2 & 2 & 1 \\
-1 & 1 & 1 & 1 & 1 \\
-\end{bmatrix}
-$
-\end{block}
-\end{frame}
-
-\begin{frame}[c,fragile]
-  \frametitle{Test matrix: Frank matrix (properties)}
-\begin{block}{Analytical eigenvalues}%
-$\lambda_k = \dfrac{1}{2 \left( 1 - \cos{\tfrac{2 k + 1}{2 n + 1}\pi} \right)} \quad (k=0,\dots,n-1)$
-\end{block}
-
-\begin{block}{Remark}%
-Frank matrix has an eigenvalue $1$\\
-\quad $\Longleftrightarrow$ $\tfrac{2 k + 1}{2 n + 1} = \tfrac{1}{3}$\\
-\quad $\Longleftrightarrow$ $n-1$ is a multiple of 3.
-\end{block}
-\end{frame}
-
-\section{Parallel sparse solvers}
+\section{Parallel MPI sparse solvers}
 
 \subsection{Basic concepts}
 
@@ -1066,8 +1169,8 @@ mpirun -np 4 ./sample/sparse/distributed_crs_matrix slepc
   \frametitle{Matrix free method}
 %たいていの疎行列向け固有値ソルバでは、行列そのものではなく、固有値分解を行うべき行列とベクトル積を行うルーチンのみが必要である。
 %　\\
-\noindent
-Write a class
+%\noindent
+%Write a class
   \begin{itemize}
   \item \RokkoFilename{rokko/utility/heisenberg_hamiltonian.hpp}
 \begin{lstlisting}
@@ -1119,7 +1222,6 @@ private:
   \frametitle{rokko::parallel_sparse_solver class}
 \vspace{-1\baselineskip}
   \begin{itemize}
-    %\setlength{\itemsep}{1em}
   \item Initialize solver
 \begin{lstlisting}
 rokko::parallel_sparse_solver solver(name);
@@ -1155,34 +1257,8 @@ solver.eigenvector(i, eigvec);
 \end{frame}
 
 
-
-\section{Diagonalization for the quantum spin system}
-
 \begin{frame}[c,fragile]
-  \frametitle{Diagonalization for the quantum spin system (dense matrix, seq. / MPI)}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item Heisenberg model (seq.) \RokkoFilename{sample/dense/heisenberg.cpp}
-\begin{lstlisting}[style=shstyle]
-./sample/dense/heisenberg lapack
-\end{lstlisting}
-  \item Heisenberg model (MPI) \RokkoFilename{sample/dense/heisenberg_mpi.cpp}
-\begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample/dense/heisenberg_mpi eigen_exa_sx
-\end{lstlisting}
-  \item XYZ model (seq.) \RokkoFilename{sample/dense/xyz.cpp}
-\begin{lstlisting}[style=shstyle]
-./sample/dense/xyz_dense lapack $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
-\end{lstlisting}
-  \item XYZ model (MPI) \RokkoFilename{sample/dense/xyz_mpi.cpp}
-\begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample/dense/xyz_mpi eigen_exa_sx $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[c,fragile]
-  \frametitle{Diagonalization for quantum spin system (sprase matrix, MPI)}
+  \frametitle{Diagonalization Hamailtonian matrix for quantum spin system (sprase matrix, MPI)}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item Heisenberg model(CRS) \RokkoFilename{sample/sparse/heisenberg_crs_mpi.cpp}
@@ -1207,74 +1283,30 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
 
 
 \begin{frame}[c,fragile]
-  \frametitle{ハイゼンベルグ模型}
-\setlength{\fboxsep}{1pt}
+  \frametitle{Verification of Installation}
+Display a list of available eigensolvers in Rokko\\
+\RokkoFilename{tool/rokko_solvers.cpp}
+\begin{lstlisting}[style=shstyle]
+cd rokko/tool
+./rokko_solvers
+\end{lstlisting}
 
-\noindent
-\begin{align*}
-\mathcal{H} &= J \sum\limits_{\langle j,k \rangle} {\boldmath S}_j \cdot S_k \\
-&= J \sum\limits_{\langle j,k \rangle} \left\{ S^z_j S^z_k + \tfrac{1}{2}(S^+_j S^-_k + S^-_j S^+_k) \right\}
-\end{align*}
-
-\begin{align*}
-\text{Here, } & S^z_j S^z_k + \tfrac{1}{2}(S^+_j S^-_k + S^-_j S^+_k) \\
- &=
-\tfrac{1}{2}
-\begin{bmatrix}
-1 & 0 \\
-0 & -1
-\end{bmatrix}
-\otimes
-\tfrac{1}{2}
-\begin{bmatrix}
-1 & 0 \\
-0 & -1
-\end{bmatrix}
-+
-\tfrac{1}{2}\left\{
-\begin{bmatrix}
-0 & 1 \\
-0 & 0
-\end{bmatrix}
-\otimes
-\begin{bmatrix}
-0 & 0 \\
-1 & 0
-\end{bmatrix}
-+
-\begin{bmatrix}
-0 & 0 \\
-1 & 0
-\end{bmatrix}
-\otimes
-\begin{bmatrix}
-0 & 1 \\
-0 & 0
-\end{bmatrix}
-\right\}\\
-&=
-\begin{bmatrix}
-\tfrac{1}{4} & & & \\
- & - \tfrac{1}{4} & \tfrac{1}{2} & \\
- & \tfrac{1}{2} & - \tfrac{1}{4} & \\
- & & & \tfrac{1}{4}
-\end{bmatrix}
-\end{align*}
+Output result
+\begin{lstlisting}[style=shstyle]
+[serial dense solvers]
+  eigen3
+  lapack
+[parallel dense solvers]
+  eigen_exa_s
+  eigen_exa_sx
+  scalapack
+  scalapack_pdsyevd
+[parallel sparse solvers]
+  anasazi
+  slepc
+\end{lstlisting}
 
 \end{frame}
-
 
 \end{document}
-
-
-
-
-
-\begin{frame}
-  \frametitle{テスト}
-  \begin{itemize}
-    %\setlength{\itemsep}{1em}
-  \item テスト
-  \end{itemize}
-\end{frame}
 
