@@ -819,25 +819,28 @@ $ for each bond ${\langle i,j \rangle}$#
 \begin{frame}[c,fragile]
   \frametitle{Output result for Hamailtonian matrix of quantum XYZ model (dense matrix, MPI)}
 \begin{lstlisting}[style=shstyle]
-Eigenvalue decomposition of Frank matrix
+Eigenvalue decomposition of XYZ model
 num_procs = 4
 num_threads per process = 12
 solver = eigen_exa_sx
-dimension = 10
-largest eigenvalues: 44.766 5.0489 1.873 1 0.6431 0.46523 0.36621 0.30798 0.27379 0.25568
-residual of the largest eigenvalue/vector: |x A x - lambda| = 2.1316e-14
+lattice file = ./xyz.dat
+number of sites = 8
+number of bonds = 8
+dimension = 256
+smallest eigenvalues: -2.6131 -2.4142 -2.4142 -1.8478 -1.8478 -1.8478 -1.8478 -1.8478 -1.8478 -1.7071
+residual of the smallest eigenvalue/vector: |x A x - lambda| = 1.7764e-15
 timer: enabled
 timer: trace = disabled
 timer: detailed report = disabled
 timer:     1 solver::construct                                              0.000          1
 timer:     2 solver::initialize                                             0.000          1
 timer:     3 solver::finalize                                               0.000          1
-timer:     4 diagonalize::initialize                                        0.217          1
-timer:     5 diagonalize::diagonalize                                       0.961          1
+timer:     4 diagonalize::initialize                                        0.204          1
+timer:     5 diagonalize::diagonalize                                      24.244          1
 timer:     6 diagonalize::finalize                                          0.000          1
-timer:    10 main                                                           2.682          1
-timer:    11 generate_matrix                                                0.051          1
-timer:    12 output_results                                                 0.027          1
+timer:    10 main                                                          25.955          1
+timer:    11 generate_matrix                                                0.045          1
+timer:    12 output_results                                                 0.019          1
 \end{lstlisting}
 \end{frame}
 
