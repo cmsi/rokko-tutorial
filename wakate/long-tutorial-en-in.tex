@@ -542,55 +542,55 @@ public:
   \end{itemize}
 \end{frame}
 
-\begin{frame}[c,fragile]
-  \frametitle{Operation for distributed_matrix}
-  \begin{itemize}
-  \item Matrix-matrix product $C = \alpha A B + \beta C$
-\begin{lstlisting}
-  ...
-  rokko::distributed_matrix<rokko::matrix_col_major> matA(dim, dim, g, solver);
-  rokko::distributed_matrix<rokko::matrix_col_major> matB(dim, dim, g, solver);
-  rokko::distributed_matrix<rokko::matrix_col_major> matC(dim, dim, g, solver);
-  ...
-  rokko::product(alpha, matA, transA, matB, transB, beta, matC);
-\end{lstlisting}
-  \item Scatter \& Gather for distributed_matrix
-\begin{lstlisting}
-  rokko::localized_matrix<LOC_MAT_MAJOR> lmat(dim, dim);
-  rokko::distributed_matrix<DIST_MAT_MAJOR> mat(dim, dim, g, solver);
-  rokko::scatter(lmat, mat, root);
-  rokko::gather(mat, lmat, root);
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
+%% \begin{frame}[c,fragile]
+%%   \frametitle{Operation for distributed_matrix}
+%%   \begin{itemize}
+%%   \item Matrix-matrix product $C = \alpha A B + \beta C$
+%% \begin{lstlisting}
+%%   ...
+%%   rokko::distributed_matrix<rokko::matrix_col_major> matA(dim, dim, g, solver);
+%%   rokko::distributed_matrix<rokko::matrix_col_major> matB(dim, dim, g, solver);
+%%   rokko::distributed_matrix<rokko::matrix_col_major> matC(dim, dim, g, solver);
+%%   ...
+%%   rokko::product(alpha, matA, transA, matB, transB, beta, matC);
+%% \end{lstlisting}
+%%   \item Scatter \& Gather for distributed_matrix
+%% \begin{lstlisting}
+%%   rokko::localized_matrix<LOC_MAT_MAJOR> lmat(dim, dim);
+%%   rokko::distributed_matrix<DIST_MAT_MAJOR> mat(dim, dim, g, solver);
+%%   rokko::scatter(lmat, mat, root);
+%%   rokko::gather(mat, lmat, root);
+%% \end{lstlisting}
+%%   \end{itemize}
+%% \end{frame}
 
-\begin{frame}[c,fragile]
-  \frametitle{generating distributed_matrix}
-  \begin{itemize}
-  \item Assign matrix elements (global indices)
-\begin{lstlisting}
-for(int global_i=0; global_i < mat.m_global; ++global_i) {
-  for(int global_j=0; global_j < mat.n_global; ++global_j) {
-    mat.set_global(global_i, global_j, f(global_i, global_j));
-  }
-}
-\end{lstlisting}
-  \item Assign matrix elements (local indices)
-\begin{lstlisting}
-for(int local_i = 0; local_i < mat.get_m_local(); ++local_i) {
-  for(int local_j = 0; local_j < mat.get_n_local(); ++local_j) {
-    int global_i = mat.translate_l2g_row(local_i);
-    int global_j = mat.translate_l2g_col(local_j);
-    mat.set_local(local_i, local_j, f(global_i, global_j));
-  }
-}
-\end{lstlisting}
-%  \item generate all matrix elements by function
-%\begin{lstlisting}
-%mat.generate(f);
-%\end{lstlisting}
-  \end{itemize}
-\end{frame}
+%% \begin{frame}[c,fragile]
+%%   \frametitle{generating distributed_matrix}
+%%   \begin{itemize}
+%%   \item Assign matrix elements (global indices)
+%% \begin{lstlisting}
+%% for(int global_i=0; global_i < mat.m_global; ++global_i) {
+%%   for(int global_j=0; global_j < mat.n_global; ++global_j) {
+%%     mat.set_global(global_i, global_j, f(global_i, global_j));
+%%   }
+%% }
+%% \end{lstlisting}
+%%   \item Assign matrix elements (local indices)
+%% \begin{lstlisting}
+%% for(int local_i = 0; local_i < mat.get_m_local(); ++local_i) {
+%%   for(int local_j = 0; local_j < mat.get_n_local(); ++local_j) {
+%%     int global_i = mat.translate_l2g_row(local_i);
+%%     int global_j = mat.translate_l2g_col(local_j);
+%%     mat.set_local(local_i, local_j, f(global_i, global_j));
+%%   }
+%% }
+%% \end{lstlisting}
+%% %  \item generate all matrix elements by function
+%% %\begin{lstlisting}
+%% %mat.generate(f);
+%% %\end{lstlisting}
+%%   \end{itemize}
+%% \end{frame}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::parallel_dense_solver class}
@@ -659,11 +659,11 @@ Frank matrix has an eigenvalue $1$\\
   \frametitle{Sample program for Frank matrix (dense matrix, MPI)}
 
   \begin{itemize}
-    \item Preperation
-\begin{lstlisting}[style=shstyle]
-source /opt/MateriApps/env.sh
-source /opt/MateriApps/rokko/rokkoenv.sh
-\end{lstlisting}
+%%     \item Preperation
+%% \begin{lstlisting}[style=shstyle]
+%% source /opt/MateriApps/env.sh
+%% source /opt/MateriApps/rokko/rokkoenv.sh
+%% \end{lstlisting}
     \item Source file: \RokkoFilename{sample/dense/frank_mpi.cpp}
     \item Command to run
 \begin{lstlisting}[style=shstyle]
@@ -762,11 +762,11 @@ J_x-J_y & & & J_z
 %% ./sample/dense/xyz_dense lapack $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
 %% \end{lstlisting}
   \begin{itemize}
-  \item Preperation
-\begin{lstlisting}[style=shstyle]
-source /opt/MateriApps/env.sh
-source /opt/MateriApps/rokko/rokkoenv.sh
-\end{lstlisting}
+%%   \item Preperation
+%% \begin{lstlisting}[style=shstyle]
+%% source /opt/MateriApps/env.sh
+%% source /opt/MateriApps/rokko/rokkoenv.sh
+%% \end{lstlisting}
     \item Source file: \RokkoFilename{sample/dense/xyz_mpi.cpp}
     \item Command to run
 \begin{lstlisting}[style=shstyle]
