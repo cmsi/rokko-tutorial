@@ -264,7 +264,7 @@
     \item \href{http://www-e.uni-magdeburg.de/jschulen/spin/}{SPINPACK}: It use LAPACK
     \item \href{http://www.noc.titech.ac.jp/~phys0016_nishimori/titpack2_new/index-e.html}{TITPACK2}: It includes their own eigensolvers
     \end{itemize}
-  \item Sequential or thread parallized. No MPI parallelized.
+  \item Sequential or thread parallelized. No MPI parallelized.
   \item It makes calculations for a large number of sites difficult.
   \end{itemize}
 \end{frame}
@@ -915,8 +915,8 @@ mpirun -np 4 ./sample/sparse/distributed_crs_matrix slepc
   \frametitle{Matrix free method}
 %たいていの疎行列向け固有値ソルバでは、行列そのものではなく、固有値分解を行うべき行列とベクトル積を行うルーチンのみが必要である。
 %　\\
-\noindent
-Write a class
+%\noindent
+%Write a class
   \begin{itemize}
   \item \RokkoFilename{rokko/utility/heisenberg_hamiltonian.hpp}
 \begin{lstlisting}
