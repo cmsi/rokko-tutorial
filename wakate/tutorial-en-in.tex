@@ -524,65 +524,6 @@ Frank matrix has an eigenvalue $1$\\
 \end{frame}
 
 
-\begin{frame}[c,fragile]
-  \frametitle{Sample program for Frank matrix (dense matrix, MPI)}
-
-  \begin{itemize}
-%%     \item Preperation
-%% \begin{lstlisting}[style=shstyle]
-%% source /opt/MateriApps/env.sh
-%% source /opt/MateriApps/rokko/rokkoenv.sh
-%% \end{lstlisting}
-    \item Source file: \href{https://github.com/t-sakashita/rokko/tree/master/sample/dense/frank_mpi.cpp}{frank_mpi.cpp}
-    \item Command to run
-\begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./frank_mpi eigen_exa_sx 10
-\end{lstlisting}
-    \begin{itemize}
-    \item 1st argument: solver name ('eigen_exa_s', 'scalapack', 'scalapack_pdsyevd' is also available) \\
-    \item 2nd argument: size of Frank matrix (The above example deals with $10\times 10$ size Frank matrix.)
-    \end{itemize}
-  \item Run by job script file /opt/wakate/rokko/script/frank_mpi.sh for psi.issp.u-tokyo.ac.jp
-\begin{lstlisting}[style=shstyle]
-cp -r /opt/wakate/rokko/script/ .
-cd script
-qsub frank_mpi.sh
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-\lstset{escapechar=\#}
-
-
-\begin{frame}[c,fragile]
-  \frametitle{Output result for Frank matrix (dense matrix, MPI)}
-\setlength { \fboxrule } { 1.5pt }
-\begin{lstlisting}[style=shstyle]
-Eigenvalue decomposition of Frank matrix
-num_procs = 4
-num_threads per process = 12
-solver = eigen_exa_sx
-dimension = 10
-largest eigenvalues: 44.766 5.0489 1.873 #\fcolorbox{red}{white}{1}# 0.6431 0.46523 0.36621 0.30798 0.27379 0.25568
-residual of the largest eigenvalue/vector: |x A x - lambda| = 2.1316e-14
-timer: enabled
-timer: trace = disabled
-timer: detailed report = disabled
-timer:     1 solver::construct                                              0.000          1
-timer:     2 solver::initialize                                             0.000          1
-timer:     3 solver::finalize                                               0.000          1
-timer:     4 diagonalize::initialize                                        0.217          1
-timer:     5 diagonalize::diagonalize                                       0.961          1
-timer:     6 diagonalize::finalize                                          0.000          1
-timer:    10 main                                                           2.682          1
-timer:    11 generate_matrix                                                0.051          1
-timer:    12 output_results                                                 0.027          1
-\end{lstlisting}
-You can find an eigenvalue 1\\
-$\longrightarrow$ The calculation result seems correct!
-\end{frame}
-
-
 
 \begin{frame}[c,fragile]
   \frametitle{Summary}
