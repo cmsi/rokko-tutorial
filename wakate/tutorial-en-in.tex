@@ -1,4 +1,4 @@
-\title{Rokko Tutorial (long version)}
+\title{Rokko Tutorial}
 
 % 講習会名 (例: "CMSI柏ハンズオン")
 \author{11th CMSI Young Researcher Technical Workshop}
@@ -57,7 +57,7 @@
     %\setlength{\itemsep}{1em}
   \item Matrix type
     \begin{itemize}
-    \item real symmetric matrix, real unsymmetric matrix, complex Hermitean matrix, complex non-Hermitean matrix
+    \item real symmetric matrix, real unsymmetric matrix, complex Hermitian matrix, complex non-Hermitian matrix
     \end{itemize}
   \item Type of matrix storage
     \begin{itemize}
@@ -204,7 +204,7 @@
     \begin{itemize}
       \item Householder + QR, Householder + divide\&conquer + QR, Householder+bisection, Householder + MR3
     \end{itemize}
-  \item \href{http://eigen.tuxfamily.org/}{Eigen3}: sequential, thread parallelized for matrix-matrix product)
+  \item \href{http://eigen.tuxfamily.org/}{Eigen3}: serial, thread parallelized for matrix-matrix product)
     \begin{itemize}
       \item Householder+QR
     \end{itemize}
@@ -264,7 +264,7 @@
     \item \href{http://www-e.uni-magdeburg.de/jschulen/spin/}{SPINPACK}: It use LAPACK
     \item \href{http://www.noc.titech.ac.jp/~phys0016_nishimori/titpack2_new/index-e.html}{TITPACK2}: It includes their own eigensolvers
     \end{itemize}
-  \item Sequential or thread parallelized. No MPI parallelized.
+  \item Serial or thread parallelized. No MPI parallelized.
   \item It makes calculations for a large number of sites difficult.
   \end{itemize}
 \end{frame}
@@ -334,7 +334,7 @@
   \begin{itemize}
     \setlength{\itemsep}{1em}
   \item Common vector and matrix class
-  \item Absorb differences of indivisual solvers by wrappers
+  \item Absorb differences of individual solvers by wrappers
     \begin{itemize}
       %\setlength{\itemsep}{1em}
     \item As eigensolvers develop and change, we modify wrapping functions to keep Rokko's interface the same.
@@ -453,8 +453,8 @@
 \end{minipage}
 \end{tabular}
   \end{figure}
-  \item ScaLAPACK and ELPA support arabitrary block sizes.
-  \item EigenExa support $1 \times 1$.
+  \item ScaLAPACK and ELPA support arbitrary block sizes.
+  \item EigenExa support only $1 \times 1$.
   \end{itemize}
 \end{frame}
 
@@ -481,143 +481,13 @@
 \subsection{Specifications of Rokko interface}
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::grid class}
-  \begin{itemize}
-  \item \RokkoFilename{rokko/grid.hpp}
-\begin{lstlisting}
-namespace rokko {
-extern struct grid_row_major_t {} grid_row_major;
-extern struct grid_col_major_t {} grid_col_major;
-class grid {
-public:
-  explicit grid(MPI_Comm comm_in = MPI_COMM_WORLD);
-  template <typename GRID_MAJOR>
-  grid(MPI_Comm comm_in, GRID_MAJOR const& grid_major);
-  MPI_Comm get_comm() const { return comm; }
-  int get_nprocs() const;
-  int get_nprow() const;
-  int get_npcol() const;
-  int get_myrank() const;
-  int get_myrow() const;
-  int get_mycol() const;
-  bool is_row_major() const;
-  bool is_col_major() const;
-  int calculate_grid_row(int proc_rank) const;
-  int calculate_grid_col(int proc_rank) const;
-};
-}
-\end{lstlisting}
-  \end{itemize}
+  \frametitle{LAPACK, ScaLAPACK, Rokko}
+  \begin{center}
+    \includegraphics[height=1.05\textheight]{lapack_scalapack_rokko.pdf}
+  \end{center}
 \end{frame}
 
 
-\begin{frame}[c,fragile]
-  \frametitle{rokko::distributed_matrix class template}
-  \begin{itemize}
-  \item \RokkoFilename{rokko/distributed_matrix.hpp}
-\begin{lstlisting}
-namespace rokko {
-template<typename MATRIX_MAJOR = rokko::matrix_row_major>
-class distributed_matrix {
-public:
-  template<typename SOLVER>
-  distributed_matrix(int m_global_in, int n_global_in, const grid& g_in, SOLVER const& solver_in);
-  template<typename SOLVER>
-  void initialize(int m_global_in, int n_global_in, const grid& g_in, SOLVER const& solver_in);
-  int get_mb() const;
-  int get_nb() const;
-  int get_nprow() const;
-  ...
-  bool is_gindex_myrow(const int& global_i) const;
-  bool is_gindex_mycol(const int& global_j) const;
-  bool is_gindex(const int& global_i, const int& global_j) const;
-  void set_local(int local_i, int local_j, double value);
-  double get_local(int local_i, int local_j) const;
-  void update_local(int local_i, int local_j, double value);
-  void set_global(int global_i, int global_j, double value);
-  double get_global(int global_i, int global_j) const;
-};
-}
-\end{lstlisting}
-  \end{itemize}
-\end{frame}
-
-%% \begin{frame}[c,fragile]
-%%   \frametitle{Operation for distributed_matrix}
-%%   \begin{itemize}
-%%   \item Matrix-matrix product $C = \alpha A B + \beta C$
-%% \begin{lstlisting}
-%%   ...
-%%   rokko::distributed_matrix<rokko::matrix_col_major> matA(dim, dim, g, solver);
-%%   rokko::distributed_matrix<rokko::matrix_col_major> matB(dim, dim, g, solver);
-%%   rokko::distributed_matrix<rokko::matrix_col_major> matC(dim, dim, g, solver);
-%%   ...
-%%   rokko::product(alpha, matA, transA, matB, transB, beta, matC);
-%% \end{lstlisting}
-%%   \item Scatter \& Gather for distributed_matrix
-%% \begin{lstlisting}
-%%   rokko::localized_matrix<LOC_MAT_MAJOR> lmat(dim, dim);
-%%   rokko::distributed_matrix<DIST_MAT_MAJOR> mat(dim, dim, g, solver);
-%%   rokko::scatter(lmat, mat, root);
-%%   rokko::gather(mat, lmat, root);
-%% \end{lstlisting}
-%%   \end{itemize}
-%% \end{frame}
-
-%% \begin{frame}[c,fragile]
-%%   \frametitle{generating distributed_matrix}
-%%   \begin{itemize}
-%%   \item Assign matrix elements (global indices)
-%% \begin{lstlisting}
-%% for(int global_i=0; global_i < mat.m_global; ++global_i) {
-%%   for(int global_j=0; global_j < mat.n_global; ++global_j) {
-%%     mat.set_global(global_i, global_j, f(global_i, global_j));
-%%   }
-%% }
-%% \end{lstlisting}
-%%   \item Assign matrix elements (local indices)
-%% \begin{lstlisting}
-%% for(int local_i = 0; local_i < mat.get_m_local(); ++local_i) {
-%%   for(int local_j = 0; local_j < mat.get_n_local(); ++local_j) {
-%%     int global_i = mat.translate_l2g_row(local_i);
-%%     int global_j = mat.translate_l2g_col(local_j);
-%%     mat.set_local(local_i, local_j, f(global_i, global_j));
-%%   }
-%% }
-%% \end{lstlisting}
-%% %  \item generate all matrix elements by function
-%% %\begin{lstlisting}
-%% %mat.generate(f);
-%% %\end{lstlisting}
-%%   \end{itemize}
-%% \end{frame}
-
-\begin{frame}[c,fragile]
-  \frametitle{rokko::parallel_dense_solver class}
-  \begin{itemize}
-  \item Initialize solver
-\begin{lstlisting}
-rokko::parallel_dense_solver solver(name);
-solver.initialize(argc, argv);
-\end{lstlisting}
-  \item Finalize solver
-\begin{lstlisting}
-solver.finalize();
-\end{lstlisting}
-  \item Diagonalize a matrix (the matrix is overwrriten)
-\begin{lstlisting}
-rokko::distributed_matrix<matrix_col_major> mat(dim, dim, g, solver);
-...
-rokko::localized_vector evals(dim);
-rokko::distributed_matrix<matrix_col_major> evecs(dim, dim, g, solver);
-solver.diagonalize(mat, evals, evecs);
-\end{lstlisting}
-%  \item 登録されているソルバの一覧
-%\begin{lstlisting}
-%std::vector<std::string> names = rokko::parallel_dense_solver::solvers();
-%\end{lstlisting}
-  \end{itemize}
-\end{frame}
 
 \subsection{Run sample}
 
@@ -664,13 +534,13 @@ Frank matrix has an eigenvalue $1$\\
 %% source /opt/MateriApps/env.sh
 %% source /opt/MateriApps/rokko/rokkoenv.sh
 %% \end{lstlisting}
-    \item Source file: \RokkoFilename{sample/dense/frank_mpi.cpp}
+    \item Source file: \href{https://github.com/t-sakashita/rokko/tree/master/sample/dense/frank_mpi.cpp}{frank_mpi.cpp}
     \item Command to run
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample/dense/frank_mpi eigen_exa_sx 10
+mpirun -np 4 ./frank_mpi eigen_exa_sx 10
 \end{lstlisting}
     \begin{itemize}
-    \item 1st argument: solver name ('eigen_exa_s', scalapack', 'scalapack_pdsyevd' is also available) \\
+    \item 1st argument: solver name ('eigen_exa_s', 'scalapack', 'scalapack_pdsyevd' is also available) \\
     \item 2nd argument: size of Frank matrix (The above example deals with $10\times 10$ size Frank matrix.)
     \end{itemize}
   \item Run by job script file /opt/wakate/rokko/script/frank_mpi.sh for psi.issp.u-tokyo.ac.jp
@@ -714,7 +584,7 @@ $\longrightarrow$ The calculation result seems correct!
 \end{frame}
 
 
-\section{Diagonalization of Hamailtonian matrix for quantum spin system}
+\section{Diagonalization of Hamiltonian matrix for quantum spin system}
 
 \begin{frame}[c,fragile]
   \frametitle{Quantum XYZ model}
@@ -748,7 +618,7 @@ J_x-J_y & & & J_z
 
 
 \begin{frame}[c,fragile]
-  \frametitle{Sample program for Hamailtonian matrix of quantum XYZ model (dense matrix, MPI)}
+  \frametitle{Sample program for Hamiltonian matrix of quantum XYZ model (dense matrix, MPI)}
 %%   \item Heisenberg model (seq.) \RokkoFilename{sample/dense/heisenberg.cpp}
 %% \begin{lstlisting}[style=shstyle]
 %% ./sample/dense/heisenberg lapack
@@ -767,13 +637,13 @@ J_x-J_y & & & J_z
 %% source /opt/MateriApps/env.sh
 %% source /opt/MateriApps/rokko/rokkoenv.sh
 %% \end{lstlisting}
-    \item Source file: \RokkoFilename{sample/dense/xyz_mpi.cpp}
+    \item Source file: \href{https://github.com/t-sakashita/rokko/tree/master/sample/dense/xyz_mpi.cpp}{xyz_mpi.cpp}
     \item Command to run
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./sample/dense/xyz_mpi eigen_exa_sx ./xyz.dat
+mpirun -np 4 ./xyz_mpi eigen_exa_sx ./xyz.dat
 \end{lstlisting}
     \begin{itemize}
-    \item 1st argument: solver name ('eigen_exa_s', scalapack', 'scalapack_pdsyevd' is also available) \\
+    \item 1st argument: solver name ('eigen_exa_s', 'scalapack', 'scalapack_pdsyevd' is also available) \\
     \item 2nd argument: input file (ref. next slide)
     \end{itemize}
   \item Run by job script file /opt/wakate/rokko/script/xyz_mpi.sh for psi.issp.u-tokyo.ac.jp
@@ -787,7 +657,7 @@ qsub xyz_mpi.sh
 
 
 \begin{frame}[c,fragile]
-  \frametitle{Input file for Hamailtonian matrix of quantum XYZ model (dense matrix, MPI)}
+  \frametitle{Input file for Hamiltonian matrix of quantum XYZ model (dense matrix, MPI)}
 xyz.dat
 \begin{lstlisting}[style=shstyle]
 8 8    #$\longleftarrow$number of sites, number of bonds#
@@ -817,7 +687,7 @@ $ for each bond ${\langle i,j \rangle}$#
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{Output result for Hamailtonian matrix of quantum XYZ model (dense matrix, MPI)}
+  \frametitle{Output result for Hamiltonian matrix of quantum XYZ model (dense matrix, MPI)}
 \begin{lstlisting}[style=shstyle]
 Eigenvalue decomposition of XYZ model
 num_procs = 4
@@ -850,12 +720,12 @@ timer:    12 output_results                                                 0.01
     \setlength{\itemsep}{1em}
   \item Review of existing eigensolvers
   \item Overview and Structure of Rokko
-  \item Diagonalization of Hamailtonian matrix for quantum spin system
+  \item Diagonalization of Hamiltonian matrix for quantum spin system
   \end{itemize}
 
   \begin{itemize}
   \item In this tutorial, we dealt with only MPI dense solvers
-  \item Rokko has also interfaces for sequential dense / MPI sparse solvers.
+  \item Rokko has also interfaces for serial dense / MPI sparse solvers.
   \end{itemize}
 \end{frame}
 
