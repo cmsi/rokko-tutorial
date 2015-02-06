@@ -204,7 +204,7 @@
     \begin{itemize}
       \item Householder + QR, Householder + divide\&conquer + QR, Householder+bisection, Householder + MR3
     \end{itemize}
-  \item \href{http://eigen.tuxfamily.org/}{Eigen3}: serial, thread parallelized for matrix-matrix product)
+  \item \href{http://eigen.tuxfamily.org/}{Eigen3}: serial, (thread parallelized for matrix-matrix product)
     \begin{itemize}
       \item Householder+QR
     \end{itemize}
@@ -228,7 +228,7 @@
   \frametitle{Recommnded order}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item For dense matrix (seq.)
+  \item For dense matrix (serial)
     \begin{itemize}
       \item LAPACK (vendor impl.) $>$ Eigen3
     \end{itemize}
@@ -236,7 +236,7 @@
     \begin{itemize}
       \item EigenExa $>$ ELPA $>$ ScaLAPACK (vendor impl.) %$>$ Elemental
     \end{itemize}
-  %% \item For sparse matrix (seq. MPI)
+  %% \item For sparse matrix (serial MPI)
   %%   \begin{itemize}
   %%     \item Anasazi $>$ SLEPc
   %%   \end{itemize}
@@ -373,16 +373,16 @@
  $\cdots$ Sample programs in C++.
  .3
  \href{https://github.com/t-sakashita/rokko/tree/develop/sample/dense}{dense}
- $\cdots$ for dense matrix ({seq.}\&MPI).
+ $\cdots$ for dense matrix ({serial}\&MPI).
  .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample/sparse}{sparse} $\cdots$ for sparse matrix (MPI).
  .2 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c}{sample_c} $\cdots$ Sample programs in C.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/dense}{dense} $\cdots$ for dense matrix ({seq.}\&MPI).
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/dense}{dense} $\cdots$ for dense matrix ({serial}\&MPI).
  .3
  \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/sparse}{sparse}
  $\cdots$ spapse matrix (MPI).
  .2 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran}{sample_fortran}
  $\cdots$ Sample programs in Fortran.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/dense}{dense} $\cdots$ for dense matrix ({seq.}\&MPI).
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/dense}{dense} $\cdots$ for dense matrix ({serial}\&MPI).
  .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/sparse}{sparse} $\cdots$ for sparse matrix (MPI).
 % .2
 % \href{https://github.com/t-sakashita/rokko/tree/develop/test}{test}
@@ -618,7 +618,7 @@ J_x-J_y & & & J_z
 
 \begin{frame}[c,fragile]
   \frametitle{Sample program for Hamiltonian matrix of quantum XYZ model (dense matrix, MPI)}
-%%   \item Heisenberg model (seq.) \RokkoFilename{sample/dense/heisenberg.cpp}
+%%   \item Heisenberg model (serial) \RokkoFilename{sample/dense/heisenberg.cpp}
 %% \begin{lstlisting}[style=shstyle]
 %% ./sample/dense/heisenberg lapack
 %% \end{lstlisting}
@@ -626,7 +626,7 @@ J_x-J_y & & & J_z
 %% \begin{lstlisting}[style=shstyle]
 %% mpirun -np 4 ./sample/dense/heisenberg_mpi eigen_exa_sx
 %% \end{lstlisting}
-%%   \item XYZ model (seq.) \RokkoFilename{sample/dense/xyz.cpp}
+%%   \item XYZ model (serial) \RokkoFilename{sample/dense/xyz.cpp}
 %% \begin{lstlisting}[style=shstyle]
 %% ./sample/dense/xyz_dense lapack $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
 %% \end{lstlisting}
