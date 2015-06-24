@@ -1,0 +1,79 @@
+% Hands-on workshop name (Example: ``CMSI Kashiwa Hands-on'')
+\author{CMSI Kobe Hands-on}
+
+% Date of hands-on workshop(year-month-day Example: "2013-04-03")
+\date{2015-07-30}
+
+% \institute{ALPS Collaboration \\ http://alps.comp-phys.org/}
+
+% To work navigation correctly
+% https://gist.github.com/zr-tex8r/4980892
+%\usepackage{bxdpx-beamer}
+
+\mode<presentation>
+{
+  \usetheme{Antibes}
+  \usecolortheme{rose}
+  \setbeamercovered{transparent}
+}
+
+\usepackage[english]{babel}
+
+% package to draw directory structure
+\usepackage{dirtree}
+
+% CMSI logo
+%\pgfdeclareimage[height=0.5cm]{university-logo}{cmsi}
+%\logo{\pgfuseimage{university-logo}\hspace*{2em}}
+
+% For displying source code
+\usepackage{listings}%,jlisting}
+\input{python_listing.tex}
+
+% Style of describing running commands (for bash shell. It keeps space the same so that you can copy and paste from generated PDF)
+\lstdefinestyle{shstyle}{
+    language=bash,
+    basicstyle=\ttfamily\tiny,
+    frame=single,
+    breaklines=true,                % sets automatic line breaking
+    breakautoindent=false,
+    breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+    backgroundcolor=\color[cmyk]{0., 0. ,0,, 0.05},
+    rulecolor=\color[cmyk]{0., 0. ,0,, 0.5},
+    deletekeywords={local, test}  % unlist these keywords as reverbation keywords for bash not to hightlight them
+}
+
+\lstset{frame=single}
+\lstset{framesep=2pt}
+\lstset{rulecolor=\color{codeframe}}
+\lstset{upquote=true}
+\lstset{basicstyle=\ttfamily}
+\lstset{showstringspaces=false}
+\lstset{showspaces=false}
+\lstset{showtabs=false}                 % show tabs within strings adding
+\lstset{literate={-}{-}1}
+\lstset{columns=flexible}
+\lstset{keepspaces=true}
+\makeatletter
+\def\lst@outputspace{{\ifx\lst@bkgcolor\empty\color{white}\else\lst@bkgcolor\fi{ }}}
+\makeatother
+
+% Set triangle mark for 2nd level itemize.
+\setbeamertemplate{itemize subitem}[triangle]
+
+% Insert page number
+\setbeamertemplate{footline}[frame number]
+
+% Remove unncessary image below slides
+%\setbeamertemplate{navigation symbols}{}
+
+% hyperref setting
+\definecolor{links}{HTML}{2A1B81}
+\hypersetup{colorlinks,linkcolor=,urlcolor=links}
+
+% string including underscores can be given not by using backslash escape.
+\usepackage[strings]{underscore}
+% Command to make to github repo for filename.
+\newcommand{\RokkoFilename}[1]{%
+\href{https://github.com/t-sakashita/rokko/tree/master/#1}{#1}}
+
