@@ -39,7 +39,7 @@
 \begin{frame}
   \titlepage
   \noindent {\footnotesize PDF file: \url{http://sf.net/projects/rokko-tutorial/files/long-tutorial-en.pdf}} \\
-  \noindent {\footnotesize LaTeX source: \url{http://github.com/cmsi/rokko-tutorial/wakate}}
+  \noindent {\footnotesize LaTeX source: \url{https://github.com/cmsi/rokko-tutorial/wakate}}
 \end{frame}
 
 %% \section*{Outline}
@@ -204,7 +204,7 @@
     \begin{itemize}
       \item Householder + QR, Householder + divide\&conquer + QR, Householder+bisection, Householder + MR3
     \end{itemize}
-  \item \href{http://eigen.tuxfamily.org/}{Eigen3}: sequential, thread parallelized for matrix-matrix product)
+  \item \href{http://eigen.tuxfamily.org/}{Eigen3}: serial (thread parallelized for matrix-matrix product)
     \begin{itemize}
       \item Householder+QR
     \end{itemize}
@@ -228,7 +228,7 @@
   \frametitle{Recommnded order}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item For dense matrix (seq.)
+  \item For dense matrix (serial)
     \begin{itemize}
       \item LAPACK (vendor impl.) $>$ Eigen3
     \end{itemize}
@@ -236,7 +236,7 @@
     \begin{itemize}
       \item EigenExa $>$ ELPA $>$ ScaLAPACK (vendor impl.) %$>$ Elemental
     \end{itemize}
-  \item For sparse matrix (seq. MPI)
+  \item For sparse matrix (serial MPI)
     \begin{itemize}
       \item Anasazi $>$ SLEPc
     \end{itemize}
@@ -264,7 +264,7 @@
     \item \href{http://www-e.uni-magdeburg.de/jschulen/spin/}{SPINPACK}: It use LAPACK
     \item \href{http://www.noc.titech.ac.jp/~phys0016_nishimori/titpack2_new/index-e.html}{TITPACK2}: It includes their own eigensolvers
     \end{itemize}
-  \item Sequential or thread parallelized. No MPI parallelized.
+  \item Serial or thread parallelized. No MPI parallelized.
   \item It makes calculations for a large number of sites difficult.
   \end{itemize}
 \end{frame}
@@ -373,16 +373,16 @@
  $\cdots$ Sample programs in C++.
  .3
  \href{https://github.com/t-sakashita/rokko/tree/develop/sample/dense}{dense}
- $\cdots$ for dense matrix ({seq.}\&MPI).
+ $\cdots$ for dense matrix ({serial}\&MPI).
  .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample/sparse}{sparse} $\cdots$ for sparse matrix (MPI).
  .2 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c}{sample_c} $\cdots$ Sample programs in C.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/dense}{dense} $\cdots$ for dense matrix ({seq.}\&MPI).
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/dense}{dense} $\cdots$ for dense matrix ({serial}\&MPI).
  .3
  \href{https://github.com/t-sakashita/rokko/tree/develop/sample_c/sparse}{sparse}
  $\cdots$ spapse matrix (MPI).
  .2 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran}{sample_fortran}
  $\cdots$ Sample programs in Fortran.
- .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/dense}{dense} $\cdots$ for dense matrix ({seq.}\&MPI).
+ .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/dense}{dense} $\cdots$ for dense matrix ({serial}\&MPI).
  .3 \href{https://github.com/t-sakashita/rokko/tree/develop/sample_fortran/sparse}{sparse} $\cdots$ for sparse matrix (MPI).
 % .2
 % \href{https://github.com/t-sakashita/rokko/tree/develop/test}{test}
@@ -628,14 +628,13 @@ solver.diagonalize(mat, evals, evecs);
 $[a_{ij}]_{i,j = {0, \dots, n-1}} = [ n - \max(i,j) ]$\\
 \end{block}
 
-\begin{block}{Example ($n=5$)}
-$[a_{ij}]_{i,j = {0, \dots, 4}} =
+\begin{block}{Example ($n=4$)}
+$[a_{ij}]_{i,j = {0, \dots, 3}} =
 \begin{bmatrix}
-5 & 4 & 3 & 2 & 1 \\
-4 & 4 & 3 & 2 & 1 \\
-3 & 3 & 3 & 2 & 1 \\
-2 & 2 & 2 & 2 & 1 \\
-1 & 1 & 1 & 1 & 1 \\
+4 & 3 & 2 & 1 \\
+3 & 3 & 2 & 1 \\
+2 & 2 & 2 & 1 \\
+1 & 1 & 1 & 1 \\
 \end{bmatrix}
 $
 \end{block}
@@ -749,7 +748,7 @@ J_x-J_y & & & J_z
 
 \begin{frame}[c,fragile]
   \frametitle{Sample program for Hamailtonian matrix of quantum XYZ model (dense matrix, MPI)}
-%%   \item Heisenberg model (seq.) \RokkoFilename{sample/dense/heisenberg.cpp}
+%%   \item Heisenberg model (serial) \RokkoFilename{sample/dense/heisenberg.cpp}
 %% \begin{lstlisting}[style=shstyle]
 %% ./sample/dense/heisenberg lapack
 %% \end{lstlisting}
@@ -757,7 +756,7 @@ J_x-J_y & & & J_z
 %% \begin{lstlisting}[style=shstyle]
 %% mpirun -np 4 ./sample/dense/heisenberg_mpi eigen_exa_sx
 %% \end{lstlisting}
-%%   \item XYZ model (seq.) \RokkoFilename{sample/dense/xyz.cpp}
+%%   \item XYZ model (serial) \RokkoFilename{sample/dense/xyz.cpp}
 %% \begin{lstlisting}[style=shstyle]
 %% ./sample/dense/xyz_dense lapack $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
 %% \end{lstlisting}
@@ -855,7 +854,7 @@ timer:    12 output_results                                                 0.01
 
   \begin{itemize}
   \item In this tutorial, we dealt with only MPI dense solvers
-  \item Rokko has also interfaces for sequential dense / MPI sparse solvers.
+  \item Rokko has also interfaces for serial dense / MPI sparse solvers.
   \end{itemize}
 \end{frame}
   
@@ -952,7 +951,7 @@ make install
 \end{frame}
 
 
-\section{Sequential dense solvers}
+\section{Serial dense solvers}
 
 \subsection{Specifications of Rokko interface}
 
@@ -1045,7 +1044,7 @@ solver.diagonalize(mat, evals, evecs);
 \begin{lstlisting}[style=shstyle]
 ./sample/dense/dsyev
 \end{lstlisting}
-  \item Using seq. dense solvers thorugh Rokko
+  \item Using serial dense solvers thorugh Rokko
   \begin{itemize}
     \item C++ ver. \RokkoFilename{sample/dense/frank.cpp}
 \begin{lstlisting}[style=shstyle]
