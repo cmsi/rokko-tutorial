@@ -2,6 +2,17 @@
 
 \newtheorem{rei}{例}
 \renewcommand{\therei}{}
+\newcommand{\smallscr}[1]{\scalebox{0.4}{$#1$}}
+\newcommand{\middlescr}[1]{\scalebox{0.60}{$#1$}}
+%\usepackage{multirow}
+
+\newlength\savedwidth
+\newcommand\whline{%
+    \noalign{\xdef\origarrayrulewidth{\the\arrayrulewidth}%
+    \global\arrayrulewidth 3\arrayrulewidth}%
+    \hline%
+    \noalign{\global\arrayrulewidth\origarrayrulewidth}%
+}
 
 \AtBeginSection[]{
     \begin{frame}
@@ -706,6 +717,65 @@ solver.diagonalize(mat, evals, evecs);
   \end{itemize}
 \end{frame}
 
+\begin{frame}[c,fragile]
+  \frametitle{密行列逐次ソルバに渡すパラメータ}
+Eigen3\\
+\scalebox{0.55}{
+\begin{tabular}[c]{|c|c|c|c|c|c|c|}
+\hline
+Rokkoルーチン名 & 元のルーチン名 & 解法 & 入力パラメータ（オプション） & 出力パラメータ & 備考\\
+\whline
+eigen3:qr & SelfAdjointEigensolver & QR法 & なし & なし & デフォルト\\
+\hline
+\end{tabular}
+}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{密行列逐次ソルバに渡すパラメータ}
+LAPACK\\
+\scalebox{0.55}{
+\begin{tabular}[c]{|c|c|c|c|c|c|c|}
+\hline
+Rokkoルーチン名 & 元のルーチン名 & 解法 & \parbox{2.5cm}{入力パラメータ\\（オプション）} & 出力パラメータ & 備考\\
+\whline
+\parbox{2cm}{lapack:dsyev\\lapack:qr} & dsyev & QR法 & uplow & なし & 引数なしのデフォルト\\
+\hline
+lapack:dsyevx & dsyevx & \parbox[c]{1.5cm}{２分法\\QR法} & \parbox{3.5cm}{upperとlowerの組,\\abstol, uplow} & m, ifail & \parbox{5cm}{$abstol>0$のとき、２分法,\\$abstol<0$のとき、QR法}\\
+\hline
+lapack:bisection & dsyevx & ２分法 & \parbox{3.5cm}{upperとlowerの組,\\abstol, uplow} & m, fail & dsyevxを$abstol>0$で使用\\
+\hline
+\parbox{2cm}{lapack:dsyevr\\lapack:mr3} & dsyevr & MR3法 & \parbox{3.5cm}{upperとlowerの組,\\abstol, uplow} & m, isuppz & 固有値範囲指定ありのデフォルト\\
+\hline
+\parbox{2cm}{lapack:dsyevd\\lapack:dc} & dsyevd & 分割統治法 & uplow & なし & \\
+\hline
+\end{tabular}
+}
+
+LAPACK向け入力パラメータ
+\scalebox{0.55}{
+\begin{tabular}[c]{|c|c|c|c|c|c|c|}
+\hline
+\parbox{2.5cm}{Rokkoの\\パラメータ名} & \parbox{2.5cm}{ScaLAPACKの\\パラメータ名} & 型 & 意味 & 値 & 備考\\
+\whline
+matrix_part & uplow & std::string & \parbox{4cm}{ソルバに読まれる部分\\（上三角/下三角）} & \parbox{1.5cm}{upper(U),\\lower(L)} & \parbox{5cm}{最初の一文字で判断。\\大文字、小文字のどちらも可。\\デフォルトは、'U' } \\
+\hline
+abstol & abstol & double & 固有値の収束判定に用いる & & \\
+\hline
+upper_index & iu & int & 求めたい固有値の番号の上限 & & 番号は昇順につけられる\\
+\hline
+upper_value & vu & double & 求めたい固有値の範囲の上限 & & \\
+\hline
+lower_index & il & int & 求めたい固有値の番号の下限 & & 番号は昇順につけられる\\
+\hline
+lower_value & vl & double & 求めたい固有値の範囲の下限 & & \\
+\hline
+verbose     & なし & bool & \parbox{5cm}{Rokkoで用意したフラグ。\\ソルバに設定した入力パラメータ、エラーの詳細を表示。} & & デフォルトはfalse\\
+\hline
+\end{tabular}
+}
+\end{frame}
+
 \section{密行列向けMPI並列ソルバ}
 
 \subsection{基本概念}
@@ -942,6 +1012,70 @@ Frank matrix has an eigenvalue $1$\\
 \end{block}
 \end{frame}
 
+\setlength{\tabcolsep}{2pt}
+
+\begin{frame}[c,fragile]
+  \frametitle{密行列MPI並列ソルバに渡すパラメータ}
+
+ScaLAPACK向けルーチン
+\scalebox{0.55}{
+\begin{tabular}[c]{|c|c|c|c|c|c|c|}
+\hline
+ Rokkoルーチン名 & 元のルーチン名 & 解法 & \parbox{2.5cm}{入力パラメータ\\（オプション）} & 出力パラメータ & 備考\\
+\whline
+\parbox{3cm}{scalapack:pdsyev\\scalapack:qr} & pdsyev & QR法 & uplow & なし & 引数なしのデフォルト\\
+\hline
+scalapack:pdsyevx & pdsyevx & \parbox[c]{1.5cm}{２分法\\QR法} & \parbox{3.5cm}{upperとlowerの組,\\abstol, uplow}  & m, ifail & \parbox{5cm}{$abstol>0$のとき、２分法,\\$abstol<0$のとき、QR法}\\
+\hline
+scalapack:bisection & pdsyevx & ２分法 & \parbox{3.5cm}{upperとlowerの組,\\abstol, uplow} & m, ifail & pdsyevxを$abstol>0$として使用\\
+\hline
+\parbox{3cm}{scalapack:pdsyevr\\scalapack:mr3} & pdsyevr & MR3法 & \parbox{3.5cm}{upperとlowerの組,\\abstol, uplow, orfac} & \parbox[c]{2cm}{m, nz, ifail,\\iclustr, gap} & 固有値範囲指定ありのデフォルト\\
+\hline
+\parbox{3cm}{scalapack:pdsyevd\\scalapack:dc} & pdsyevd & 分割統治法 & uplow & なし & \\
+\hline
+\end{tabular}
+}
+
+ScaLAPACK向け入力パラメータ
+\scalebox{0.55}{
+\begin{tabular}[c]{|c|c|c|c|c|c|c|}
+\hline
+\parbox{2.5cm}{Rokkoの\\パラメータ名} & \parbox{2.5cm}{ScaLAPACKの\\パラメータ名} & 型 & 意味 & 値 & 備考\\
+\whline
+matrix_part & uplow & std::string & \parbox{4cm}{ソルバに読まれる部分\\（上三角/下三角）} & \parbox{1.5cm}{upper(U),\\lower(L)} & \parbox{5cm}{最初の一文字で判断。\\大文字、小文字のどちらも可。\\デフォルトは、'U' } \\
+\hline
+abstol & abstol & double & 固有値の収束判定に用いる & & \\
+\hline
+upper_index & iu & int & 求めたい固有値の番号の上限 & & 番号は昇順につけられる\\
+\hline
+upper_value & vu & double & 求めたい固有値の範囲の上限 & & \\
+\hline
+lower_index & il & int & 求めたい固有値の番号の下限 & & 番号は昇順につけられる\\
+\hline
+lower_value & vl & double & 求めたい固有値の範囲の下限 & & \\
+\hline
+verbose     & なし & bool & \parbox{5cm}{Rokkoで用意したフラグ。\\ソルバに設定した入力パラメータ、エラーの詳細を表示。} & & デフォルトはfalse\\
+\hline
+\end{tabular}
+}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{密行列MPI並列ソルバに渡すパラメータ}
+EigenExa
+\scalebox{0.55}{
+\begin{tabular}[c]{|c|c|c|c|c|c|c|}
+\hline
+Rokkoルーチン名 & 元のルーチン名 & 解法 & \parbox{2.5cm}{入力パラメータ\\（オプション）} & 出力パラメータ & 備考\\
+\whline
+\parbox{3cm}{eigen_exa:tri\\eigen_exa:eigen_s} & eigen_s & 分割統治法（３重対角化を経由） & m_forward, m_backward & なし & \\
+\hline
+\parbox{3cm}{eigen_exa:penta\\eigen_exa:eigen_sx} & eigen_sx & 分割統治法（５重対角化を経由） & m_forward, m_backward & なし & デフォルト\\
+\hline
+\end{tabular}
+}
+\end{frame}
+
 \section{疎行列向け並列ソルバ}
 
 \subsection{基本概念}
@@ -1149,6 +1283,36 @@ solver.eigenvector(i, eigvec);
 \section{量子スピン系の対角化}
 
 \begin{frame}[c,fragile]
+  \frametitle{量子XYZ模型}
+\setlength{\fboxsep}{1pt}
+
+\noindent
+$\mathcal{H}
+ := \sum\limits_{\middlescr{{\langle i,j \rangle}}} \left(
+  J_x^{\smallscr{\langle i,j \rangle}} \, S^x_i \cdot S^x_j
++ J_y^{\smallscr{\langle i,j \rangle}} \, S^y_i \cdot S^y_j
++ J_z^{\smallscr{\langle i,j \rangle}} \, S^z_i \cdot S^z_j
+\right)$
+
+\vspace{1\baselineskip}
+
+\noindent
+$\mathcal{H}$は、局所ハミルトニアンの和で表せる:\\
+\noindent
+$\mathcal{H} =
+\sum\limits_{\middlescr{\langle i,j \rangle}}  \mathcal{H}_{\smallscr{\langle i,j \rangle}}$ \\
+$\text{where} \quad  H_{\smallscr{\langle i,j \rangle}} :=
+\dfrac{1}{4}
+\begin{bmatrix}
+J_z & & & J_x-J_y \\
+ & - J_z & J_x+J_y & \\
+ & J_x+J_y & - J_z & \\
+J_x-J_y & & & J_z
+\end{bmatrix}$
+
+\end{frame}
+
+\begin{frame}[c,fragile]
   \frametitle{量子スピン系の対角化（密行列、逐次・MPI版）}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
@@ -1193,6 +1357,38 @@ mpirun -np 4 ./sample/sparse/xyz_crs_mpi
 mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
 \end{lstlisting}
   \end{itemize}
+\end{frame}
+
+\lstset{escapechar=\#}
+
+\begin{frame}[c,fragile]
+  \frametitle{入力ファイル}
+xyz.dat
+\begin{lstlisting}[style=shstyle]
+8 8    #$\longleftarrow$number of sites, number of bonds#
+
+0 1
+1 2
+2 3
+3 4    #$\longleftarrow$ bonds $\langle i,j \rangle$ (pairs of site numbers)#
+4 5
+5 6
+6 7
+7 0
+
+1.0 1.0 0.0
+1.0 1.0 0.0
+1.0 1.0 0.0
+1.0 1.0 0.0
+1.0 1.0 0.0    #$\longleftarrow
+J_x^{\smallscr{\langle i,j \rangle}},\, 
+J_y^{\smallscr{\langle i,j \rangle}},\,
+J_z^{\smallscr{\langle i,j \rangle}}
+$ for each bond ${\langle i,j \rangle}$#
+1.0 1.0 0.0
+1.0 1.0 0.0
+1.0 1.0 0.0
+\end{lstlisting}
 \end{frame}
 
 \section{TITPACK2へのRokko組み込み実習}
@@ -1306,11 +1502,27 @@ mpirun -np 4 ./sample/sparse/xyz_mfree_mpi
 
 %\end{frame}
 
+\begin{frame}[c,fragile]
+  \frametitle{OpenMXへの組み込み}
+LAPACK（一般化固有値問題）\\
+\scalebox{0.55}{
+\begin{tabular}[c]{|c|c|c|c|c|c|c|}
+\hline
+Rokkoルーチン名 & 元のルーチン名 & 解法 & \parbox{2.5cm}{入力パラメータ\\（オプション）}  & 出力パラメータ & 備考\\
+\whline
+\parbox{2cm}{lapack:dsygv\\lapack:qr} & dsygv & QR法 & uplow & なし & 引数なしのデフォルト\\
+\hline
+lapack:dsygvx & dsygvx & \parbox[c]{1.5cm}{２分法\\QR法} & \parbox{3.5cm}{upperとlowerの組,\\abstol, uplow} & m, ifail & \parbox{5cm}{$abstol>0$のとき、２分法,\\$abstol<0$のとき、QR法}\\
+\hline
+lapack:bisection & dsygvx & ２分法 & \parbox{3.5cm}{upperとlowerの組,\\abstol, uplow} & m, fail & dsygvxを$abstol>0$として使用\\
+\hline
+\parbox{2cm}{lapack:dsygvd\\lapack:dc} & dsygvd & 分割統治法 & uplow & なし &\\
+\hline
+\end{tabular}
+}
+\end{frame}
 
 \end{document}
-
-
-
 
 %\section{ALPS/Baristaパッケージ}
 %\section{MateriAppsとMateriApps LIVE!}
