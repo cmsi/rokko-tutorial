@@ -1502,8 +1502,10 @@ $ for each bond ${\langle i,j \rangle}$#
 
 %\end{frame}
 
+\section{OpenMXへの組み込み}
+
 \begin{frame}[c,fragile]
-  \frametitle{OpenMXへの組み込み}
+  \frametitle{一般化固有値問題へのインターフェース（暫定）}
 LAPACK（一般化固有値問題）\\
 \scalebox{0.55}{
 \begin{tabular}[c]{|c|c|c|c|c|c|c|}
@@ -1520,6 +1522,32 @@ lapack:bisection & dsygvx & ２分法 & \parbox{3.5cm}{upperとlowerの組,\\abs
 \hline
 \end{tabular}
 }
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{一般化固有値問題を標準固有値問題２個に分解して解く}
+一般化固有値問題
+$A x = \lambda B x$\quad(where A: 対称行列，$B\ge 0$)
+
+両辺に、$B^{-1/2}$を左から掛ける。
+\begin{align}
+B^{-1/2} A (B^{-1/2} B^{1/2}) x = \lambda B^{-1/2} x
+\end{align}
+
+$A^\prime := B^{-1/2} A B^{-1/2},\,  x' := B^{1/2} x$とおくと、
+\begin{align}
+A' x' = \lambda x'
+\end{align}
+対称標準固有値問題に帰着する。
+
+手順\\
+\begin{enumerate}
+\item $B$を固有値分解し、$B^{-1/2}$を計算する。このとき、$0$に近い固有値は逆数をとれないので、無視する。
+\item $A^\prime := B^{-1/2} A B^{-1/2}$を計算する。
+\item 標準固有値問題$A' x' = \lambda x'$を解く。
+\item $x=B^{-1/2}x'$を計算する。
+\item 一般化固有値問題$A x = \lambda B x$の固有値$\lambda$、固有ベクトル$x=B^{-1/2}x'$となる。
+\end{enumerate}
 \end{frame}
 
 \end{document}
