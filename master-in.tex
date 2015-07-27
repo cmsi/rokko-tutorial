@@ -1527,11 +1527,11 @@ lapack:bisection & dsygvx & ２分法 & \parbox{3.5cm}{upperとlowerの組,\\abs
 \begin{frame}[c,fragile]
   \frametitle{一般化固有値問題を標準固有値問題２個に分解して解く}
 一般化固有値問題
-$A x = \lambda B x$\quad(where A: 対称行列，$B\ge 0$)
+$A x = \lambda B x$\quad(where A: 対称行列，$B>0$)
 
 両辺に、$B^{-1/2}$を左から掛ける。
 \begin{align}
-B^{-1/2} A (B^{-1/2} B^{1/2}) x = \lambda B^{-1/2} x
+B^{-1/2} A (B^{-1/2} B^{1/2}) x = \lambda B^{1/2} x
 \end{align}
 
 $A^\prime := B^{-1/2} A B^{-1/2},\,  x' := B^{1/2} x$とおくと、
