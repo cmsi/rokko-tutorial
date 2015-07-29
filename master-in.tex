@@ -561,10 +561,10 @@ cd rokko/tool
   eigen3
   lapack
 [parallel dense solvers]
-  eigen_exa_s
-  eigen_exa_sx
+  eigen_exa
+  elemental
+  elpa
   scalapack
-  scalapack_pdsyevd
 [parallel sparse solvers]
   anasazi
   slepc
@@ -729,6 +729,21 @@ eigen3:qr & SelfAdjointEigensolver & QR法 & なし & なし & デフォルト\\
 \hline
 \end{tabular}
 }
+\end{frame}
+
+\begin{frame}[c,fragile]
+   \frametitle{Rokkoでのパラメータの渡し方}
+   \begin{itemize}
+   \item \RokkoFilename{rokko/parameters.hpp}
+\begin{lstlisting}
+   rokko::parameters params;
+   params.set("routine", "tri");
+   params.set("upper_value", 1.2);
+   params.set("lower_value", 0.1);
+   params.set("uplow", "lower");
+   params.set("verbose", true);
+\end{lstlisting}
+   \end{itemize}
 \end{frame}
 
 \begin{frame}[c,fragile]
@@ -1389,7 +1404,7 @@ J_x-J_y & & & J_z
 \end{lstlisting}
   \item Heisenberg模型（MPI版） \RokkoFilename{example/cxx/dense/heisenberg_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./example/cxx/dense/heisenberg_mpi eigen_exa_sx
+mpirun -np 4 ./example/cxx/dense/heisenberg_mpi eigen_exa
 \end{lstlisting}
   \item XYZ模型（逐次版） \RokkoFilename{example/cxx/dense/xyz.cpp}
 \begin{lstlisting}[style=shstyle]
@@ -1397,7 +1412,7 @@ mpirun -np 4 ./example/cxx/dense/heisenberg_mpi eigen_exa_sx
 \end{lstlisting}
   \item XYZ模型(MPI版) \RokkoFilename{example/cxx/dense/xyz_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./example/cxx/dense/xyz_mpi eigen_exa_sx $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
+mpirun -np 4 ./example/cxx/dense/xyz_mpi eigen_exa $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
 \end{lstlisting}
   \end{itemize}
 \end{frame}
