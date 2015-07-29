@@ -1391,93 +1391,93 @@ $ for each bond ${\langle i,j \rangle}$#
 \end{lstlisting}
 \end{frame}
 
-\section{TITPACK2へのRokko組み込み実習}
+% \section{TITPACK2へのRokko組み込み実習}
 
-%\begin{frame}[c,fragile]
-%  \frametitle{TITPACKの概要}
-%\end{frame}
+% %\begin{frame}[c,fragile]
+% %  \frametitle{TITPACKの概要}
+% %\end{frame}
 
-\begin{frame}[c,fragile]
-  \frametitle{ハイゼンベルグ模型}
-\setlength{\fboxsep}{1pt}
+% \begin{frame}[c,fragile]
+%   \frametitle{ハイゼンベルグ模型}
+% \setlength{\fboxsep}{1pt}
 
-\noindent
-\begin{align*}
-\mathcal{H} &= J \sum\limits_{\langle j,k \rangle} {\boldmath S}_j \cdot S_k \\
-&= J \sum\limits_{\langle j,k \rangle} \left\{ S^z_j S^z_k + \tfrac{1}{2}(S^+_j S^-_k + S^-_j S^+_k) \right\}
-\end{align*}
+% \noindent
+% \begin{align*}
+% \mathcal{H} &= J \sum\limits_{\langle j,k \rangle} {\boldmath S}_j \cdot S_k \\
+% &= J \sum\limits_{\langle j,k \rangle} \left\{ S^z_j S^z_k + \tfrac{1}{2}(S^+_j S^-_k + S^-_j S^+_k) \right\}
+% \end{align*}
 
-\begin{align*}
-\text{Here, } & S^z_j S^z_k + \tfrac{1}{2}(S^+_j S^-_k + S^-_j S^+_k) \\
- &=
-\tfrac{1}{2}
-\begin{bmatrix}
-1 & 0 \\
-0 & -1
-\end{bmatrix}
-\otimes
-\tfrac{1}{2}
-\begin{bmatrix}
-1 & 0 \\
-0 & -1
-\end{bmatrix}
-+
-\tfrac{1}{2}\left\{
-\begin{bmatrix}
-0 & 1 \\
-0 & 0
-\end{bmatrix}
-\otimes
-\begin{bmatrix}
-0 & 0 \\
-1 & 0
-\end{bmatrix}
-+
-\begin{bmatrix}
-0 & 0 \\
-1 & 0
-\end{bmatrix}
-\otimes
-\begin{bmatrix}
-0 & 1 \\
-0 & 0
-\end{bmatrix}
-\right\}\\
-&=
-\begin{bmatrix}
-\tfrac{1}{4} & & & \\
- & - \tfrac{1}{4} & \tfrac{1}{2} & \\
- & \tfrac{1}{2} & - \tfrac{1}{4} & \\
- & & & \tfrac{1}{4}
-\end{bmatrix}
-\end{align*}
+% \begin{align*}
+% \text{Here, } & S^z_j S^z_k + \tfrac{1}{2}(S^+_j S^-_k + S^-_j S^+_k) \\
+%  &=
+% \tfrac{1}{2}
+% \begin{bmatrix}
+% 1 & 0 \\
+% 0 & -1
+% \end{bmatrix}
+% \otimes
+% \tfrac{1}{2}
+% \begin{bmatrix}
+% 1 & 0 \\
+% 0 & -1
+% \end{bmatrix}
+% +
+% \tfrac{1}{2}\left\{
+% \begin{bmatrix}
+% 0 & 1 \\
+% 0 & 0
+% \end{bmatrix}
+% \otimes
+% \begin{bmatrix}
+% 0 & 0 \\
+% 1 & 0
+% \end{bmatrix}
+% +
+% \begin{bmatrix}
+% 0 & 0 \\
+% 1 & 0
+% \end{bmatrix}
+% \otimes
+% \begin{bmatrix}
+% 0 & 1 \\
+% 0 & 0
+% \end{bmatrix}
+% \right\}\\
+% &=
+% \begin{bmatrix}
+% \tfrac{1}{4} & & & \\
+%  & - \tfrac{1}{4} & \tfrac{1}{2} & \\
+%  & \tfrac{1}{2} & - \tfrac{1}{4} & \\
+%  & & & \tfrac{1}{4}
+% \end{bmatrix}
+% \end{align*}
 
-\end{frame}
+% \end{frame}
 
-\begin{frame}[c,fragile]
-  \frametitle{ディレクトリ構成}
+% \begin{frame}[c,fragile]
+%   \frametitle{ディレクトリ構成}
 
-\dirtree{%
- .1 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/}{tutorial}.
- .2
- \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack}{titpack}.
- .3
- \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/00_original}{00\_original}
- $\cdots$ 独自固有値ソルバのFortran版.
- .3
- \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/01_lapack}{01\_lapack}
- $\cdots$ FortranのままLAPACK化.
- .3
- \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/01_lapack_cxx}{01\_lapack\_cxx}
- $\cdots$ C++でLAPACK版.
- .3
- \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/02_refactored_cxx}{02\_refactored\_cxx}
- $\cdots$ C++版のリファクタリング版.
- .3
- \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/03_rokko_cxx}{03\_rokko\_cxx}
- $\cdots$ C++でRokko化.
-}
-\end{frame}
+% \dirtree{%
+%  .1 \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/}{tutorial}.
+%  .2
+%  \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack}{titpack}.
+%  .3
+%  \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/00_original}{00\_original}
+%  $\cdots$ 独自固有値ソルバのFortran版.
+%  .3
+%  \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/01_lapack}{01\_lapack}
+%  $\cdots$ FortranのままLAPACK化.
+%  .3
+%  \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/01_lapack_cxx}{01\_lapack\_cxx}
+%  $\cdots$ C++でLAPACK版.
+%  .3
+%  \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/02_refactored_cxx}{02\_refactored\_cxx}
+%  $\cdots$ C++版のリファクタリング版.
+%  .3
+%  \href{https://github.com/t-sakashita/rokko/tree/develop/tutorial/titpack/03_rokko_cxx}{03\_rokko\_cxx}
+%  $\cdots$ C++でRokko化.
+% }
+% \end{frame}
 
 
 \section{アプリケーションからのRokkoの利用}
@@ -1496,11 +1496,10 @@ $ for each bond ${\langle i,j \rangle}$#
 \end{frame}
 
 
-%\begin{frame}[c,fragile]
-%  \frametitle{MakefileによるRokkoライブラリの取り込み方法}
+\begin{frame}[c,fragile]
+  \frametitle{MakefileによるRokkoライブラリの取り込み方法}
 ユーザプログラムのMakefileにshare/rokko/include.mkをインクルードする。
-
-%\end{frame}
+\end{frame}
 
 \section{OpenMXへの組み込み}
 
@@ -1542,10 +1541,9 @@ A' x' = \lambda x'
 
 手順\\
 \begin{enumerate}
-\item $B$を固有値分解し、$B^{-1/2}$を計算する。このとき、$0$に近い固有値は逆数をとれないので、無視する。
+\item $B$を固有値分解し、$B^{-1/2}$を計算する。このとき、$0$に近い固有値は逆数をとれないので、その逆数は$0$とする。
 \item $A^\prime := B^{-1/2} A B^{-1/2}$を計算する。
 \item 標準固有値問題$A' x' = \lambda x'$を解く。
-\item $x=B^{-1/2}x'$を計算する。
 \item 一般化固有値問題$A x = \lambda B x$の固有値$\lambda$、固有ベクトル$x=B^{-1/2}x'$となる。
 \end{enumerate}
 \end{frame}
