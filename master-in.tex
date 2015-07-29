@@ -366,8 +366,8 @@
   \begin{itemize}
     \setlength{\itemsep}{1em}
   \item 坂下達哉 (東大物性研) \ \href{mailto:t-sakashita@issp.u-tokyo.ac.jp}{t-sakashita@issp.u-tokyo.ac.jp}
-  \item 本山裕一 (東大物性研) \ \href{mailto:y-motoyama@issp.u-tokyo.ac.jp}{y-motoyama@issp.u-tokyo.ac.jp}
   \item 五十嵐 亮 (東大物性研) \ \href{mailto:rigarash@issp.u-tokyo.ac.jp}{rigarash@issp.u-tokyo.ac.jp}
+  \item 本山裕一 (東大物性研) \ \href{mailto:y-motoyama@issp.u-tokyo.ac.jp}{y-motoyama@issp.u-tokyo.ac.jp}
   \item 大久保 毅 (東大物性研) \ \href{mailto:t-okubo@issp.u-tokyo.ac.jp}{t-okubo@issp.u-tokyo.ac.jp}
   \item 藤堂眞治 (東大院理/物性研) \ \href{mailto:wistaria@phys.s.u-tokyo.ac.jp}{wistaria@phys.s.u-tokyo.ac.jp}
   \end{itemize}
@@ -677,8 +677,8 @@ solver.finalize();
 rokko::localized_matrix<matrix_col_major> mat(dim, dim, solver);
 ...
 rokko::localized_vector evals(dim);
-rokko::localized_matrix<matrix_col_major> evecs(dim, dim, solver);
-solver.diagonalize(mat, evals, evecs);
+rokko::localized_matrix<matrix_col_major> evecs(dim, dim);
+solver.diagonalize(mat, eigval, eigvec, params);
 \end{lstlisting}
 %  \item 登録されているソルバの一覧
 %\begin{lstlisting}
@@ -718,6 +718,24 @@ solver.diagonalize(mat, evals, evecs);
 \end{frame}
 
 \begin{frame}[c,fragile]
+   \frametitle{固有値ソルバへのパラメータの渡し方}
+   \begin{itemize}
+   \item パラメータクラス\RokkoFilename{rokko/parameters.hpp}を利用
+     \begin{itemize}
+     \item \RokkoFilename{example/cxx/dense/frank.cpp}の例：
+\begin{lstlisting}
+   rokko::parameters params;
+   params.set("routine", "tri");
+   params.set("upper_value", 1.2);
+   params.set("lower_value", 0.1);
+   params.set("uplow", "lower");
+   params.set("verbose", true);
+\end{lstlisting}
+\end{itemize}
+   \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
   \frametitle{密行列逐次ソルバに渡すパラメータ}
 Eigen3\\
 \scalebox{0.55}{
@@ -729,21 +747,6 @@ eigen3:qr & SelfAdjointEigensolver & QR法 & なし & なし & デフォルト\\
 \hline
 \end{tabular}
 }
-\end{frame}
-
-\begin{frame}[c,fragile]
-   \frametitle{Rokkoでのパラメータの渡し方}
-   \begin{itemize}
-   \item \RokkoFilename{rokko/parameters.hpp}
-\begin{lstlisting}
-   rokko::parameters params;
-   params.set("routine", "tri");
-   params.set("upper_value", 1.2);
-   params.set("lower_value", 0.1);
-   params.set("uplow", "lower");
-   params.set("verbose", true);
-\end{lstlisting}
-   \end{itemize}
 \end{frame}
 
 \begin{frame}[c,fragile]
@@ -859,7 +862,7 @@ public:
 
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::distributed\_matrix クラステンプレート}
+  \frametitle{rokko::distributed_matrix クラステンプレート}
   \begin{itemize}
   \item \RokkoFilename{rokko/distributed_matrix.hpp}
 \begin{lstlisting}
@@ -896,16 +899,17 @@ public:
   \item 行列の掛け算 $C = \alpha A B + \beta C$
 \begin{lstlisting}
   ...
-  rokko::distributed_matrix<rokko::matrix_col_major> matA(dim, dim, g, solver);
-  rokko::distributed_matrix<rokko::matrix_col_major> matB(dim, dim, g, solver);
-  rokko::distributed_matrix<rokko::matrix_col_major> matC(dim, dim, g, solver);
+  rokko::mapping_bc<matrix_major> map(dim, g, solver);
+  rokko::distributed_matrix<rokko::matrix_col_major> matA(map);
+  rokko::distributed_matrix<rokko::matrix_col_major> matB(map);
+  rokko::distributed_matrix<rokko::matrix_col_major> matC(map);
   ...
   rokko::product(alpha, matA, transA, matB, transB, beta, matC);
 \end{lstlisting}
   \item distributed\_matrixの scatter と gather
 \begin{lstlisting}
   rokko::localized_matrix<LOC_MAT_MAJOR> lmat(dim, dim);
-  rokko::distributed_matrix<DIST_MAT_MAJOR> mat(dim, dim, g, solver);
+  rokko::distributed_matrix<DIST_MAT_MAJOR> mat(map);
   rokko::scatter(lmat, mat, root);
   rokko::gather(mat, lmat, root);
 \end{lstlisting}
@@ -913,7 +917,7 @@ public:
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{distributed\_matrixの生成}
+  \frametitle{distributed_matrixの生成}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item 要素毎に代入 (globalな添字)
@@ -942,7 +946,7 @@ mat.generate(f);
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::parallel\_dense\_solverクラス}
+  \frametitle{rokko::parallel_dense_solverクラス}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item ソルバの初期化
@@ -956,11 +960,12 @@ solver.finalize();
 \end{lstlisting}
   \item 対角化 (行列は破壊される)
 \begin{lstlisting}
-rokko::distributed_matrix<matrix_col_major> mat(dim, dim, g, solver);
+rokko::mapping_bc<matrix_major> map(dim, g, solver);
+rokko::distributed_matrix<matrix_col_major> mat(map);
 ...
 rokko::localized_vector evals(dim);
-rokko::distributed_matrix<matrix_col_major> evecs(dim, dim, g, solver);
-solver.diagonalize(mat, evals, evecs);
+rokko::distributed_matrix<matrix_col_major> evecs(map);
+solver.diagonalize(mat, evals, evecs, params);
 \end{lstlisting}
 %  \item 登録されているソルバの一覧
 %\begin{lstlisting}
@@ -975,7 +980,7 @@ solver.diagonalize(mat, evals, evecs);
   \frametitle{対角化のサンプル}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-%  \item MPI並列密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/parallel_dense_solvers.cpp}{test/parallel\_dense\_solvers.cpp}
+%  \item MPI並列密行列ソルバーの一覧 \href{https://github.com/t-sakashita/rokko/blob/master/test/parallel_dense_solvers.cpp}{test/parallel_dense_solvers.cpp}
 %\begin{lstlisting}[style=shstyle]
 %./test/parallel_dense_solvers
 %\end{lstlisting}
@@ -1155,8 +1160,8 @@ public:
 
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::distributed\_crs\_matrix クラス（使用例）
-    \RokkoFilename{sample/sparse/distributed_crs_matrix anasazi.cpp} }
+  \frametitle{rokko::distributed_crs_matrix クラス（使用例）
+    \RokkoFilename{sample/sparse/distributed_crs_matrix.cpp} }
 \begin{lstlisting}
   rokko::parallel_sparse_solver solver("anasazi");
   int dim = 4;
@@ -1256,7 +1261,6 @@ private:
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::parallel_sparse_solverクラス}
-\vspace{-1\baselineskip}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item ソルバの初期化
@@ -1272,12 +1276,31 @@ solver.finalize();
 \begin{lstlisting}
 rokko::distributed_crs_matrix mat(dim, dim, solver);
 ...
-solver.diagonalize(mat, num_evals, block_size, max_iters, tol);
+パラメータparamsの設定
+solver.diagonalize(mat, params);
 \end{lstlisting}
   \item 対角化（Matrix Freeの場合）
 \begin{lstlisting}
 heisenberg_op  mat(L, lattice);
-solver.diagonalize(mat, num_evals, block_size, max_iters, tol);
+パラメータparamsの設定
+solver.diagonalize(mat, params);
+\end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{rokko::parallel_sparse_solverクラス（続）}
+  \begin{itemize}
+  \item パラメータの設定法
+\begin{lstlisting}
+  rokko::parameters params;
+  params.set("Block Size", block_size);   // 必須
+  params.set("Maximum Iterations", max_iters);
+  params.set("Convergence Tolerance", tol);  // 必須
+  params.set("num_eigenvalues", nev);  // 必須
+  // 上記以外のパラメータ名は、ソルバライブラリ(Anasazi/SLEPc)と同じ。
+  params.set("Which", "LM");
+  params.set("routine", "lanczos");
 \end{lstlisting}
   \item 固有値・固有ベクトルの取り出し
 \begin{lstlisting}
@@ -1313,7 +1336,7 @@ $\begin{bmatrix}
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{テスト行列：ラプラシアン行列（Frank行列の逆行列（性質）}
+  \frametitle{テスト行列：ラプラシアン行列（Frank行列の逆行列}
 \begin{block}{理論固有値}%
 $\lambda_k = 2 \left( 1 - \cos{\tfrac{2 k + 1}{2 n + 1}\pi} \right) \quad (k=0,\dots,n-1)$
 \end{block}
@@ -1408,11 +1431,11 @@ mpirun -np 4 ./example/cxx/dense/heisenberg_mpi eigen_exa
 \end{lstlisting}
   \item XYZ模型（逐次版） \RokkoFilename{example/cxx/dense/xyz.cpp}
 \begin{lstlisting}[style=shstyle]
-./example/cxx/dense/xyz_dense lapack $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
+./example/cxx/dense/xyz_dense lapack $HOME/rokko-0.3/test/input_data/xyz_1hexagon.ip
 \end{lstlisting}
   \item XYZ模型(MPI版) \RokkoFilename{example/cxx/dense/xyz_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./example/cxx/dense/xyz_mpi eigen_exa $HOME/rokko-0.1/test/input_data/xyz_1hexagon.ip
+mpirun -np 4 ./example/cxx/dense/xyz_mpi eigen_exa $HOME/rokko-0.3/test/input_data/xyz_1hexagon.ip
 \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -1444,7 +1467,7 @@ mpirun -np 4 ./exmple/sparse/cxx/xyz_mfree_mpi
 
 \begin{frame}[c,fragile]
   \frametitle{入力ファイル}
-xyz.dat
+\RokkoFilename{test/input_data/heisenberg.ip}
 \begin{lstlisting}[style=shstyle]
 8 8    #$\longleftarrow$number of sites, number of bonds#
 
@@ -1567,13 +1590,25 @@ $ for each bond ${\langle i,j \rangle}$#
   \frametitle{CMakeによるRokkoライブラリの取り込み方法}
 以下を参考にユーザプログラム用のCMakeLists.txtを書く。
 
-そのCMakeLists.txtにshare/rokko/UseRokko.cmakeをインクルードする。
+そのCMakeLists.txtに、Rokkoのインストール先のshare/rokko/UseRokko.cmakeをインクルードする。
 
 \begin{itemize}
-  \item \href{https://github.com/t-sakashita/rokko/tree/develop/sample/CMakeLists.txt}{sample/CMakeLists.txt}
-  \item \href{https://github.com/t-sakashita/rokko/tree/develop/example/c/CMakeLists.txt}{sample\_c/CMakeLists.txt}
-  \item \href{https://github.com/t-sakashita/rokko/tree/develop/example/fortran/CMakeLists.txt}{sample\_fortran/CMakeLists.txt}
-\end{itemize}
+  \item C++
+    \begin{itemize}
+    \item \href{https://github.com/t-sakashita/rokko/tree/develop/example/cxx/dense/CMakeLists.txt}{example/cxx/dense/CMakeLists.txt}
+    \item \href{https://github.com/t-sakashita/rokko/tree/develop/example/cxx/sparse/CMakeLists.txt}{example/cxx/sparse/CMakeLists.txt}
+    \end{itemize}
+  \item C
+    \begin{itemize}
+    \item \href{https://github.com/t-sakashita/rokko/tree/develop/example/c/dense/CMakeLists.txt}{example/c/dense/CMakeLists.txt}
+    \item \href{https://github.com/t-sakashita/rokko/tree/develop/example/c/sparse/CMakeLists.txt}{example/c/sparse/CMakeLists.txt}
+    \end{itemize}
+  \item Fortran
+    \begin{itemize}
+    \item \href{https://github.com/t-sakashita/rokko/tree/develop/example/fortran/dense/CMakeLists.txt}{example/fortran/dense/CMakeLists.txt}
+    \item \href{https://github.com/t-sakashita/rokko/tree/develop/example/fortran/sparse/CMakeLists.txt}{example/fortran/sparse/CMakeLists.txt}
+    \end{itemize}
+  \end{itemize}
 \end{frame}
 
 
