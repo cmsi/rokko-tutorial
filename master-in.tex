@@ -459,9 +459,9 @@
     \setlength{\itemsep}{1em}
   \item CMake: \url{http://www.cmake.org}
   \item Boost C++ Libraries: \url{http://www.boost.org}
-  \item インストールスクリプト: \url{https://github.com/wistaria/installer}
+  \item インストールスクリプト: \url{https://github.com/wistaria/MateriAppsInstaller}
   \item 主要なスパコンへのインストール状況 \\
-    \url{https://github.com/wistaria/installer/wiki}
+    \url{https://github.com/wistaria/MateriAppsInstaller/wiki}
   \end{itemize}
 \end{frame}
 
@@ -490,7 +490,7 @@
       \item ライブラリ: Anasazi, EigenExa, Elemental, ELPA, PETSc, ScaLAPACK, SLEPc
       \item 対応アーキテクチャ: 京/FX10, x86スパコン・クラスタ(Intelコンパイラ/GCC), Mac OS X (GCC), 他
     \end{itemize}
-  \item 主要なスパコンにインストール済み: \url{https://github.com/t-sakashita/rokko/wiki/PreInstall}
+  \item 主要なスパコンにインストール済み: \url{https://github.com/t-sakashita/rokko/wiki}
   \end{itemize}
 \end{frame}
 
@@ -506,16 +506,15 @@ source /home/materiapps/rokko/rokkoenv.sh
   \item ソースコードのダウンロード・展開
 \begin{lstlisting}[style=shstyle]
 cd $HOME
-wget --no-check-certificate https://github.com/t-sakashita/rokko/archive/0.3.tar.gz \
- -O rokko-0.3.tar.gz
+wget http://github.com/t-sakashita/rokko/archive/0.3.tar.gz -O rokko-0.3.tar.gz
 tar zxvf rokko-0.3.tar.gz
 \end{lstlisting}
   \item CMakeの実行
 \begin{lstlisting}[style=shstyle]
 mkdir rokko-build
 cd rokko-build
-
-cmake $HOME/rokko-0.3 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
+cmake $HOME/rokko-0.3 -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc \
+  -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
 \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -526,11 +525,11 @@ cmake $HOME/rokko-0.3 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=icpc -DCMAKE
   \item 上記のコピー＆ペーストがうまく行かなかった方は、スクリプトで実行
 \begin{lstlisting}[style=shstyle]
 cp /home/hands-on/rokko_20150730/cmake-rokko.sh  .
-bash ./cmake-rokko.sh
+sh cmake-rokko.sh
 \end{lstlisting}
   \item Make, テスト
 \begin{lstlisting}[style=shstyle]
-make -j 10
+make -j 4
 make test
 make install
 \end{lstlisting}
