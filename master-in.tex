@@ -501,31 +501,22 @@
     %\setlength{\itemsep}{1em}
   \item 下準備 (phi.aics.riken.jpの場合)
 \begin{lstlisting}[style=shstyle]
-source /opt/nano/alps/alpsvars.sh
+source /home/materiapps/env.sh
+source /home/materiapps/rokko/rokkoenv.sh
 \end{lstlisting}
   \item ソースコードのダウンロード・展開
 \begin{lstlisting}[style=shstyle]
 cd $HOME
-wget --no-check-certificate https://github.com/t-sakashita/rokko/archive/0.2.tar.gz \
- -O rokko-0.2.tar.gz
-tar zxvf rokko-0.2.tar.gz
+wget --no-check-certificate https://github.com/t-sakashita/rokko/archive/0.3.tar.gz \
+ -O rokko-0.3.tar.gz
+tar zxvf rokko-0.3.tar.gz
 \end{lstlisting}
   \item CMakeの実行
-%\begin{lstlisting}[style=shstyle]
-%cmake $HOME/rokko-0.2 -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp -DROKKO_SOLVER_DIR=/opt/nano/rokko -DSCALAPACK_LIB="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -mkl=parallel" -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
-%\end{lstlisting}
 \begin{lstlisting}[style=shstyle]
 mkdir rokko-build
 cd rokko-build
 
-cmake $HOME/rokko-0.2 \
- -DBoost_ROOT_DIR=/opt/local/boost_1_55_0 \
- -DCMAKE_BUILD_TYPE=Debug \
- -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort \
- -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp \
- -DROKKO_SOLVER_DIR=/opt/nano/rokko \
- -DSCALAPACK_LIB="-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -mkl=parallel" \
- -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
+cmake $HOME/rokko-0.3 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
 \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -535,7 +526,7 @@ cmake $HOME/rokko-0.2 \
   \begin{itemize}
   \item 上記のコピー＆ペーストがうまく行かなかった方は、スクリプトで実行
 \begin{lstlisting}[style=shstyle]
-cp /home/hands-on/rokko_20140918/cmake-rokko.sh  .
+cp /home/hands-on/rokko_20150730/cmake-rokko.sh  .
 bash ./cmake-rokko.sh
 \end{lstlisting}
   \item Make, テスト
@@ -618,7 +609,7 @@ cd rokko/tool
   \item \RokkoFilename{rokko/localized_matrix.hpp}
 \begin{lstlisting}
 namespace rokko {
-template<typename MATRIX_MAJOR = rokko::matrix_row_major>
+template<typename MATRIX_MAJOR = rokko::matrix_col_major>
 class localized_matrix {
 public:
   typedef MATRIX_MAJOR major_type;
@@ -660,7 +651,7 @@ rokko::localized_vector w = a*u+M*v;
 \end{frame}
 
 \begin{frame}[c,fragile]
-  \frametitle{rokko::serial\_dense\_solverクラス}
+  \frametitle{rokko::serial_dense_solverクラス}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
   \item ソルバの初期化
@@ -674,7 +665,7 @@ solver.finalize();
 \end{lstlisting}
   \item 対角化 (行列は破壊される)
 \begin{lstlisting}
-rokko::localized_matrix<matrix_col_major> mat(dim, dim, solver);
+rokko::localized_matrix<matrix_col_major> mat(dim, dim);
 ...
 rokko::localized_vector evals(dim);
 rokko::localized_matrix<matrix_col_major> evecs(dim, dim);
@@ -867,25 +858,21 @@ public:
   \item \RokkoFilename{rokko/distributed_matrix.hpp}
 \begin{lstlisting}
 namespace rokko {
-template<typename MATRIX_MAJOR = rokko::matrix_row_major>
+template<typename MATRIX_MAJOR = rokko::matrix_col_major>
 class distributed_matrix {
 public:
   template<typename SOLVER>
-  distributed_matrix(int m_global_in, int n_global_in, const grid& g_in, SOLVER const& solver_in);
+  distributed_matrix(mapping_bc<MATRIX_MAJOR> const& map_in);
   template<typename SOLVER>
-  void initialize(int m_global_in, int n_global_in, const grid& g_in, SOLVER const& solver_in);
-  int get_mb() const;
-  int get_nb() const;
-  int get_nprow() const;
   ...
-  bool is_gindex_myrow(const int& global_i) const;
-  bool is_gindex_mycol(const int& global_j) const;
-  bool is_gindex(const int& global_i, const int& global_j) const;
-  void set_local(int local_i, int local_j, double value);
-  double get_local(int local_i, int local_j) const;
-  void update_local(int local_i, int local_j, double value);
-  void set_global(int global_i, int global_j, double value);
-  double get_global(int global_i, int global_j) const;
+  bool is_gindex_myrow(int global_i) const; // プロセスグリッドのうち、自プロセスの行方向の番号を返す
+  bool is_gindex_mycol(int global_j) const; // プロセスグリッドのうち、自プロセスの列方向の番号を返す
+  bool is_gindex(int global_i, int global_j) const; // 自プロセスが(global_i, global_j)を持っているか？
+  void set_local(int local_i, int local_j, double value);  // 自プロセスのlocal storageの(local_i, local_j)に値valueを格納
+  double get_local(int local_i, int local_j) const;  // 自プロセスのlocal storageの(local_i, local_j)の値を返す
+  void update_local(int local_i, int local_j, double value); // 自プロセスのlocal storageの(local_i, local_j)に値valueを足し込む
+  void set_global(int global_i, int global_j, double value); // 自プロセスが(global_i, global_j)を受け持っていたら、値valueを格納
+  double get_global(int global_i, int global_j) const; // 自プロセスが(global_i, global_j)を受け持っていたら、その値を返す
 };
 }
 \end{lstlisting}
@@ -899,7 +886,7 @@ public:
   \item 行列の掛け算 $C = \alpha A B + \beta C$
 \begin{lstlisting}
   ...
-  rokko::mapping_bc<matrix_major> map(dim, g, solver);
+  rokko::mapping_bc<matrix_major> map(dim, g, solver);  // 正方行列と与えられたgridとsolverに適切なブロックサイズを返す。
   rokko::distributed_matrix<rokko::matrix_col_major> matA(map);
   rokko::distributed_matrix<rokko::matrix_col_major> matB(map);
   rokko::distributed_matrix<rokko::matrix_col_major> matC(map);
@@ -997,7 +984,7 @@ mpirun -np 4 ./example/c/dense/frank_mpi eigen_exa 5
 mpirun -np 4 ./example/fortran/dense/frank_mpi eigen_exa 5
 \end{lstlisting}
 
-  \end{itemize}
+\end{itemize}
 \end{frame}
 
 \begin{frame}[c,fragile]
@@ -1203,7 +1190,7 @@ mpirun -np 4 ./example/sparse/cxx/distributed_crs_matrix slepc
 \noindent
 作り方
   \begin{itemize}
-  \item rokko::distributed\_mfreeを継承したクラスを用意する。
+  \item rokko::distributed_mfreeを継承したクラスを用意する。
   \item そのクラスの中で、
      \begin{itemize}
      \item void multiply(const double* x, double* y)関数
@@ -1352,17 +1339,17 @@ Frank matrix has an eigenvalue $1$\\
 \begin{frame}[c,fragile]
   \frametitle{CRS行列の対角化}
   \begin{itemize}
-  \item C++ \RokkoFilename{example/cxx/dense/laplacian_crs_mpi.cpp}
+  \item C++ \RokkoFilename{example/cxx/sparse/laplacian_crs_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./example/cxx/dense/laplacian_crs_mpi eigen_exa 5
+mpirun -np 4 ./example/cxx/sparse/laplacian_crs_mpi eigen_exa 5
 \end{lstlisting}
-  \item C版 \RokkoFilename{example/c/dense/laplacian_crs_mpi.cpp}
+  \item C版 \RokkoFilename{example/c/sparse/laplacian_crs_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./example/c/dense/laplacian_crs_mpi eigen_exa 5
+mpirun -np 4 ./example/c/sparse/laplacian_crs_mpi eigen_exa 5
 \end{lstlisting}
-  \item Fortran版 \RokkoFilename{example/fortran/dense/laplacian_crs_mpi.cpp}
+  \item Fortran版 \RokkoFilename{example/fortran/sparse/laplacian_crs_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./example/fortran/dense/laplacian_crs_mpi eigen_exa 5
+mpirun -np 4 ./example/fortran/sparse/laplacian_crs_mpi eigen_exa 5
 \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -1370,17 +1357,17 @@ mpirun -np 4 ./example/fortran/dense/laplacian_crs_mpi eigen_exa 5
 \begin{frame}[c,fragile]
   \frametitle{MatFreeの対角化}
   \begin{itemize}
-  \item C++ \RokkoFilename{example/cxx/dense/laplacian_mfree_mpi.cpp}
+  \item C++ \RokkoFilename{example/cxx/sparse/laplacian_mfree_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./example/cxx/dense/laplacian_mfree_mpi eigen_exa 5
+mpirun -np 4 ./example/cxx/sparse/laplacian_mfree_mpi eigen_exa 5
 \end{lstlisting}
-  \item C版 \RokkoFilename{example/c/dense/laplacian_mfree_mpi.cpp}
+  \item C版 \RokkoFilename{example/c/sparse/laplacian_mfree_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./example/c/dense/laplacian_mfree_mpi eigen_exa 5
+mpirun -np 4 ./example/c/sparse/laplacian_mfree_mpi eigen_exa 5
 \end{lstlisting}
-  \item Fortran版 \RokkoFilename{example/fortran/dense/laplacian_mfree_mpi.cpp}
+  \item Fortran版 \RokkoFilename{example/fortran/sparse/laplacian_mfree_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./example/fortran/dense/laplacian_mfree_mpi eigen_exa 5
+mpirun -np 4 ./example/fortran/sparse/laplacian_mfree_mpi eigen_exa 5
 \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -1421,7 +1408,7 @@ J_x-J_y & & & J_z
   \frametitle{量子スピン系の対角化（密行列、逐次・MPI版）}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item Heisenberg模型（逐次版） \RokkoFilename{example/cxx/dense/heisenberg.cpp}
+  \item Heisenberg模型（逐次版） \RokkoFilename{example/cxx/sparse/heisenberg.cpp}
 \begin{lstlisting}[style=shstyle]
 ./example/cxx/dense/heisenberg lapack
 \end{lstlisting}
@@ -1444,21 +1431,21 @@ mpirun -np 4 ./example/cxx/dense/xyz_mpi eigen_exa $HOME/rokko-0.3/test/input_da
   \frametitle{量子スピン系の対角化（疎行列、MPI版、C++）}
   \begin{itemize}
     %\setlength{\itemsep}{1em}
-  \item Heisenberg模型(CRS) \RokkoFilename{example/sparse/cxx/heisenberg_crs_mpi.cpp}
+  \item Heisenberg模型(CRS) \RokkoFilename{example/cxx/sparse/heisenberg_crs_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./example/sparse/cxx/heisenberg_crs_mpi
+mpirun -np 4 ./example/cxx/sparse/heisenberg_crs_mpi
 \end{lstlisting}
-  \item Heisenberg模型(MatFree) \RokkoFilename{example/sparse/cxx/heisenberg_mfree_mpi.cpp}
+  \item Heisenberg模型(MatFree) \RokkoFilename{example/cxx/sparse/heisenberg_mfree_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./example/sparse/cxx/heisenberg_mfree_mpi
+mpirun -np 4 ./example/cxx/sparse/heisenberg_mfree_mpi
 \end{lstlisting}
-  \item XYZ模型(CRS) \RokkoFilename{example/sparse/cxx/xyz_crs_mpi.cpp}
+  \item XYZ模型(CRS) \RokkoFilename{example/cxx/sparse/xyz_crs_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./example/sparse/cxx/xyz_crs_mpi
+mpirun -np 4 ./example/cxx/sparse/xyz_crs_mpi
 \end{lstlisting}
-  \item XYZ模型(Matfree) \RokkoFilename{example/sparse/cxx/xyz_mfree_mpi.cpp}
+  \item XYZ模型(Matfree) \RokkoFilename{example/cxx/sparse/xyz_mfree_mpi.cpp}
 \begin{lstlisting}[style=shstyle]
-mpirun -np 4 ./exmple/sparse/cxx/xyz_mfree_mpi
+mpirun -np 4 ./exmple/cxx/sparse/xyz_mfree_mpi
 \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -1617,27 +1604,27 @@ $ for each bond ${\langle i,j \rangle}$#
 ユーザプログラムのMakefileにshare/rokko/include.mkをインクルードする。
 \end{frame}
 
-\section{OpenMXへの組み込み}
+\section{一般化固有値問題（OpenMXへの組み込み）}
 
-\begin{frame}[c,fragile]
-  \frametitle{一般化固有値問題へのインターフェース（暫定）}
-LAPACK（一般化固有値問題）\\
-\scalebox{0.55}{
-\begin{tabular}[c]{|c|c|c|c|c|c|c|}
-\hline
-Rokkoルーチン名 & 元のルーチン名 & 解法 & \parbox{2.5cm}{入力パラメータ\\（オプション）}  & 出力パラメータ & 備考\\
-\whline
-\parbox{2cm}{lapack:dsygv\\lapack:qr} & dsygv & QR法 & uplow & なし & 引数なしのデフォルト\\
-\hline
-lapack:dsygvx & dsygvx & \parbox[c]{1.5cm}{２分法\\QR法} & \parbox{3.5cm}{upperとlowerの組,\\abstol, uplow} & m, ifail & \parbox{5cm}{$abstol>0$のとき、２分法,\\$abstol<0$のとき、QR法}\\
-\hline
-lapack:bisection & dsygvx & ２分法 & \parbox{3.5cm}{upperとlowerの組,\\abstol, uplow} & m, fail & dsygvxを$abstol>0$として使用\\
-\hline
-\parbox{2cm}{lapack:dsygvd\\lapack:dc} & dsygvd & 分割統治法 & uplow & なし &\\
-\hline
-\end{tabular}
-}
-\end{frame}
+% \begin{frame}[c,fragile]
+%   \frametitle{一般化固有値問題へのインターフェース（暫定）}
+% LAPACK（一般化固有値問題）\\
+% \scalebox{0.55}{
+% \begin{tabular}[c]{|c|c|c|c|c|c|c|}
+% \hline
+% Rokkoルーチン名 & 元のルーチン名 & 解法 & \parbox{2.5cm}{入力パラメータ\\（オプション）}  & 出力パラメータ & 備考\\
+% \whline
+% \parbox{2cm}{lapack:dsygv\\lapack:qr} & dsygv & QR法 & uplow & なし & 引数なしのデフォルト\\
+% \hline
+% lapack:dsygvx & dsygvx & \parbox[c]{1.5cm}{２分法\\QR法} & \parbox{3.5cm}{upperとlowerの組,\\abstol, uplow} & m, ifail & \parbox{5cm}{$abstol>0$のとき、２分法,\\$abstol<0$のとき、QR法}\\
+% \hline
+% lapack:bisection & dsygvx & ２分法 & \parbox{3.5cm}{upperとlowerの組,\\abstol, uplow} & m, fail & dsygvxを$abstol>0$として使用\\
+% \hline
+% \parbox{2cm}{lapack:dsygvd\\lapack:dc} & dsygvd & 分割統治法 & uplow & なし &\\
+% \hline
+% \end{tabular}
+% }
+% \end{frame}
 
 \begin{frame}[c,fragile]
   \frametitle{一般化固有値問題を標準固有値問題２個に分解して解く}
@@ -1662,6 +1649,59 @@ A' x' = \lambda x'
 \item 標準固有値問題$A' x' = \lambda x'$を解く。
 \item 一般化固有値問題$A x = \lambda B x$の固有値$\lambda$、固有ベクトル$x=B^{-1/2}x'$となる。
 \end{enumerate}
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \frametitle{サンプルプログラムの実行}
+% \begin{itemize}
+% \item C++
+%   \begin{lstlisting}[style=shstyle]
+% mpirun -np 4 ./example/cxx/dense/gev_fixedB_mpi eigen_exa
+%   \end{lstlisting}
+% \item C
+%   \begin{lstlisting}[style=shstyle]
+% mpirun -np 4 ./example/c/dense/gev_fixedB_mpi eigen_exa
+%   \end{lstlisting}
+% \end{itemize}
+
+\RokkoFilename{example/cxx/dense/gev_fixedB_mpi.cpp}
+\begin{lstlisting}
+template<typename T, typename MATRIX_MAJOR>
+void function_matrix(rokko::localized_vector<double> const& eigval_tmp, rokko::distributed_matrix<T, MATRIX_MAJOR> const& eigvec, rokko::distributed_matrix<T, MATRIX_MAJOR>& result, rokko::distributed_matrix<T, MATRIX_MAJOR>& tmp) {
+  for (int local_j=0; local_j<eigvec.get_n_local(); ++local_j) {
+    int global_j = eigvec.translate_l2g_col(local_j);
+    double coeff = eigval_tmp(global_j);
+    for (int local_i=0; local_i<eigvec.get_m_local(); ++local_i) {
+      double value = eigvec.get_local(local_i, local_j);
+      tmp.set_local(local_i, local_j, coeff * value); 
+    }
+  }
+  product(1, tmp, false, eigvec, true, 0, result);
+}
+
+template<typename T, typename MATRIX_MAJOR>
+void diagonalize_fixedB(rokko::parallel_dense_solver& solver, rokko::distributed_matrix<T, MATRIX_MAJOR>& A, rokko::distributed_matrix<T, MATRIX_MAJOR>& B,
+			rokko::localized_vector<double>& eigval, rokko::distributed_matrix<T, MATRIX_MAJOR>& eigvec, T tol = 0) {
+  rokko::distributed_matrix<double, matrix_major> tmp(A.get_mapping()), Binvroot(A.get_mapping()), mat(A.get_mapping());
+  rokko::parameters params;
+  int myrank = A.get_myrank();
+  params.set("routine", "");
+  solver.diagonalize(B, eigval, eigvec, params);
+  // computation of B^{-1/2}
+  for(int i=0; i<eigval.size(); ++i)
+    eigval(i) = (eigval(i) > tol) ? sqrt(1/eigval(i)) : 0;
+  function_matrix(eigval, eigvec, Binvroot, tmp);
+  
+  // computation of B^{-1/2} A B^{-1/2}
+  product(1, Binvroot, false, A, false, 0, tmp);
+  product(1, tmp, false, Binvroot, false, 0, mat);
+  // diagonalization of B^{-1/2} A B^{-1/2}
+  solver.diagonalize(mat, eigval, tmp, params);
+
+  // computation of {eigvec of Ax=lambda Bx} = B^{-1/2} {eigvec of B^{-1/2} A B^{-1/2}}
+  product(1, Binvroot, false, tmp, false, 0, eigvec);
+}
+\end{lstlisting}
 \end{frame}
 
 \end{document}
