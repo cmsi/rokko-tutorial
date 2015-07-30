@@ -26,8 +26,7 @@
 
 \begin{frame}
   \titlepage
-  \noindent {\footnotesize PDFファイル: \url{http://sf.net/projects/rokko-tutorial/files/}} \\
-  \noindent {\footnotesize LaTeXソース: \url{http://github.com/cmsi/rokko-tutorial/}}
+  \noindent {\footnotesize 講習資料: \url{https://github.com/cmsi/rokko-tutorial/releases/latest}} 
 \end{frame}
 
 %% \section*{Outline}
@@ -66,7 +65,7 @@
   \item 座学・実習: 密行列向けMPI並列ソルバの基本概念、サンプル実行
   \item 座学・実習: 疎行列向けMPI並列ソルバの基本概念、サンプル実行
   \item 実習: 量子スピン系の対角化のサンプル実行
-  \item 実習: TITPACK2へのRokko組み込み実習
+  %\item 実習: TITPACK2へのRokko組み込み実習
   \item 実習: アプリケーションからのRokkoの利用
 %  \item (付録: ALPS/Baristaパッケージ)
  % \item (付録: MateriAppsとMateriApps LIVE!)
@@ -601,7 +600,7 @@ cd rokko/tool
 
 \section{密行列向け逐次ソルバ}
 
-\subsection{Rokkoインターフェースの仕様}
+\subsection*{Rokkoインターフェースの仕様}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::localized\_matrix クラステンプレート}
@@ -678,7 +677,7 @@ solver.diagonalize(mat, eigval, eigvec, params);
   \end{itemize}
 \end{frame}
 
-\subsection{サンプルの実行}
+\subsection*{サンプルの実行}
 
 \begin{frame}[c,fragile]
   \frametitle{対角化のサンプル}
@@ -787,7 +786,7 @@ verbose     & なし & bool & \parbox{5cm}{Rokkoで用意したフラグ。\\ソ
 
 \section{密行列向けMPI並列ソルバ}
 
-\subsection{基本概念}
+\subsection*{基本概念}
 
 \begin{frame}
   \frametitle{２次元プロセスグリッド}
@@ -819,7 +818,7 @@ verbose     & なし & bool & \parbox{5cm}{Rokkoで用意したフラグ。\\ソ
   \end{itemize}
 \end{frame}
 
-\subsection{Rokkoインターフェースの仕様}
+\subsection*{Rokkoインターフェースの仕様}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::grid クラス}
@@ -961,7 +960,7 @@ solver.diagonalize(mat, evals, evecs, params);
   \end{itemize}
 \end{frame}
 
-\subsection{サンプルの実行}
+\subsection*{サンプルの実行}
 
 \begin{frame}[c,fragile]
   \frametitle{対角化のサンプル}
@@ -1085,7 +1084,7 @@ Rokkoルーチン名 & 元のルーチン名 & 解法 & \parbox{2.5cm}{入力パ
 
 \section{疎行列向け並列ソルバ}
 
-\subsection{基本概念}
+\subsection*{基本概念}
 
 \begin{frame}[c,fragile]
   \frametitle{CRS(Compressed Row Storage)方式}
@@ -1122,7 +1121,7 @@ MPI並列化は行単位
 
 \end{frame}
 
-\subsection{Rokkoインターフェースの仕様}
+\subsection*{Rokkoインターフェースの仕様}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::distributed_crs_matrix クラステンプレート}
@@ -1335,7 +1334,7 @@ Frank matrix has an eigenvalue $1$\\
 \end{block}
 \end{frame}
 
-\subsection{サンプルの実行}
+\subsection*{サンプルの実行}
 \begin{frame}[c,fragile]
   \frametitle{CRS行列の対角化}
   \begin{itemize}
