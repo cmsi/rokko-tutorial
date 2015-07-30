@@ -26,8 +26,7 @@
 
 \begin{frame}
   \titlepage
-  \noindent {\footnotesize PDFファイル: \url{http://sf.net/projects/rokko-tutorial/files/}} \\
-  \noindent {\footnotesize LaTeXソース: \url{http://github.com/cmsi/rokko-tutorial/}}
+  \noindent {\footnotesize 講習資料: \url{https://github.com/cmsi/rokko-tutorial/releases/latest}} 
 \end{frame}
 
 %% \section*{Outline}
@@ -66,7 +65,7 @@
   \item 座学・実習: 密行列向けMPI並列ソルバの基本概念、サンプル実行
   \item 座学・実習: 疎行列向けMPI並列ソルバの基本概念、サンプル実行
   \item 実習: 量子スピン系の対角化のサンプル実行
-  \item 実習: TITPACK2へのRokko組み込み実習
+  %\item 実習: TITPACK2へのRokko組み込み実習
   \item 実習: アプリケーションからのRokkoの利用
 %  \item (付録: ALPS/Baristaパッケージ)
  % \item (付録: MateriAppsとMateriApps LIVE!)
@@ -460,9 +459,9 @@
     \setlength{\itemsep}{1em}
   \item CMake: \url{http://www.cmake.org}
   \item Boost C++ Libraries: \url{http://www.boost.org}
-  \item インストールスクリプト: \url{https://github.com/wistaria/installer}
+  \item インストールスクリプト: \url{https://github.com/wistaria/MateriAppsInstaller}
   \item 主要なスパコンへのインストール状況 \\
-    \url{https://github.com/wistaria/installer/wiki}
+    \url{https://github.com/wistaria/MateriAppsInstaller/wiki}
   \end{itemize}
 \end{frame}
 
@@ -491,7 +490,7 @@
       \item ライブラリ: Anasazi, EigenExa, Elemental, ELPA, PETSc, ScaLAPACK, SLEPc
       \item 対応アーキテクチャ: 京/FX10, x86スパコン・クラスタ(Intelコンパイラ/GCC), Mac OS X (GCC), 他
     \end{itemize}
-  \item 主要なスパコンにインストール済み: \url{https://github.com/t-sakashita/rokko/wiki/PreInstall}
+  \item 主要なスパコンにインストール済み: \url{https://github.com/t-sakashita/rokko/wiki}
   \end{itemize}
 \end{frame}
 
@@ -507,16 +506,15 @@ source /home/materiapps/rokko/rokkoenv.sh
   \item ソースコードのダウンロード・展開
 \begin{lstlisting}[style=shstyle]
 cd $HOME
-wget --no-check-certificate https://github.com/t-sakashita/rokko/archive/0.3.tar.gz \
- -O rokko-0.3.tar.gz
+wget http://github.com/t-sakashita/rokko/archive/0.3.tar.gz -O rokko-0.3.tar.gz
 tar zxvf rokko-0.3.tar.gz
 \end{lstlisting}
   \item CMakeの実行
 \begin{lstlisting}[style=shstyle]
 mkdir rokko-build
 cd rokko-build
-
-cmake $HOME/rokko-0.3 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc -DCMAKE_Fortran_COMPILER=ifort -DOpenMP_CXX_FLAGS=-openmp -DOpenMP_C_FLAGS=-openmp -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
+cmake $HOME/rokko-0.3 -DCMAKE_CXX_COMPILER=icpc -DCMAKE_C_COMPILER=icc \
+  -DCMAKE_Fortran_COMPILER=ifort -DCMAKE_INSTALL_PREFIX=$HOME/rokko_install
 \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -527,11 +525,11 @@ cmake $HOME/rokko-0.3 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=icpc -DCMAKE
   \item 上記のコピー＆ペーストがうまく行かなかった方は、スクリプトで実行
 \begin{lstlisting}[style=shstyle]
 cp /home/hands-on/rokko_20150730/cmake-rokko.sh  .
-bash ./cmake-rokko.sh
+sh cmake-rokko.sh
 \end{lstlisting}
   \item Make, テスト
 \begin{lstlisting}[style=shstyle]
-make -j 10
+make -j 4
 make test
 make install
 \end{lstlisting}
@@ -601,7 +599,7 @@ cd rokko/tool
 
 \section{密行列向け逐次ソルバ}
 
-\subsection{Rokkoインターフェースの仕様}
+\subsection*{Rokkoインターフェースの仕様}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::localized\_matrix クラステンプレート}
@@ -678,7 +676,7 @@ solver.diagonalize(mat, eigval, eigvec, params);
   \end{itemize}
 \end{frame}
 
-\subsection{サンプルの実行}
+\subsection*{サンプルの実行}
 
 \begin{frame}[c,fragile]
   \frametitle{対角化のサンプル}
@@ -787,7 +785,7 @@ verbose     & なし & bool & \parbox{5cm}{Rokkoで用意したフラグ。\\ソ
 
 \section{密行列向けMPI並列ソルバ}
 
-\subsection{基本概念}
+\subsection*{基本概念}
 
 \begin{frame}
   \frametitle{２次元プロセスグリッド}
@@ -819,7 +817,7 @@ verbose     & なし & bool & \parbox{5cm}{Rokkoで用意したフラグ。\\ソ
   \end{itemize}
 \end{frame}
 
-\subsection{Rokkoインターフェースの仕様}
+\subsection*{Rokkoインターフェースの仕様}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::grid クラス}
@@ -961,7 +959,7 @@ solver.diagonalize(mat, evals, evecs, params);
   \end{itemize}
 \end{frame}
 
-\subsection{サンプルの実行}
+\subsection*{サンプルの実行}
 
 \begin{frame}[c,fragile]
   \frametitle{対角化のサンプル}
@@ -1085,7 +1083,7 @@ Rokkoルーチン名 & 元のルーチン名 & 解法 & \parbox{2.5cm}{入力パ
 
 \section{疎行列向け並列ソルバ}
 
-\subsection{基本概念}
+\subsection*{基本概念}
 
 \begin{frame}[c,fragile]
   \frametitle{CRS(Compressed Row Storage)方式}
@@ -1122,7 +1120,7 @@ MPI並列化は行単位
 
 \end{frame}
 
-\subsection{Rokkoインターフェースの仕様}
+\subsection*{Rokkoインターフェースの仕様}
 
 \begin{frame}[c,fragile]
   \frametitle{rokko::distributed_crs_matrix クラステンプレート}
@@ -1335,7 +1333,7 @@ Frank matrix has an eigenvalue $1$\\
 \end{block}
 \end{frame}
 
-\subsection{サンプルの実行}
+\subsection*{サンプルの実行}
 \begin{frame}[c,fragile]
   \frametitle{CRS行列の対角化}
   \begin{itemize}
