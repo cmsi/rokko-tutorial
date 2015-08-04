@@ -605,16 +605,16 @@ cd rokko/tool
   \item \RokkoFilename{rokko/localized_matrix.hpp}
 \begin{lstlisting}
 namespace rokko {
-template<typename MATRIX_MAJOR = rokko::matrix_col_major>
+template<typename T, typename MATRIX_MAJOR = rokko::matrix_col_major>
 class localized_matrix {
 public:
   typedef MATRIX_MAJOR major_type;
   localized_matrix();
   localized_matrix(int rows, int cols);
-  template <typename T>
-  localized_matrix(T const& other);
-  template <typename T>
-  matrix_type& operator=(T const& other);
+  template <typename U>
+  localized_matrix(U const& other);
+  template <typename U>
+  matrix_type& operator=(U const& other);
   double operator[](int i, int j) const;
   double& operator[](int i, int j);
   int get_m_global() const;
@@ -634,7 +634,7 @@ public:
   \item \RokkoFilename{test/localized\_matrix.cpp}
 \begin{lstlisting}
 int dim = 3;
-rokko::localized_matrix<> M(dim,dim);
+rokko::localized_matrix<double> M(dim,dim);
 M << 1,2,3,4,5,6,7,8,9;
 double a = 5.0;
 rokko::localized_vector u(dim);
@@ -661,10 +661,10 @@ solver.finalize();
 \end{lstlisting}
   \item 対角化 (行列は破壊される)
 \begin{lstlisting}
-rokko::localized_matrix<matrix_col_major> mat(dim, dim);
+rokko::localized_matrix<double, matrix_col_major> mat(dim, dim);
 ...
 rokko::localized_vector evals(dim);
-rokko::localized_matrix<matrix_col_major> evecs(dim, dim);
+rokko::localized_matrix<double, matrix_col_major> evecs(dim, dim);
 solver.diagonalize(mat, eigval, eigvec, params);
 \end{lstlisting}
 %  \item 登録されているソルバの一覧
@@ -854,7 +854,7 @@ public:
   \item \RokkoFilename{rokko/distributed_matrix.hpp}
 \begin{lstlisting}
 namespace rokko {
-template<typename MATRIX_MAJOR = rokko::matrix_col_major>
+template<typename T, typename MATRIX_MAJOR = rokko::matrix_col_major>
 class distributed_matrix {
 public:
   template<typename SOLVER>
@@ -883,16 +883,16 @@ public:
 \begin{lstlisting}
   ...
   rokko::mapping_bc<matrix_major> map(dim, g, solver);  // 正方行列と与えられたgridとsolverに適切なブロックサイズを返す。
-  rokko::distributed_matrix<rokko::matrix_col_major> matA(map);
-  rokko::distributed_matrix<rokko::matrix_col_major> matB(map);
-  rokko::distributed_matrix<rokko::matrix_col_major> matC(map);
+  rokko::distributed_matrix<double, rokko::matrix_col_major> matA(map);
+  rokko::distributed_matrix<double, rokko::matrix_col_major> matB(map);
+  rokko::distributed_matrix<double, rokko::matrix_col_major> matC(map);
   ...
   rokko::product(alpha, matA, transA, matB, transB, beta, matC);
 \end{lstlisting}
   \item distributed\_matrixの scatter と gather
 \begin{lstlisting}
-  rokko::localized_matrix<LOC_MAT_MAJOR> lmat(dim, dim);
-  rokko::distributed_matrix<DIST_MAT_MAJOR> mat(map);
+  rokko::localized_matrix<double, LOC_MAT_MAJOR> lmat(dim, dim);
+  rokko::distributed_matrix<double, DIST_MAT_MAJOR> mat(map);
   rokko::scatter(lmat, mat, root);
   rokko::gather(mat, lmat, root);
 \end{lstlisting}
@@ -943,11 +943,11 @@ solver.finalize();
 \end{lstlisting}
   \item 対角化 (行列は破壊される)
 \begin{lstlisting}
-rokko::mapping_bc<matrix_major> map(dim, g, solver);
-rokko::distributed_matrix<matrix_col_major> mat(map);
+rokko::mapping_bc<double, matrix_major> map(dim, g, solver);
+rokko::distributed_matrix<double, matrix_col_major> mat(map);
 ...
 rokko::localized_vector evals(dim);
-rokko::distributed_matrix<matrix_col_major> evecs(map);
+rokko::distributed_matrix<double, matrix_col_major> evecs(map);
 solver.diagonalize(mat, evals, evecs, params);
 \end{lstlisting}
 %  \item 登録されているソルバの一覧
