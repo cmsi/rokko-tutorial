@@ -905,8 +905,8 @@ public:
     %\setlength{\itemsep}{1em}
   \item 要素毎に代入 (globalな添字)
 \begin{lstlisting}
-for(int global_i=0; global_i < mat.m_global(); ++global_i) {
-  for(int global_j=0; global_j < mat.n_global(); ++global_j) {
+for(int global_i=0; global_i < mat.get_m_global(); ++global_i) {
+  for(int global_j=0; global_j < mat.get_n_global(); ++global_j) {
     mat.set_global(global_i, global_j, f(global_i, global_j));
   }
 }
