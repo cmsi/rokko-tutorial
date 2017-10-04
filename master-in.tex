@@ -538,7 +538,7 @@ make install
   \frametitle{インストールの成否の確認}
 Rokkoで使用できる固有値ルーチン一覧の表示 \RokkoFilename{tool/rokko_solvers.cpp}
 \begin{lstlisting}[style=shstyle]
-cd rokko/tool
+cd $HOME/rokko_install/tool
 ./rokko_solvers
 \end{lstlisting}
 
@@ -605,9 +605,11 @@ cd rokko/tool
   \item \RokkoFilename{rokko/localized_matrix.hpp}
 \begin{lstlisting}
 namespace rokko {
-template<typename MATRIX_MAJOR = rokko::matrix_col_major>
+template<typename T, typename MATRIX_MAJOR = rokko::matrix_col_major>
 class localized_matrix {
 public:
+  typedef T value_type;
+  MATRIX_MAJOR major_type;
   typedef MATRIX_MAJOR major_type;
   localized_matrix();
   localized_matrix(int rows, int cols);
@@ -634,14 +636,14 @@ public:
   \item \RokkoFilename{test/localized\_matrix.cpp}
 \begin{lstlisting}
 int dim = 3;
-rokko::localized_matrix<> M(dim,dim);
+rokko::localized_matrix<double> M(dim,dim);
 M << 1,2,3,4,5,6,7,8,9;
 double a = 5.0;
-rokko::localized_vector u(dim);
+rokko::localized_vecto<double>r u(dim);
 u << 1,2,3;
-rokko::localized_vector v(dim);
+rokko::localized_vector<double> v(dim);
 v << 4,5,6;
-rokko::localized_vector w = a*u+M*v;
+rokko::localized_vector<double> w = a*u+M*v;
 \end{lstlisting}
   \end{itemize}
 \end{frame}
@@ -661,10 +663,10 @@ solver.finalize();
 \end{lstlisting}
   \item 対角化 (行列は破壊される)
 \begin{lstlisting}
-rokko::localized_matrix<matrix_col_major> mat(dim, dim);
+rokko::localized_matrix<double, matrix_col_major> mat(dim, dim);
 ...
-rokko::localized_vector evals(dim);
-rokko::localized_matrix<matrix_col_major> evecs(dim, dim);
+rokko::localized_vector<double> evals(dim);
+rokko::localized_matrix<double, matrix_col_major> evecs(dim, dim);
 solver.diagonalize(mat, eigval, eigvec, params);
 \end{lstlisting}
 %  \item 登録されているソルバの一覧
@@ -684,7 +686,7 @@ solver.diagonalize(mat, eigval, eigvec, params);
 %\begin{lstlisting}[style=shstyle]
 %./test/serial_dense_solvers
 %\end{lstlisting}
-  \item LAPACK dsyev を直接使う \RokkoFilename{example/cxx/dense/dsyev.cpp}
+  \item LAPACK dsyev を直接使う \RokkoFilename{example/cxx/dense/dsyev.c}
 \begin{lstlisting}[style=shstyle]
 ./example/cxx/dense/dsyev
 \end{lstlisting}
